@@ -1,95 +1,20 @@
-import sys, os
+import sys, os, Create
 import qtawesome as qta
 from PyQt4 import QtGui, QtCore
+
+#Variables
+wmHidden = True
 
 class Window(QtGui.QWidget):
     def __init__(self):
         super(Window, self).__init__()
         self.setGeometry(50,50,1200,700)
-        self.setWindowTitle("Company")
+        self.setWindowTitle("Hitch")
         #self.setWindowFlags(self.windowFlags() | QtCore.Qt.FramelessWindowHint)
-        self.create()
+        Create.createUI.create(self)
         self.icon()
+        self.showMaximized()
         self.show()
-
-    def create(self):
-        #Create icons
-        minIco = qta.icon("fa.minus", color="white")
-        closeIco = qta.icon("fa.times", color="white")
-        setIco = qta.icon("fa.cog", color="white")
-        usrIco = qta.icon("fa.user", color="white")
-
-        #Create window action buttons
-        mini = QtGui.QPushButton(minIco, "", self)
-        mini.setObjectName("minimize")
-        mini.setMaximumSize(QtCore.QSize(30,30))
-        mini.clicked.connect(self.minimize)
-
-        quitBtn = QtGui.QPushButton(closeIco, "", self)
-        quitBtn.setObjectName("quitBtn")
-        quitBtn.setMaximumSize(QtCore.QSize(30,30))
-        quitBtn.clicked.connect(QtCore.QCoreApplication.instance().quit)
-
-        settings = QtGui.QPushButton(setIco, "", self)
-        settings.setObjectName("settings")
-        settings.setMaximumSize(QtCore.QSize(30,30))
-        settings.clicked.connect(self.maximize)
-
-        friendz = QtGui.QPushButton(usrIco, "", self)
-        friendz.setObjectName("friendz")
-        friendz.setMaximumSize(QtCore.QSize(30,30))
-
-        #Create app buttons
-        cdnt = QtGui.QPushButton("", self)
-        cdnt.setObjectName("cadent")
-        cdnt.setMinimumSize(QtCore.QSize(50,50))
-        cdnt.setMaximumSize(QtCore.QSize(90,90))
-
-        lakeside = QtGui.QPushButton("", self)
-        lakeside.setObjectName("cadent")
-        lakeside.setMinimumSize(QtCore.QSize(50,50))
-        lakeside.setMaximumSize(QtCore.QSize(90,90))
-
-        #Titlebar background
-        cont = QtGui.QWidget(self)
-        cont.setObjectName("titlebar")
-        cont.setMinimumHeight(120)
-        cont.setMaximumHeight(120)
-
-
-        #Layouts
-        vMain = QtGui.QVBoxLayout()
-        vTB = QtGui.QHBoxLayout(cont)
-        vTabs = QtGui.QHBoxLayout()
-        winAc  = QtGui.QGridLayout()
-
-        #Alignment
-        vMain.setAlignment(QtCore.Qt.AlignTop)
-        winAc.setAlignment(QtCore.Qt.AlignRight)
-
-        #Margin
-        vMain.setMargin(0)
-        winAc.setMargin(20)
-        winAc.setContentsMargins(QtCore.QMargins(10,23,20,23))
-        vTB.setContentsMargins(QtCore.QMargins(20,0,0,0))
-        vTabs.setContentsMargins(QtCore.QMargins(0,0,0,0))
-
-        #Adding the Widgets
-        vMain.addWidget(cont)
-
-        winAc.addWidget(mini, 0, 0)
-        winAc.addWidget(quitBtn, 0, 1)
-        winAc.addWidget(settings, 1, 0)
-        winAc.addWidget(friendz, 1, 1)
-
-        vTabs.addWidget(cdnt)
-        vTabs.addWidget(lakeside)
-
-        #adding the Layouts
-        vTB.addLayout(vTabs)
-        vTB.addLayout(winAc)
-        vMain.addLayout(vTB)
-        self.setLayout(vMain)
 
     def minimize(self):
         self.showMinimized()
@@ -109,6 +34,28 @@ class Window(QtGui.QWidget):
         app_icon.addFile('icons/128x128.png', QtCore.QSize(128,128))
         app_icon.addFile('icons/256x256.png', QtCore.QSize(256,256))
         app.setWindowIcon(app_icon)
+
+    def animate(self):
+        global wmHidden
+        dur = 500
+        if wmHidden==False:
+            anim1 = QtCore.QPropertyAnimation(self.wMenu, "pos")
+            anim1.setDuration(dur)
+            anim1.setStartValue(self.wMenu.pos())
+            anim1.setEndValue(QtCore.QPoint(0,self.wMenu.y()))
+            anim1.start()
+            wmHidden = True
+            self.anim1 = anim1
+
+        else:
+            anim2 = QtCore.QPropertyAnimation(self.wMenu, "pos")
+            anim2.setDuration(dur)
+            anim2.setStartValue(self.wMenu.pos())
+            anim2.setEndValue(QtCore.QPoint(-1000,self.wMenu.y()))
+            anim2.start()
+            wmHidden = False
+            self.anim2 = anim2
+
 
 app = QtGui.QApplication(sys.argv)
 with open("stylesheet.css") as f:

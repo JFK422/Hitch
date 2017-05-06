@@ -79,7 +79,7 @@ QPushButton:hover{
     font-size: 18px;
 }
 
-#friendz{
+#maxim{
     border-color: #ffb041;
     border-style: solid;
     background-color: #ffb041;
@@ -87,10 +87,26 @@ QPushButton:hover{
     font-size: 18px;
 }
 
-#friendz:hover{
+#maxim:hover{
     border-color: #f19f2d;
     border-style: solid;
     background-color: #f19f2d;
+    color: #ffffff;
+    font-size: 18px;
+}
+
+#tools{
+    border-color: #6bd6d1;
+    border-style: solid;
+    background-color: #6bd6d1;
+    color: #ffffff;
+    font-size: 18px;
+}
+
+#tools:hover{
+    border-color: #5dbab5;
+    border-style: solid;
+    background-color: #5dbab5;
     color: #ffffff;
     font-size: 18px;
 }
@@ -100,4 +116,28 @@ QPushButton:hover{
     border-style: solid;
     background-color: #18184a;
     color: #18184a;
+}
+
+#menu{
+    background-color: #6bd6d1;
+    border-style: solid;
+    color: #6bd6d1;
+}
+
+#leftEdit{
+    background-color: #6b9dd6;
+    border-style: solid;
+    color: #6b9dd6;
+}
+
+#centerEdit{
+    background-color: #6b6bd6;
+    border-style: solid;
+    color: #6b6bd6;
+}
+
+#rightEdit{
+    background-color: #a06bd6;
+    border-style: solid;
+    color: #a06bd6;
 }
