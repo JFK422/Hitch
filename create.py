@@ -6,6 +6,9 @@ from PyQt4 import QtGui, QtCore
 
 class createUI():    
     def create(self):
+        print("create: Creating the main window layout")
+        print("create: Creating widgets")
+
         #Create icons
         minIco = qta.icon("fa.minus", color="white")
         closeIco = qta.icon("fa.times", color="white")
@@ -105,6 +108,7 @@ class createUI():
         cont.setMinimumHeight(120)
         cont.setMaximumHeight(120)
 
+        print("create: creating layouts")
 
         #Layouts
         vMain = QtGui.QVBoxLayout() #Backbone lay, important because of the titlebar

@@ -1,4 +1,4 @@
-import sys, os, create, time
+import sys, os, create
 import qtawesome as qta
 from PyQt4 import QtGui, QtCore
 
