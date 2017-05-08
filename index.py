@@ -2,6 +2,8 @@ import sys, os, create, time
 import qtawesome as qta
 from PyQt4 import QtGui, QtCore
 
+#This is the MAIN file of the app. Its used for handeling hte diffrent scripts within this programm.
+
 #Variables
 wmHidden = False
 
@@ -10,12 +12,13 @@ class Window(QtGui.QWidget):
         super(Window, self).__init__()
         self.setGeometry(50,50,1200,700)
         self.setWindowTitle("Hitch")
-        #self.setWindowFlags(self.windowFlags() | QtCore.Qt.FramelessWindowHint)
+        #self.setWindowFlags(self.windowFlags() | QtCore.Qt.FramelessWindowHint) #Use this for a frameless window. Will be used later!
         create.createUI.create(self)
         self.icon()
         self.showMaximized()
         self.show()
 
+    #Minimize and maximize methods for the new window action buttons
     def minimize(self):
         self.showMinimized()
 
@@ -65,12 +68,14 @@ class Window(QtGui.QWidget):
             time.sleep(dur/1000)
             """
 
-
+#Creating the QApplication
 app = QtGui.QApplication(sys.argv)
+
+#Set the main styling of the app
 with open("stylesheet.css") as f:
     theme = f.read()
 app.setStyleSheet(theme)
 
+#Misc stuff
 wid = Window()
-
 sys.exit(app.exec_())

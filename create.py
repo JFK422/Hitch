@@ -2,6 +2,8 @@ import qtawesome as qta
 import animations as anim
 from PyQt4 import QtGui, QtCore
 
+#This is the main file which is used for creating the window.
+
 class createUI():    
     def create(self):
         #Create icons
