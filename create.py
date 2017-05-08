@@ -63,10 +63,17 @@ class createUI():
         lakeside.setMinimumSize(QtCore.QSize(50,50))
         lakeside.setMaximumSize(QtCore.QSize(90,90))
 
+        #Dialogs
+        dial = QtGui.QMessageBox()
+
         #Empty Widgets
-        self.wMenu = QtGui.QWidget()
-        self.wMenu.setObjectName("menu")
-        self.wMenu.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred))
+        wMenu = QtGui.QWidget()
+        wMenu.setObjectName("menu")
+        wMenu.setMaximumWidth(200)
+
+        self.wStack = QtGui.QWidget()
+        self.wStack.setMaximumWidth(200)
+        self.wStack.setVisible(False)
 
         wLPart = QtGui.QWidget()
         wLPart.setObjectName("leftEdit")
@@ -76,6 +83,19 @@ class createUI():
 
         wRPart = QtGui.QWidget()
         wRPart.setObjectName("rightEdit")
+
+        #Size
+        wCPart.setMinimumWidth(500)
+        wRPart.setMinimumWidth(300)
+        wLPart.setMinimumWidth(300)
+
+        wLPart.setMaximumWidth(400)
+        wRPart.setMaximumWidth(400)
+
+        #Size Policy
+        #sp = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Expanding)
+        #wLPart.setSizePolicy(sp)
+        #wMenu.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum))
 
         #Titlebar background
         cont = QtGui.QWidget(self)
@@ -95,27 +115,29 @@ class createUI():
         vLPart = QtGui.QVBoxLayout() #Left part of the editor
         vCPart = QtGui.QVBoxLayout() #Main layout of the editor
         vRPart = QtGui.QVBoxLayout() #Right part of the editor
+        sMenu = QtGui.QStackedLayout() #Stack layout to show diffrent menu widgets
         #vCenter = QtGui.QVBoxLayout() Unused, former gCenter layout
 
         #Alignment
         vMain.setAlignment(QtCore.Qt.AlignTop)
         winAc.setAlignment(QtCore.Qt.AlignRight)
         gCenter.setAlignment(QtCore.Qt.AlignTop)
-        vMenu.setAlignment(QtCore.Qt.AlignTop)
+        vMenu.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignTop)
 
         #Margin
         vMain.setMargin(0)
         winAc.setMargin(20)
         vMenu.setMargin(0)
         gCenter.setMargin(0)
-        vMenu.setMargin(0)
         winAc.setContentsMargins(QtCore.QMargins(10,23,20,23))
         vTB.setContentsMargins(QtCore.QMargins(20,0,0,0))
         tools.setContentsMargins(QtCore.QMargins(0,23,30,23))
         vTabs.setContentsMargins(QtCore.QMargins(0,0,0,0))
 
         #Stretch
-        #vMenu.addStretch(1)
+        vLPart.addStretch(1)
+        vCPart.addStretch(5)
+        vRPart.addStretch(1)
 
         #Adding the Widgets
         vMain.addWidget(cont)
@@ -133,16 +155,19 @@ class createUI():
         vMenu.addWidget(lakeside)
         #vMenu.addWidget(cdnt)
 
-        gCenter.addWidget(self.wMenu, 0, 0)
+        gCenter.addWidget(self.wStack, 0, 0)
         gCenter.addWidget(wLPart, 0, 1)
         gCenter.addWidget(wCPart, 0, 2)
         gCenter.addWidget(wRPart, 0, 3)
+
+        sMenu.addWidget(wMenu)
 
         vTabs.addWidget(cdnt)
         #vTabs.addWidget(lakeside)
 
         #adding the Layouts
-        self.wMenu.setLayout(vMenu)
+        wMenu.setLayout(vMenu)
+        self.wStack.setLayout(sMenu)
         wLPart.setLayout(vLPart)
         wCPart.setLayout(vCPart)
         wRPart.setLayout(vRPart)

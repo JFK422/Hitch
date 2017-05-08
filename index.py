@@ -1,9 +1,9 @@
-import sys, os, Create
+import sys, os, create, time
 import qtawesome as qta
 from PyQt4 import QtGui, QtCore
 
 #Variables
-wmHidden = True
+wmHidden = False
 
 class Window(QtGui.QWidget):
     def __init__(self):
@@ -11,7 +11,7 @@ class Window(QtGui.QWidget):
         self.setGeometry(50,50,1200,700)
         self.setWindowTitle("Hitch")
         #self.setWindowFlags(self.windowFlags() | QtCore.Qt.FramelessWindowHint)
-        Create.createUI.create(self)
+        create.createUI.create(self)
         self.icon()
         self.showMaximized()
         self.show()
@@ -38,23 +38,32 @@ class Window(QtGui.QWidget):
     def animate(self):
         global wmHidden
         dur = 500
-        if wmHidden==False:
+        if self.wStack.isVisible():
+            self.wStack.setVisible(False)
+            wmHidden = False
+
+            """
             anim1 = QtCore.QPropertyAnimation(self.wMenu, "pos")
             anim1.setDuration(dur)
             anim1.setStartValue(self.wMenu.pos())
             anim1.setEndValue(QtCore.QPoint(0,self.wMenu.y()))
             anim1.start()
-            wmHidden = True
             self.anim1 = anim1
+            """
 
         else:
+            self.wStack.setVisible(True)
+            wmHidden = True
+
+            """
             anim2 = QtCore.QPropertyAnimation(self.wMenu, "pos")
             anim2.setDuration(dur)
             anim2.setStartValue(self.wMenu.pos())
-            anim2.setEndValue(QtCore.QPoint(-1000,self.wMenu.y()))
+            anim2.setEndValue(QtCore.QPoint(-300,self.wMenu.y()))
             anim2.start()
-            wmHidden = False
             self.anim2 = anim2
+            time.sleep(dur/1000)
+            """
 
 
 app = QtGui.QApplication(sys.argv)
