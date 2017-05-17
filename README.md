@@ -1,2 +1,2 @@
 # Hitch 
-This my attemt on creating visual scripting for Python.
+This my attempt on creating visual scripting for Python.
