@@ -1,6 +1,7 @@
+import sys, os, create, createWorkarea
 import qtawesome as qta
 import animations as anim
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore, QtWidgets
 
 #This is the main file which is used for creating the window.
 
@@ -20,73 +21,73 @@ class createUI():
         toolsIco = qta.icon("fa.cog", color="white")
 
         #Create window action buttons
-        mini = QtGui.QPushButton(minIco, "", self)
+        mini = QtWidgets.QPushButton(minIco, "", self)
         mini.setObjectName("minimize")
         mini.setMaximumSize(QtCore.QSize(30,30))
         mini.clicked.connect(self.minimize)
 
-        quitBtn = QtGui.QPushButton(closeIco, "", self)
+        quitBtn = QtWidgets.QPushButton(closeIco, "", self)
         quitBtn.setObjectName("quitBtn")
         quitBtn.setMaximumSize(QtCore.QSize(30,30))
         quitBtn.clicked.connect(QtCore.QCoreApplication.instance().quit)
 
-        maxim = QtGui.QPushButton(maximIco, "", self)
+        maxim = QtWidgets.QPushButton(maximIco, "", self)
         maxim.setObjectName("maxim")
         maxim.setMaximumSize(QtCore.QSize(30,30))
         maxim.clicked.connect(self.maximize)
 
-        settings = QtGui.QPushButton(setIco, "", self)
+        settings = QtWidgets.QPushButton(setIco, "", self)
         settings.setObjectName("settings")
         settings.setMaximumSize(QtCore.QSize(30,30))
 
         #Create Tool Buttons
-        files = QtGui.QPushButton(filesIco, "", self)
+        files = QtWidgets.QPushButton(filesIco, "", self)
         files.setObjectName("tools")
         files.setMaximumSize(QtCore.QSize(30,30))
 
-        edit = QtGui.QPushButton(editIco, "", self)
+        edit = QtWidgets.QPushButton(editIco, "", self)
         edit.setObjectName("tools")
         edit.setMaximumSize(QtCore.QSize(30,30))
 
-        wind = QtGui.QPushButton(windIco, "", self)
+        wind = QtWidgets.QPushButton(windIco, "", self)
         wind.setObjectName("tools")
         wind.setMaximumSize(QtCore.QSize(30,30))
 
-        tool = QtGui.QPushButton(toolsIco, "", self)
+        tool = QtWidgets.QPushButton(toolsIco, "", self)
         tool.setObjectName("tools")
         tool.setMaximumSize(QtCore.QSize(30,30))
 
         #Create app buttons
-        cdnt = QtGui.QPushButton("", self)
+        cdnt = QtWidgets.QPushButton("", self)
         cdnt.setObjectName("cadent")
         cdnt.setMinimumSize(QtCore.QSize(50,50))
         cdnt.setMaximumSize(QtCore.QSize(90,90))
         cdnt.clicked.connect(self.animate)
 
-        lakeside = QtGui.QPushButton("", self)
+        lakeside = QtWidgets.QPushButton("", self)
         lakeside.setObjectName("cadent")
         lakeside.setMinimumSize(QtCore.QSize(50,50))
         lakeside.setMaximumSize(QtCore.QSize(90,90))
 
         #Dialogs
-        dial = QtGui.QMessageBox()
+        dial = QtWidgets.QMessageBox()
 
         #Empty Widgets
-        wMenu = QtGui.QWidget()
+        wMenu = QtWidgets.QWidget()
         wMenu.setObjectName("menu")
         wMenu.setMaximumWidth(200)
 
-        self.wStack = QtGui.QWidget()
+        self.wStack = QtWidgets.QWidget()
         self.wStack.setMaximumWidth(200)
         self.wStack.setVisible(False)
 
-        wLPart = QtGui.QWidget()
+        wLPart = QtWidgets.QWidget()
         wLPart.setObjectName("leftEdit")
 
-        wCPart = QtGui.QWidget()
+        wCPart = QtWidgets.QWidget()
         wCPart.setObjectName("centerEdit")
 
-        wRPart = QtGui.QWidget()
+        wRPart = QtWidgets.QWidget()
         wRPart.setObjectName("rightEdit")
 
         #Size
@@ -103,26 +104,26 @@ class createUI():
         #wMenu.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum))
 
         #Titlebar background
-        cont = QtGui.QWidget(self)
+        cont = QtWidgets.QWidget(self)
         cont.setObjectName("titlebar")
         cont.setMinimumHeight(120)
         cont.setMaximumHeight(120)
 
-        print("create: creating layouts")
+        print("create: Creating layouts")
 
         #Layouts
-        vMain = QtGui.QVBoxLayout() #Backbone lay, important because of the titlebar
-        gCenter = QtGui.QGridLayout() #Central grid layout of the app beacuse every part is a widget not a layout
-        vTB = QtGui.QHBoxLayout(cont) #Titlebat Layout
-        vTabs = QtGui.QHBoxLayout() #Tabs Layout in the Titlebar
-        winAc  = QtGui.QGridLayout() #Window actions layout (Top left buttons)
-        tools = QtGui.QGridLayout() #Grid Layout for the tool actions in the titlebar
-        vMenu = QtGui.QVBoxLayout() #Menu layout from the left side. Is placed on a blank widget then added to gCenter
-        vLPart = QtGui.QVBoxLayout() #Left part of the editor
-        vCPart = QtGui.QVBoxLayout() #Main layout of the editor
-        vRPart = QtGui.QVBoxLayout() #Right part of the editor
-        sMenu = QtGui.QStackedLayout() #Stack layout to show diffrent menu widgets
-        #vCenter = QtGui.QVBoxLayout() Unused, former gCenter layout
+        vMain = QtWidgets.QVBoxLayout() #Backbone lay, important because of the titlebar
+        gCenter = QtWidgets.QGridLayout() #Central grid layout of the app beacuse every part is a widget not a layout
+        vTB = QtWidgets.QHBoxLayout(cont) #Titlebat Layout
+        vTabs = QtWidgets.QHBoxLayout() #Tabs Layout in the Titlebar
+        winAc  = QtWidgets.QGridLayout() #Window actions layout (Top left buttons)
+        tools = QtWidgets.QGridLayout() #Grid Layout for the tool actions in the titlebar
+        vMenu = QtWidgets.QVBoxLayout() #Menu layout from the left side. Is placed on a blank widget then added to gCenter
+        vLPart = QtWidgets.QVBoxLayout() #Left part of the editor
+        self.vCPart = QtWidgets.QVBoxLayout() #Main layout of the editor
+        vRPart = QtWidgets.QVBoxLayout() #Right part of the editor
+        sMenu = QtWidgets.QStackedLayout() #Stack layout to show diffrent menu widgets
+        #vCenter = QtWidgets.QVBoxLayout() Unused, former gCenter layout
 
         #Alignment
         vMain.setAlignment(QtCore.Qt.AlignTop)
@@ -131,10 +132,10 @@ class createUI():
         vMenu.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignTop)
 
         #Margin
-        vMain.setMargin(0)
-        winAc.setMargin(20)
-        vMenu.setMargin(0)
-        gCenter.setMargin(0)
+        vMain.setContentsMargins(QtCore.QMargins(0,0,0,0))
+        winAc.setContentsMargins(QtCore.QMargins(0,0,0,0))
+        vMenu.setContentsMargins(QtCore.QMargins(0,0,0,0))
+        gCenter.setContentsMargins(QtCore.QMargins(0,0,0,0))
         winAc.setContentsMargins(QtCore.QMargins(10,23,20,23))
         vTB.setContentsMargins(QtCore.QMargins(20,0,0,0))
         tools.setContentsMargins(QtCore.QMargins(0,23,30,23))
@@ -142,7 +143,7 @@ class createUI():
 
         #Stretch
         vLPart.addStretch(1)
-        vCPart.addStretch(5)
+        self.vCPart.addStretch(5)
         vRPart.addStretch(1)
 
         #Adding the Widgets
@@ -166,6 +167,8 @@ class createUI():
         gCenter.addWidget(wCPart, 0, 2)
         gCenter.addWidget(wRPart, 0, 3)
 
+        self.vCPart.addWidget(createWorkarea.createArea())
+
         sMenu.addWidget(wMenu)
 
         vTabs.addWidget(cdnt)
@@ -175,7 +178,7 @@ class createUI():
         wMenu.setLayout(vMenu)
         self.wStack.setLayout(sMenu)
         wLPart.setLayout(vLPart)
-        wCPart.setLayout(vCPart)
+        wCPart.setLayout(self.vCPart)
         wRPart.setLayout(vRPart)
 
         vTB.addLayout(tools)

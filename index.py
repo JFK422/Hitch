@@ -1,14 +1,14 @@
 import sys, os, create
 import qtawesome as qta
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore, QtWidgets
 
 #This is the MAIN file of the app. Its used for handeling hte diffrent scripts within this programm.
 
 #Variables
 wmHidden = False
 
-class Window(QtGui.QWidget):
-    def __init__(self):
+class Window(QtWidgets.QWidget):
+    def __init__(self, parent = None):
         super(Window, self).__init__()
         self.setGeometry(50,50,1200,700)
         self.setWindowTitle("Hitch")
@@ -69,7 +69,7 @@ class Window(QtGui.QWidget):
             """
 
 #Creating the QApplication
-app = QtGui.QApplication(sys.argv)
+app = QtWidgets.QApplication(sys.argv)
 
 #Set the main styling of the app
 with open("stylesheet.css") as f:
