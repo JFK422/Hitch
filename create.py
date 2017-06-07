@@ -1,6 +1,7 @@
 import sys, os, create, createWorkarea
 import qtawesome as qta
-import animations as anim
+from OpenGL.GL import *
+#import animations as anim
 from PyQt5 import QtGui, QtCore, QtWidgets
 
 #This is the main file which is used for creating the window.
@@ -99,8 +100,8 @@ class createUI():
         wRPart.setMaximumWidth(400)
 
         #Size Policy
-        #sp = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Expanding)
-        #wLPart.setSizePolicy(sp)
+        #sp = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        #lakeside.setSizePolicy(sp)
         #wMenu.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum))
 
         #Titlebar background
@@ -129,6 +130,7 @@ class createUI():
         vMain.setAlignment(QtCore.Qt.AlignTop)
         winAc.setAlignment(QtCore.Qt.AlignRight)
         gCenter.setAlignment(QtCore.Qt.AlignTop)
+        self.vCPart.setAlignment(QtCore.Qt.AlignTop)
         vMenu.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignTop)
 
         #Margin
@@ -143,7 +145,7 @@ class createUI():
 
         #Stretch
         vLPart.addStretch(1)
-        self.vCPart.addStretch(5)
+        #self.vCPart.addStretch(5)
         vRPart.addStretch(1)
 
         #Adding the Widgets

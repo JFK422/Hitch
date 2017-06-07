@@ -1,6 +1,6 @@
 import sys, os
 from PyQt5 import QtGui, QtCore, QtWidgets, QtOpenGL
-from OpenGL import GL, GLU
+from OpenGL.GL import *
 
 #This is used to create the grid of the workarea for the scripting and some main functions
 
@@ -31,3 +31,11 @@ class createArea(QtWidgets.QOpenGLWidget):
     def initializeGL(self):
         glClearColor(0.0, 0.0, 0.0, 1.0)
         glClear(GL_COLOR_BUFFER_BIT)
+
+"""
+if __name__ == '__main__':
+    app = QtWidgets.QApplication(["Winfred's PyQt OpenGL"])
+    widget = createArea()
+    widget.show()
+    app.exec_()
+"""
