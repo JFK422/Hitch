@@ -1,6 +1,6 @@
 import sys, os, create, createWorkarea
 import qtawesome as qta
-from PyQt5 import QtGui, QtCore, QtWidgets
+from PyQt5 import QtGui, QtCore, QtWidgets, QtMultimedia
 
 #This is the main file which is used for creating the window.
 
@@ -68,6 +68,15 @@ class createUI():
         lakeside.setMinimumSize(QtCore.QSize(50,50))
         lakeside.setMaximumSize(QtCore.QSize(90,90))
 
+        """
+        Audio Test (doesnt work!)
+        url= QtCore.QUrl.fromLocalFile("./Tobu - Amplified.mp3")
+        content= QtMultimedia.QMediaContent(url)
+        player = QtMultimedia.QMediaPlayer()
+        player.setMedia(content)
+        player.play()
+        """
+
         #Dialogs
         dial = QtWidgets.QMessageBox()
 
@@ -98,9 +107,8 @@ class createUI():
         wRPart.setMaximumWidth(400)
 
         #Size Policy
-        #sp = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        #lakeside.setSizePolicy(sp)
-        #wMenu.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum))
+        sp = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
+        wLPart.setSizePolicy(sp)
 
         #Titlebar background
         cont = QtWidgets.QWidget(self)
@@ -136,15 +144,16 @@ class createUI():
         winAc.setContentsMargins(QtCore.QMargins(0,0,0,0))
         vMenu.setContentsMargins(QtCore.QMargins(0,0,0,0))
         gCenter.setContentsMargins(QtCore.QMargins(0,0,0,0))
+        self.vCPart.setContentsMargins(QtCore.QMargins(0,0,0,0))
         winAc.setContentsMargins(QtCore.QMargins(10,23,20,23))
         vTB.setContentsMargins(QtCore.QMargins(20,0,0,0))
         tools.setContentsMargins(QtCore.QMargins(0,23,30,23))
         vTabs.setContentsMargins(QtCore.QMargins(0,0,0,0))
 
         #Stretch
-        vLPart.addStretch(1)
+        #vLPart.addStretch(1)
         #self.vCPart.addStretch(5)
-        vRPart.addStretch(1)
+        #vRPart.addStretch(1)
 
         #Adding the Widgets
         vMain.addWidget(cont)
@@ -161,13 +170,14 @@ class createUI():
 
         vMenu.addWidget(lakeside)
         #vMenu.addWidget(cdnt)
+        
+        wWorkarea = createWorkarea.createArea()
+        self.vCPart.addWidget(wWorkarea)
 
         gCenter.addWidget(self.wStack, 0, 0)
         gCenter.addWidget(wLPart, 0, 1)
         gCenter.addWidget(wCPart, 0, 2)
         gCenter.addWidget(wRPart, 0, 3)
-
-        self.vCPart.addWidget(createWorkarea.createArea())
 
         sMenu.addWidget(wMenu)
 
