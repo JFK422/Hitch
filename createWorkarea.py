@@ -1,6 +1,6 @@
 import sys, os
 from PyQt5 import QtGui, QtCore, QtWidgets, QtOpenGL
-from OpenGL import GL, GLU
+from OpenGL.GL import *
 
 #This is used to create the grid of the workarea for the scripting and some main functions
 
@@ -47,5 +47,4 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(['Spiral Widget Demo'])
     window = SpiralWidgetDemo()
     window.show()
-    app.exec_()
 """
