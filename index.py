@@ -3,6 +3,7 @@ import qtawesome as qta
 from PyQt5 import QtGui, QtCore, QtWidgets
 
 #This is the MAIN file of the app. Its used for handeling hte diffrent scripts within this programm.
+#Debug prints are as formatted like this: FILE; CLASS; METHOD: MESSAGE
 
 #Variables
 wmHidden = False

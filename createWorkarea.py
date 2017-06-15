@@ -1,17 +1,13 @@
-import sys, os
+import sys, os, style
 from PyQt5 import QtGui, QtCore, QtWidgets, QtOpenGL
-from OpenGL.GL import *
+from OpenGL import GL, GLU
 
 #This is used to create the grid of the workarea for the scripting and some main functions
-
 #Variables
 
 
 class createArea(QtWidgets.QOpenGLWidget):
-    def __init__(self, parent = None):
-        print("CreateWorkarea: Init method called")
 
-        super(createArea, self).__init__(parent)
 
     def paintGL(self):
         GL.glColor3f(0.0, 0.0, 1.0)
@@ -34,17 +30,9 @@ class createArea(QtWidgets.QOpenGLWidget):
 
 
 """
-class SpiralWidgetDemo(QtWidgets.QMainWindow):
-    ''' Example class for using SpiralWidget'''
-    
-    def __init__(self):
-        QtWidgets.QMainWindow.__init__(self)
-        widget = createArea(self)    
-        self.setCentralWidget(widget)
-
-
 if __name__ == '__main__':
-    app = QtWidgets.QApplication(['Spiral Widget Demo'])
-    window = SpiralWidgetDemo()
-    window.show()
+    app = QtWidgets.QApplication(["Winfred's PyQt OpenGL"])
+    widget = createArea()
+    widget.show()
+    app.exec_()
 """

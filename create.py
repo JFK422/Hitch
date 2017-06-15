@@ -4,10 +4,10 @@ from PyQt5 import QtGui, QtCore, QtWidgets, QtMultimedia
 
 #This is the main file which is used for creating the window.
 
-class createUI():    
+class createUI:    
     def create(self):
-        print("create: Creating the main window layout")
-        print("create: Creating widgets")
+        print("create; createUI; create: Creating the main window layout")
+        print("create; createUI; create: Creating widgets")
 
         #Create icons
         minIco = qta.icon("fa.minus", color="white")
@@ -106,18 +106,18 @@ class createUI():
         wLPart.setMaximumWidth(400)
         wRPart.setMaximumWidth(400)
 
-        #Size Policy
-        sp = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
-        wLPart.setSizePolicy(sp)
-
         #Titlebar background
         cont = QtWidgets.QWidget(self)
         cont.setObjectName("titlebar")
         cont.setMinimumHeight(120)
         cont.setMaximumHeight(120)
 
-        print("create: Creating layouts")
+        #Size Policy for layouts
+        sp = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
+        wRPart.setSizePolicy(sp)
 
+
+        print("create; createUI; create: Creating layouts")
         #Layouts
         vMain = QtWidgets.QVBoxLayout() #Backbone lay, important because of the titlebar
         gCenter = QtWidgets.QGridLayout() #Central grid layout of the app beacuse every part is a widget not a layout
@@ -132,11 +132,12 @@ class createUI():
         sMenu = QtWidgets.QStackedLayout() #Stack layout to show diffrent menu widgets
         #vCenter = QtWidgets.QVBoxLayout() Unused, former gCenter layout
 
+        print("create; createUI; create: Seting layouts alignment and margins")
         #Alignment
         vMain.setAlignment(QtCore.Qt.AlignTop)
         winAc.setAlignment(QtCore.Qt.AlignRight)
         gCenter.setAlignment(QtCore.Qt.AlignTop)
-        self.vCPart.setAlignment(QtCore.Qt.AlignTop)
+        #self.vCPart.setAlignment(QtCore.Qt.AlignTop)
         vMenu.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignTop)
 
         #Margin
@@ -155,6 +156,7 @@ class createUI():
         #self.vCPart.addStretch(5)
         #vRPart.addStretch(1)
 
+        print("create; createUI; create: Adding the widgets to the layouts")
         #Adding the Widgets
         vMain.addWidget(cont)
 
@@ -168,7 +170,7 @@ class createUI():
         tools.addWidget(wind, 1, 0)
         tools.addWidget(tool, 1, 1)
 
-        vMenu.addWidget(lakeside)
+        #vMenu.addWidget(lakeside)
         #vMenu.addWidget(cdnt)
         
         wWorkarea = createWorkarea.createArea()
