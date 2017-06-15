@@ -1,7 +1,5 @@
 import sys, os, create, createWorkarea
 import qtawesome as qta
-from OpenGL.GL import *
-#import animations as anim
 from PyQt5 import QtGui, QtCore, QtWidgets
 
 #This is the main file which is used for creating the window.
