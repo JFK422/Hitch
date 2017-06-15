@@ -14,28 +14,37 @@ class createArea(QtWidgets.QOpenGLWidget):
         super(createArea, self).__init__(parent)
 
     def paintGL(self):
-        glColor3f(0.0, 0.0, 1.0)
-        glRectf(-5, -5, 5, 5)
-        glColor3f(1.0, 0.0, 0.0)
-        glBegin(GL_LINES)
-        glVertex3f(0, 0, 0)
-        glVertex3f(20, 20, 0)
-        glEnd()
+        GL.glColor3f(0.0, 0.0, 1.0)
+        GL.glRectf(-5, -5, 5, 5)
+        GL.glColor3f(1.0, 0.0, 0.0)
+        GL.glBegin(GL.GL_LINES)
+        GL.glVertex3f(0, 0, 0)
+        GL.glVertex3f(20, 20, 0)
+        GL.glEnd()
 
     def resizeGL(self, w, h):
-        glMatrixMode(GL_PROJECTION)
-        glLoadIdentity()
-        glOrtho(-50, 50, -50, 50, -50.0, 50.0)
-        glViewport(0, 0, w, h)
+        GL.glMatrixMode(GL.GL_PROJECTION)
+        GL.glLoadIdentity()
+        GL.glOrtho(-50, 50, -50, 50, -50.0, 50.0)
+        GL.glViewport(0, 0, w, h)
 
     def initializeGL(self):
-        glClearColor(0.0, 0.0, 0.0, 1.0)
-        glClear(GL_COLOR_BUFFER_BIT)
+        GL.glClearColor(0.0, 0.0, 0.0, 1.0)
+        GL.glClear(GL.GL_COLOR_BUFFER_BIT)
+
 
 """
+class SpiralWidgetDemo(QtWidgets.QMainWindow):
+    ''' Example class for using SpiralWidget'''
+    
+    def __init__(self):
+        QtWidgets.QMainWindow.__init__(self)
+        widget = createArea(self)    
+        self.setCentralWidget(widget)
+
+
 if __name__ == '__main__':
-    app = QtWidgets.QApplication(["Winfred's PyQt OpenGL"])
-    widget = createArea()
-    widget.show()
-    app.exec_()
+    app = QtWidgets.QApplication(['Spiral Widget Demo'])
+    window = SpiralWidgetDemo()
+    window.show()
 """
