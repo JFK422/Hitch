@@ -99,9 +99,9 @@ class createUI:
         wRPart.setObjectName("rightEdit")
 
         #Size
-        wCPart.setMinimumWidth(500)
-        wRPart.setMinimumWidth(300)
-        wLPart.setMinimumWidth(300)
+        #wCPart.setMinimumWidth(500)
+        #wRPart.setMinimumWidth(100)
+        #wLPart.setMinimumWidth(300)
 
         wLPart.setMaximumWidth(400)
         wRPart.setMaximumWidth(400)
@@ -113,9 +113,7 @@ class createUI:
         cont.setMaximumHeight(120)
 
         #Size Policy for layouts
-        sp = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
-        wRPart.setSizePolicy(sp)
-
+        wCPart.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding))
 
         print("create; createUI; create: Creating layouts")
         #Layouts
