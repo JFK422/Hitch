@@ -18,3 +18,6 @@ class HandleStyleConfig:
     def readConfig(self):
         #read the config file
         print("style; HandleStyleConfig; ajustConfigFile: WIP Reding the style config")
+        
+        config = open("./Data/colorsConfig.cfg", "r")
+        config.read()
