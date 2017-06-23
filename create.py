@@ -113,9 +113,7 @@ class createUI:
         cont.setMaximumHeight(120)
 
         #Size Policy for layouts
-        sp = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
-        wRPart.setSizePolicy(sp)
-
+        wCPart.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding))
 
         print("create; createUI; create: Creating layouts")
         #Layouts
