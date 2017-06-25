@@ -119,7 +119,7 @@ class createUI:
         vTabs = QtWidgets.QHBoxLayout() #Tabs Layout in the Titlebar
         winAc  = QtWidgets.QGridLayout() #Window actions layout (Top left buttons)
         tools = QtWidgets.QGridLayout() #Grid Layout for the tool actions in the titlebar
-        vMenu = QtWidgets.QVBoxLayout() #Menu layout from the left side. Is placed on a blank widget then added to gCenter (Not used anymore, replaced with widget stack on vLPart)
+        vMenu = QtWidgets.QVBoxLayout() #Menu layout placed ontop of the stack vLPart
         self.vLPart = QtWidgets.QStackedLayout() #Left part of the editor
         self.vCPart = QtWidgets.QVBoxLayout() #Main layout of the editor
         self.vRPart = QtWidgets.QStackedLayout() #Right part of the editor
