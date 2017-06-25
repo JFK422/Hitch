@@ -124,10 +124,10 @@ class createUI:
         winAc  = QtWidgets.QGridLayout() #Window actions layout (Top left buttons)
         tools = QtWidgets.QGridLayout() #Grid Layout for the tool actions in the titlebar
         vMenu = QtWidgets.QVBoxLayout() #Menu layout from the left side. Is placed on a blank widget then added to gCenter
-        vLPart = QtWidgets.QVBoxLayout() #Left part of the editor
+        self.vLPart = QtWidgets.QStackedLayout() #Left part of the editor
         self.vCPart = QtWidgets.QVBoxLayout() #Main layout of the editor
-        vRPart = QtWidgets.QVBoxLayout() #Right part of the editor
-        sMenu = QtWidgets.QStackedLayout() #Stack layout to show diffrent menu widgets
+        self.vRPart = QtWidgets.QStackedLayout() #Right part of the editor
+        #sMenu = QtWidgets.QStackedLayout() #Stack layout to show diffrent menu widgets
         #vCenter = QtWidgets.QVBoxLayout() Unused, former gCenter layout
 
         print("create; createUI; create: Seting layouts alignment and margins")
@@ -179,17 +179,17 @@ class createUI:
         gCenter.addWidget(wCPart, 0, 2)
         gCenter.addWidget(wRPart, 0, 3)
 
-        sMenu.addWidget(wMenu)
+        #sMenu.addWidget(wMenu)
 
         vTabs.addWidget(cdnt)
         #vTabs.addWidget(lakeside)
 
         #adding the Layouts
         wMenu.setLayout(vMenu)
-        self.wStack.setLayout(sMenu)
-        wLPart.setLayout(vLPart)
+        #self.wStack.setLayout(sMenu)
+        wLPart.setLayout(self.vLPart)
         wCPart.setLayout(self.vCPart)
-        wRPart.setLayout(vRPart)
+        wRPart.setLayout(self.vRPart)
 
         vTB.addLayout(tools)
         vTB.addLayout(vTabs)
