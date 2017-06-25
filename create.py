@@ -93,6 +93,9 @@ class createUI:
         wRPart = QtWidgets.QWidget()
         wRPart.setObjectName("rightEdit")
 
+        wFileExplorer = QtWidgets.QWidget()
+        wFileExplorer.setObjectName("fileExplorer")
+
         #Size
         wCPart.setMinimumWidth(500)
         wRPart.setMinimumWidth(300)
@@ -123,7 +126,7 @@ class createUI:
         self.vLPart = QtWidgets.QStackedLayout() #Left part of the editor
         self.vCPart = QtWidgets.QVBoxLayout() #Main layout of the editor
         self.vRPart = QtWidgets.QStackedLayout() #Right part of the editor
-        #sMenu = QtWidgets.QStackedLayout() #Stack layout to show diffrent menu widgets
+        self.vFileExplorer = QtWidgets.QVBoxLayout() #Layout for the file explorer
 
         print("create; createUI; create: Seting layouts alignment and margins")
         #Alignment
@@ -165,6 +168,9 @@ class createUI:
 
         self.vLPart.addWidget(wMenu)
         vMenu.addWidget(lakeside)
+
+        self.vRPart.addWidget(wFileExplorer)
+        wFileExplorer.setLayout(self.vFileExplorer)
         
         wWorkarea = createWorkarea.createArea()
         self.vCPart.addWidget(wWorkarea)

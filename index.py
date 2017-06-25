@@ -53,7 +53,7 @@ class Window(QtWidgets.QWidget):
 app = QtWidgets.QApplication(sys.argv)
 
 #Set the main styling of the app
-with open("stylesheet.css") as f:
+with open("./Data/configFiles/style/stylesheet.css") as f:
     theme = f.read()
 app.setStyleSheet(theme)
 
