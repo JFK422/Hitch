@@ -38,42 +38,22 @@ class Window(QtWidgets.QWidget):
         app_icon.addFile('icons/128x128.png', QtCore.QSize(128,128))
         app_icon.addFile('icons/256x256.png', QtCore.QSize(256,256))
         app.setWindowIcon(app_icon)
+    
 
     def animate(self):
         global wmHidden
-        dur = 500
-        if self.wStack.isVisible():
-            self.wStack.setVisible(False)
+        
+        if wmHidden == True:
             wmHidden = False
 
-            """
-            anim1 = QtCore.QPropertyAnimation(self.wMenu, "pos")
-            anim1.setDuration(dur)
-            anim1.setStartValue(self.wMenu.pos())
-            anim1.setEndValue(QtCore.QPoint(0,self.wMenu.y()))
-            anim1.start()
-            self.anim1 = anim1
-            """
-
         else:
-            self.wStack.setVisible(True)
             wmHidden = True
-
-            """
-            anim2 = QtCore.QPropertyAnimation(self.wMenu, "pos")
-            anim2.setDuration(dur)
-            anim2.setStartValue(self.wMenu.pos())
-            anim2.setEndValue(QtCore.QPoint(-300,self.wMenu.y()))
-            anim2.start()
-            self.anim2 = anim2
-            time.sleep(dur/1000)
-            """
 
 #Creating the QApplication
 app = QtWidgets.QApplication(sys.argv)
 
 #Set the main styling of the app
-with open("stylesheet.css") as f:
+with open("./Data/configFiles/style/stylesheet.css") as f:
     theme = f.read()
 app.setStyleSheet(theme)
 

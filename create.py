@@ -83,11 +83,6 @@ class createUI:
         #Empty Widgets
         wMenu = QtWidgets.QWidget()
         wMenu.setObjectName("menu")
-        wMenu.setMaximumWidth(200)
-
-        self.wStack = QtWidgets.QWidget()
-        self.wStack.setMaximumWidth(200)
-        self.wStack.setVisible(False)
 
         wLPart = QtWidgets.QWidget()
         wLPart.setObjectName("leftEdit")
@@ -97,6 +92,9 @@ class createUI:
 
         wRPart = QtWidgets.QWidget()
         wRPart.setObjectName("rightEdit")
+
+        wFileExplorer = QtWidgets.QWidget()
+        wFileExplorer.setObjectName("fileExplorer")
 
         #Size
         wCPart.setMinimumWidth(500)
@@ -114,6 +112,7 @@ class createUI:
 
         #Size Policy for layouts
         wCPart.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding))
+        wMenu.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding))
 
         print("create; createUI; create: Creating layouts")
         #Layouts
@@ -123,12 +122,11 @@ class createUI:
         vTabs = QtWidgets.QHBoxLayout() #Tabs Layout in the Titlebar
         winAc  = QtWidgets.QGridLayout() #Window actions layout (Top left buttons)
         tools = QtWidgets.QGridLayout() #Grid Layout for the tool actions in the titlebar
-        vMenu = QtWidgets.QVBoxLayout() #Menu layout from the left side. Is placed on a blank widget then added to gCenter
-        vLPart = QtWidgets.QVBoxLayout() #Left part of the editor
+        vMenu = QtWidgets.QVBoxLayout() #Menu layout placed ontop of the stack vLPart
+        self.vLPart = QtWidgets.QStackedLayout() #Left part of the editor
         self.vCPart = QtWidgets.QVBoxLayout() #Main layout of the editor
-        vRPart = QtWidgets.QVBoxLayout() #Right part of the editor
-        sMenu = QtWidgets.QStackedLayout() #Stack layout to show diffrent menu widgets
-        #vCenter = QtWidgets.QVBoxLayout() Unused, former gCenter layout
+        self.vRPart = QtWidgets.QStackedLayout() #Right part of the editor
+        self.vFileExplorer = QtWidgets.QVBoxLayout() #Layout for the file explorer
 
         print("create; createUI; create: Seting layouts alignment and margins")
         #Alignment
@@ -136,12 +134,12 @@ class createUI:
         winAc.setAlignment(QtCore.Qt.AlignRight)
         gCenter.setAlignment(QtCore.Qt.AlignTop)
         #self.vCPart.setAlignment(QtCore.Qt.AlignTop)
-        vMenu.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignTop)
+        vMenu.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
 
         #Margin
         vMain.setContentsMargins(QtCore.QMargins(0,0,0,0))
         winAc.setContentsMargins(QtCore.QMargins(0,0,0,0))
-        vMenu.setContentsMargins(QtCore.QMargins(0,0,0,0))
+        vMenu.setContentsMargins(QtCore.QMargins(20,20,0,0))
         gCenter.setContentsMargins(QtCore.QMargins(0,0,0,0))
         self.vCPart.setContentsMargins(QtCore.QMargins(0,0,0,0))
         winAc.setContentsMargins(QtCore.QMargins(10,23,20,23))
@@ -154,8 +152,8 @@ class createUI:
         #self.vCPart.addStretch(5)
         #vRPart.addStretch(1)
 
-        print("create; createUI; create: Adding the widgets to the layouts")
         #Adding the Widgets
+        print("create; createUI; create: Adding the widgets to the layouts")
         vMain.addWidget(cont)
 
         winAc.addWidget(mini, 0, 0)
@@ -168,33 +166,32 @@ class createUI:
         tools.addWidget(wind, 1, 0)
         tools.addWidget(tool, 1, 1)
 
-        #vMenu.addWidget(lakeside)
-        #vMenu.addWidget(cdnt)
+        self.vLPart.addWidget(wMenu)
+        vMenu.addWidget(lakeside)
+
+        self.vRPart.addWidget(wFileExplorer)
+        wFileExplorer.setLayout(self.vFileExplorer)
         
         wWorkarea = createWorkarea.createArea()
         self.vCPart.addWidget(wWorkarea)
 
-        gCenter.addWidget(self.wStack, 0, 0)
-        gCenter.addWidget(wLPart, 0, 1)
-        gCenter.addWidget(wCPart, 0, 2)
-        gCenter.addWidget(wRPart, 0, 3)
-
-        sMenu.addWidget(wMenu)
+        gCenter.addWidget(wLPart, 0, 0)
+        gCenter.addWidget(wCPart, 0, 1)
+        gCenter.addWidget(wRPart, 0, 2)
 
         vTabs.addWidget(cdnt)
-        #vTabs.addWidget(lakeside)
 
         #adding the Layouts
+        print("create; createUI; create: Adding the layouts to widgets")
         wMenu.setLayout(vMenu)
-        self.wStack.setLayout(sMenu)
-        wLPart.setLayout(vLPart)
+        wLPart.setLayout(self.vLPart)
         wCPart.setLayout(self.vCPart)
-        wRPart.setLayout(vRPart)
+        wRPart.setLayout(self.vRPart)
 
+        print("create; createUI; create: Adding the layouts together")
         vTB.addLayout(tools)
         vTB.addLayout(vTabs)
         vTB.addLayout(winAc)
         vMain.addLayout(vTB)
-        #hCenter.addLayout(vMenu)
         vMain.addLayout(gCenter)
         self.setLayout(vMain)
