@@ -99,9 +99,9 @@ class createUI:
         wRPart.setObjectName("rightEdit")
 
         #Size
-        #wCPart.setMinimumWidth(500)
-        #wRPart.setMinimumWidth(100)
-        #wLPart.setMinimumWidth(300)
+        wCPart.setMinimumWidth(500)
+        wRPart.setMinimumWidth(300)
+        wLPart.setMinimumWidth(300)
 
         wLPart.setMaximumWidth(400)
         wRPart.setMaximumWidth(400)
