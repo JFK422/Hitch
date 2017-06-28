@@ -67,7 +67,7 @@ class createUI:
         self.compileBtn.setMaximumSize(QtCore.QSize(90,90))
         self.compileBtn.clicked.connect(lambda:compiler.compiler.compile(self, "thing"))
 
-        self.gearSpinning = qta.icon("fa.gear", color=compileStates["compiling"], animation=qta.Spin(compileBtn))
+        self.gearSpinning = qta.icon("fa.gear", color=compileStates["compiling"], animation=qta.Spin(self.compileBtn))
         self.gearIdleU = qta.icon("fa.gear", color=compileStates["uncompiled"])
         self.gearIdleC = qta.icon("fa.gear", color=compileStates["compiled"])
         self.gearIdleE = qta.icon("fa.gear", color=compileStates["error"])
