@@ -1,4 +1,4 @@
-import sys, os, create, createWorkarea
+import sys, os, create, createWorkarea, compiler
 import qtawesome as qta
 from PyQt5 import QtGui, QtCore, QtWidgets, QtMultimedia
 
@@ -56,12 +56,25 @@ class createUI:
         tool.setObjectName("tools")
         tool.setMaximumSize(QtCore.QSize(30,30))
 
-        #Create app buttons
-        cdnt = QtWidgets.QPushButton("", self)
-        cdnt.setObjectName("cadent")
-        cdnt.setMinimumSize(QtCore.QSize(50,50))
-        cdnt.setMaximumSize(QtCore.QSize(90,90))
-        cdnt.clicked.connect(self.animate)
+        #Create app buttons and icons
+        mode = "current"
+        self.state = "uncompiled"
+        compileStates = {"uncompiled" : "#a51946", "compiled" : "#4190ff", "error" : "#ffb041", "leftovers" : "#b041ff", "compiling" : "white"}
+
+        compileBtn = QtWidgets.QPushButton("", self)
+        compileBtn.setObjectName("compileBtn")
+        compileBtn.setMinimumSize(QtCore.QSize(50,50))
+        compileBtn.setMaximumSize(QtCore.QSize(90,90))
+        compileBtn.clicked.connect(lambda:compiler.compiler.compile(self, "thing"))
+
+        gearSpinning = qta.icon("fa.gear", color=compileStates["compiling"], animation=qta.Spin(compileBtn))
+        gearIdleU = qta.icon("fa.gear", color=compileStates["uncompiled"])
+        gearIdleC = qta.icon("fa.gear", color=compileStates["compiled"])
+        gearIdleE = qta.icon("fa.gear", color=compileStates["error"])
+        gearIdleL = qta.icon("fa.gear", color=compileStates["leftovers"])
+
+        compileBtn.setIcon(gearIdleU)
+        compileBtn.setIconSize(QtCore.QSize(64, 64))
 
         lakeside = QtWidgets.QPushButton("", self)
         lakeside.setObjectName("cadent")
@@ -179,7 +192,7 @@ class createUI:
         gCenter.addWidget(wCPart, 0, 1)
         gCenter.addWidget(wRPart, 0, 2)
 
-        vTabs.addWidget(cdnt)
+        vTabs.addWidget(compileBtn)
 
         #adding the Layouts
         print("create; createUI; create: Adding the layouts to widgets")
