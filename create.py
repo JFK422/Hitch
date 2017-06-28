@@ -61,20 +61,20 @@ class createUI:
         self.state = "uncompiled"
         compileStates = {"uncompiled" : "#a51946", "compiled" : "#4190ff", "error" : "#ffb041", "leftovers" : "#b041ff", "compiling" : "white"}
 
-        compileBtn = QtWidgets.QPushButton("", self)
-        compileBtn.setObjectName("compileBtn")
-        compileBtn.setMinimumSize(QtCore.QSize(50,50))
-        compileBtn.setMaximumSize(QtCore.QSize(90,90))
-        compileBtn.clicked.connect(lambda:compiler.compiler.compile(self, "thing"))
+        self.compileBtn = QtWidgets.QPushButton("", self)
+        self.compileBtn.setObjectName("compileBtn")
+        self.compileBtn.setMinimumSize(QtCore.QSize(50,50))
+        self.compileBtn.setMaximumSize(QtCore.QSize(90,90))
+        self.compileBtn.clicked.connect(lambda:compiler.compiler.compile(self, "thing"))
 
-        gearSpinning = qta.icon("fa.gear", color=compileStates["compiling"], animation=qta.Spin(compileBtn))
-        gearIdleU = qta.icon("fa.gear", color=compileStates["uncompiled"])
-        gearIdleC = qta.icon("fa.gear", color=compileStates["compiled"])
-        gearIdleE = qta.icon("fa.gear", color=compileStates["error"])
-        gearIdleL = qta.icon("fa.gear", color=compileStates["leftovers"])
+        self.gearSpinning = qta.icon("fa.gear", color=compileStates["compiling"], animation=qta.Spin(compileBtn))
+        self.gearIdleU = qta.icon("fa.gear", color=compileStates["uncompiled"])
+        self.gearIdleC = qta.icon("fa.gear", color=compileStates["compiled"])
+        self.gearIdleE = qta.icon("fa.gear", color=compileStates["error"])
+        self.gearIdleL = qta.icon("fa.gear", color=compileStates["leftovers"])
 
-        compileBtn.setIcon(gearIdleU)
-        compileBtn.setIconSize(QtCore.QSize(64, 64))
+        self.compileBtn.setIcon(gearIdleL)
+        self.compileBtn.setIconSize(QtCore.QSize(64, 64))
 
         lakeside = QtWidgets.QPushButton("", self)
         lakeside.setObjectName("cadent")
@@ -208,3 +208,17 @@ class createUI:
         vMain.addLayout(vTB)
         vMain.addLayout(gCenter)
         self.setLayout(vMain)
+
+    def switchCompStatus(self, newStatus):
+        if newStatus == "compiling":
+            self.compileBtn.setIcon(self.gearSpinning)
+        elif newStatus == "uncompiled":
+            self.compileBtn.setIcon(self.gearIdleU)
+        elif newStatus == "compiled":
+            self.compileBtn.setIcon(self.gearIdleC)
+        elif newStatus == "error":
+            self.compileBtn.setIcon(self.gearIdleE)
+        elif newStatus == "leftovers":
+            self.compileBtn.setIcon(self.gearIdleL)
+        else:
+            print("create; createUI; switchCompStatus: Error, unable to determine the new icon status!")
