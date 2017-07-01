@@ -1,5 +1,7 @@
 import sys, os, create, createWorkarea, compiler
 import qtawesome as qta
+from ProjectHandling import saveFiles as sf
+from ProjectHandling import workareaData as wd
 from PyQt5 import QtGui, QtCore, QtWidgets, QtMultimedia
 
 #This is the main file which is used for creating the window.
@@ -61,21 +63,26 @@ class createUI:
         compileStates = {"uncompiled" : "#a51946", "compiled" : "#4190ff", "error" : "#ffb041", "leftovers" : "#b041ff", "compiling" : "white"}
 
         self.compileBtn = QtWidgets.QPushButton("", self)
-        self.compileBtn.setObjectName("compileBtn")
+        self.compileBtn.setObjectName("toolButtons")
         self.compileBtn.setMinimumSize(QtCore.QSize(50,50))
         self.compileBtn.setMaximumSize(QtCore.QSize(90,90))
         self.compileBtn.clicked.connect(lambda:compiler.compiler.compile(self, "thing"))
 
         compMenu = QtWidgets.QMenu()
-        compMenu.hide()
-        compMenu.addAction("Test1")
-        compMenu.addAction("Test2")
-        compMenu.addAction("Test3")
+        compMenu.addAction("Compile All")
+        compMenu.addAction("Compile Current")
+        #compMenu.addAction("Package")
 
         modeBtn = QtWidgets.QPushButton("", self)
-        modeBtn.setObjectName("compileBtn")
+        modeBtn.setObjectName("toolButtons")
         modeBtn.setMenu(compMenu)
         modeBtn.setMaximumWidth(20)
+
+        saveBtn = QtWidgets.QPushButton("", self)
+        saveBtn.setObjectName("toolButtons")
+        saveBtn.setMinimumSize(QtCore.QSize(50,50))
+        saveBtn.setMaximumSize(QtCore.QSize(90,90))
+        saveBtn.clicked.connect(lambda:sf.saveFiles.saveAFile(self, "filePath"))
 
         self.gearSpinning = qta.icon("fa.gear", color=compileStates["compiling"], animation=qta.Spin(self.compileBtn))
         self.gearIdleU = qta.icon("fa.gear", color=compileStates["uncompiled"])
@@ -83,15 +90,13 @@ class createUI:
         self.gearIdleE = qta.icon("fa.gear", color=compileStates["error"])
         self.gearIdleL = qta.icon("fa.gear", color=compileStates["leftovers"])
         triang = qta.icon("fa.caret-down", color="white")
+        floppy = qta.icon("fa.floppy-o", color="white")
 
         self.compileBtn.setIcon(self.gearIdleL)
         self.compileBtn.setIconSize(QtCore.QSize(64, 64))
         modeBtn.setIcon(triang)
-
-        lakeside = QtWidgets.QPushButton("", self)
-        lakeside.setObjectName("cadent")
-        lakeside.setMinimumSize(QtCore.QSize(50,50))
-        lakeside.setMaximumSize(QtCore.QSize(90,90))
+        saveBtn.setIcon(floppy)
+        saveBtn.setIconSize(QtCore.QSize(64, 64))
 
         """
         Audio Test (doesnt work!)
@@ -178,7 +183,7 @@ class createUI:
         vTB.setContentsMargins(QtCore.QMargins(20,0,0,0))
         tools.setContentsMargins(QtCore.QMargins(0,23,30,23))
         vTabs.setContentsMargins(QtCore.QMargins(0,0,0,0))
-        hComp.setContentsMargins(QtCore.QMargins(0,0,0,0))
+        hComp.setContentsMargins(QtCore.QMargins(0,0,10,0))
 
         #Stretch
         #vLPart.addStretch(1)
@@ -200,7 +205,7 @@ class createUI:
         tools.addWidget(tool, 1, 1)
 
         self.vLPart.addWidget(wMenu)
-        vMenu.addWidget(lakeside)
+        #vMenu.addWidget() #Add widgets to the menu
 
         self.vRPart.addWidget(wFileExplorer)
         wFileExplorer.setLayout(self.vFileExplorer)
@@ -215,6 +220,7 @@ class createUI:
         hComp.addWidget(self.compileBtn)
         hComp.addWidget(modeBtn)
         vTabs.addWidget(wComp)
+        vTabs.addWidget(saveBtn)
 
         #adding the Layouts
         print("create; createUI; create: Adding the layouts to widgets")

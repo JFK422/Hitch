@@ -1,5 +1,6 @@
 import sys, os, create
 import qtawesome as qta
+from ProjectHandling import workareaData as wd
 from PyQt5 import QtGui, QtCore, QtWidgets
 
 #This is the MAIN file of the app. Its used for handeling hte diffrent scripts within this programm.
@@ -14,6 +15,7 @@ class Window(QtWidgets.QWidget):
         self.setGeometry(50,50,1200,700)
         self.setWindowTitle("Hitch")
         #self.setWindowFlags(self.windowFlags() | QtCore.Qt.FramelessWindowHint) #Use this for a frameless window. Will be used later!
+        wd.Data.readTemp(self)
         create.createUI.create(self)
         self.icon()
         self.showMaximized()

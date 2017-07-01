@@ -23,7 +23,7 @@ QPushButton::menu-indicator
     background-color: #ff634d;
 }
 
-#compileBtn{
+#toolButtons{
     border-color: #ff634d;
     border-style: solid;
     background-color: #ff634d;
@@ -31,7 +31,7 @@ QPushButton::menu-indicator
     font-size: 18px;
 }
 
-#cadent:hover{
+#toolButtons:hover{
     border-color: #ff5840;
     background-color: #ff5840;
 }
