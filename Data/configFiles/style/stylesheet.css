@@ -18,6 +18,11 @@ QPushButton:hover{
     font-size: 18px;
 }
 
+QPushButton::menu-indicator
+{
+    background-color: #ff634d;
+}
+
 #compileBtn{
     border-color: #ff634d;
     border-style: solid;

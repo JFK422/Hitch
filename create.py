@@ -58,7 +58,6 @@ class createUI:
 
         #Create app buttons and icons
         mode = "current"
-        self.state = "uncompiled"
         compileStates = {"uncompiled" : "#a51946", "compiled" : "#4190ff", "error" : "#ffb041", "leftovers" : "#b041ff", "compiling" : "white"}
 
         self.compileBtn = QtWidgets.QPushButton("", self)
@@ -67,14 +66,27 @@ class createUI:
         self.compileBtn.setMaximumSize(QtCore.QSize(90,90))
         self.compileBtn.clicked.connect(lambda:compiler.compiler.compile(self, "thing"))
 
+        compMenu = QtWidgets.QMenu()
+        compMenu.hide()
+        compMenu.addAction("Test1")
+        compMenu.addAction("Test2")
+        compMenu.addAction("Test3")
+
+        modeBtn = QtWidgets.QPushButton("", self)
+        modeBtn.setObjectName("compileBtn")
+        modeBtn.setMenu(compMenu)
+        modeBtn.setMaximumWidth(20)
+
         self.gearSpinning = qta.icon("fa.gear", color=compileStates["compiling"], animation=qta.Spin(self.compileBtn))
         self.gearIdleU = qta.icon("fa.gear", color=compileStates["uncompiled"])
         self.gearIdleC = qta.icon("fa.gear", color=compileStates["compiled"])
         self.gearIdleE = qta.icon("fa.gear", color=compileStates["error"])
         self.gearIdleL = qta.icon("fa.gear", color=compileStates["leftovers"])
+        triang = qta.icon("fa.caret-down", color="white")
 
-        self.compileBtn.setIcon(gearIdleL)
+        self.compileBtn.setIcon(self.gearIdleL)
         self.compileBtn.setIconSize(QtCore.QSize(64, 64))
+        modeBtn.setIcon(triang)
 
         lakeside = QtWidgets.QPushButton("", self)
         lakeside.setObjectName("cadent")
@@ -109,6 +121,11 @@ class createUI:
         wFileExplorer = QtWidgets.QWidget()
         wFileExplorer.setObjectName("fileExplorer")
 
+        wComp = QtWidgets.QWidget()
+        #wComp.setObjectName("rightEdit")
+        wComp.setMaximumSize(QtCore.QSize(110, 90))
+        wComp.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum))
+
         #Size
         wCPart.setMinimumWidth(500)
         wRPart.setMinimumWidth(300)
@@ -140,6 +157,7 @@ class createUI:
         self.vCPart = QtWidgets.QVBoxLayout() #Main layout of the editor
         self.vRPart = QtWidgets.QStackedLayout() #Right part of the editor
         self.vFileExplorer = QtWidgets.QVBoxLayout() #Layout for the file explorer
+        hComp = QtWidgets.QHBoxLayout() #Layout for the dropdown and the compile button
 
         print("create; createUI; create: Seting layouts alignment and margins")
         #Alignment
@@ -148,6 +166,7 @@ class createUI:
         gCenter.setAlignment(QtCore.Qt.AlignTop)
         #self.vCPart.setAlignment(QtCore.Qt.AlignTop)
         vMenu.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
+        hComp.setAlignment(QtCore.Qt.AlignLeft)
 
         #Margin
         vMain.setContentsMargins(QtCore.QMargins(0,0,0,0))
@@ -159,6 +178,7 @@ class createUI:
         vTB.setContentsMargins(QtCore.QMargins(20,0,0,0))
         tools.setContentsMargins(QtCore.QMargins(0,23,30,23))
         vTabs.setContentsMargins(QtCore.QMargins(0,0,0,0))
+        hComp.setContentsMargins(QtCore.QMargins(0,0,0,0))
 
         #Stretch
         #vLPart.addStretch(1)
@@ -192,7 +212,9 @@ class createUI:
         gCenter.addWidget(wCPart, 0, 1)
         gCenter.addWidget(wRPart, 0, 2)
 
-        vTabs.addWidget(compileBtn)
+        hComp.addWidget(self.compileBtn)
+        hComp.addWidget(modeBtn)
+        vTabs.addWidget(wComp)
 
         #adding the Layouts
         print("create; createUI; create: Adding the layouts to widgets")
@@ -200,6 +222,7 @@ class createUI:
         wLPart.setLayout(self.vLPart)
         wCPart.setLayout(self.vCPart)
         wRPart.setLayout(self.vRPart)
+        wComp.setLayout(hComp)
 
         print("create; createUI; create: Adding the layouts together")
         vTB.addLayout(tools)
@@ -212,13 +235,18 @@ class createUI:
     def switchCompStatus(self, newStatus):
         if newStatus == "compiling":
             self.compileBtn.setIcon(self.gearSpinning)
+            self.currentCompStat = "compiling"
         elif newStatus == "uncompiled":
             self.compileBtn.setIcon(self.gearIdleU)
+            self.currentCompStat = "uncompiled"
         elif newStatus == "compiled":
             self.compileBtn.setIcon(self.gearIdleC)
+            self.currentCompStat = "compiled"
         elif newStatus == "error":
             self.compileBtn.setIcon(self.gearIdleE)
+            self.currentCompStat = "error"
         elif newStatus == "leftovers":
             self.compileBtn.setIcon(self.gearIdleL)
+            self.currentCompStat = "leftovers"
         else:
             print("create; createUI; switchCompStatus: Error, unable to determine the new icon status!")
