@@ -26,35 +26,46 @@ class Data:
         if type == "openFilesAdd":
             if self.openFiles == []:
                 self.openFiles.append(data)
+                Data.saveTemp(self)
             else:
                 self.openFiles.append(";{0}".format(data))
+                Data.saveTemp(self)
 
         elif type == "openFilesRemove":
             self.openFiles.remove(data)
+            Data.saveTemp(self)
 
         elif type == "compMode":
             self.compileMode = data
+            Data.saveTemp(self)
 
         elif type == "unsavedFilesAdd":
             if self.unsavedFiles == []:
                 self.unsavedFiles.append(data)
+                Data.saveTemp(self)
             else:
                 self.unsavedFiles.append(";{0}".format(data))
+                Data.saveTemp(self)
 
         elif type == "unsavedFilesRemove":
             self.unsavedFiles.remove(data)
+            Data.saveTemp(self)
 
         elif type == "uncompiledFilesAdd":
             if self.uncompiledFiles == []:
                 self.uncompiledFiles.append(data)
+                Data.saveTemp(self)
             else:
                 self.uncompiledFiles.append(";{0}".format(data))
+                Data.saveTemp(self)
 
         elif type == "uncompiledFilesRemove":
             self.uncompiledFiles.remove(data)
+            Data.saveTemp(self)
 
         elif type == "selectedFile":
             self.selectedFile = data
+            Data.saveTemp(self)
 
     def saveTemp(self):
         tempSave = ""
