@@ -1,5 +1,7 @@
 import sys, os, create, createWorkarea, compiler
 import qtawesome as qta
+from ProjectHandling import saveFiles as sf
+from ProjectHandling import workareaData as wd
 from PyQt5 import QtGui, QtCore, QtWidgets, QtMultimedia
 
 #This is the main file which is used for creating the window.
@@ -58,28 +60,43 @@ class createUI:
 
         #Create app buttons and icons
         mode = "current"
-        self.state = "uncompiled"
         compileStates = {"uncompiled" : "#a51946", "compiled" : "#4190ff", "error" : "#ffb041", "leftovers" : "#b041ff", "compiling" : "white"}
 
         self.compileBtn = QtWidgets.QPushButton("", self)
-        self.compileBtn.setObjectName("compileBtn")
+        self.compileBtn.setObjectName("toolButtons")
         self.compileBtn.setMinimumSize(QtCore.QSize(50,50))
         self.compileBtn.setMaximumSize(QtCore.QSize(90,90))
-        self.compileBtn.clicked.connect(lambda:compiler.compiler.compile(self, "thing"))
+        self.compileBtn.clicked.connect(lambda:compiler.compiler.compile(self))
+
+        compMenu = QtWidgets.QMenu()
+        compMenu.addAction("Compile All")
+        compMenu.addAction("Compile Current")
+        #compMenu.addAction("Package")
+
+        modeBtn = QtWidgets.QPushButton("", self)
+        modeBtn.setObjectName("toolButtons")
+        modeBtn.setMenu(compMenu)
+        modeBtn.setMaximumWidth(20)
+
+        saveBtn = QtWidgets.QPushButton("", self)
+        saveBtn.setObjectName("toolButtons")
+        saveBtn.setMinimumSize(QtCore.QSize(50,50))
+        saveBtn.setMaximumSize(QtCore.QSize(90,90))
+        saveBtn.clicked.connect(lambda:sf.saveFiles.saveAFile(self, "filePath"))
 
         self.gearSpinning = qta.icon("fa.gear", color=compileStates["compiling"], animation=qta.Spin(self.compileBtn))
         self.gearIdleU = qta.icon("fa.gear", color=compileStates["uncompiled"])
         self.gearIdleC = qta.icon("fa.gear", color=compileStates["compiled"])
         self.gearIdleE = qta.icon("fa.gear", color=compileStates["error"])
         self.gearIdleL = qta.icon("fa.gear", color=compileStates["leftovers"])
+        triang = qta.icon("fa.caret-down", color="white")
+        floppy = qta.icon("fa.floppy-o", color="white")
 
-        self.compileBtn.setIcon(gearIdleL)
+        self.compileBtn.setIcon(self.gearIdleL)
         self.compileBtn.setIconSize(QtCore.QSize(64, 64))
-
-        lakeside = QtWidgets.QPushButton("", self)
-        lakeside.setObjectName("cadent")
-        lakeside.setMinimumSize(QtCore.QSize(50,50))
-        lakeside.setMaximumSize(QtCore.QSize(90,90))
+        modeBtn.setIcon(triang)
+        saveBtn.setIcon(floppy)
+        saveBtn.setIconSize(QtCore.QSize(64, 64))
 
         """
         Audio Test (doesnt work!)
@@ -108,6 +125,11 @@ class createUI:
 
         wFileExplorer = QtWidgets.QWidget()
         wFileExplorer.setObjectName("fileExplorer")
+
+        wComp = QtWidgets.QWidget()
+        #wComp.setObjectName("rightEdit")
+        wComp.setMaximumSize(QtCore.QSize(110, 90))
+        wComp.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum))
 
         #Size
         wCPart.setMinimumWidth(500)
@@ -140,6 +162,7 @@ class createUI:
         self.vCPart = QtWidgets.QVBoxLayout() #Main layout of the editor
         self.vRPart = QtWidgets.QStackedLayout() #Right part of the editor
         self.vFileExplorer = QtWidgets.QVBoxLayout() #Layout for the file explorer
+        hComp = QtWidgets.QHBoxLayout() #Layout for the dropdown and the compile button
 
         print("create; createUI; create: Seting layouts alignment and margins")
         #Alignment
@@ -148,6 +171,7 @@ class createUI:
         gCenter.setAlignment(QtCore.Qt.AlignTop)
         #self.vCPart.setAlignment(QtCore.Qt.AlignTop)
         vMenu.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
+        hComp.setAlignment(QtCore.Qt.AlignLeft)
 
         #Margin
         vMain.setContentsMargins(QtCore.QMargins(0,0,0,0))
@@ -159,6 +183,7 @@ class createUI:
         vTB.setContentsMargins(QtCore.QMargins(20,0,0,0))
         tools.setContentsMargins(QtCore.QMargins(0,23,30,23))
         vTabs.setContentsMargins(QtCore.QMargins(0,0,0,0))
+        hComp.setContentsMargins(QtCore.QMargins(0,0,10,0))
 
         #Stretch
         #vLPart.addStretch(1)
@@ -180,7 +205,7 @@ class createUI:
         tools.addWidget(tool, 1, 1)
 
         self.vLPart.addWidget(wMenu)
-        vMenu.addWidget(lakeside)
+        #vMenu.addWidget() #Add widgets to the menu
 
         self.vRPart.addWidget(wFileExplorer)
         wFileExplorer.setLayout(self.vFileExplorer)
@@ -192,7 +217,10 @@ class createUI:
         gCenter.addWidget(wCPart, 0, 1)
         gCenter.addWidget(wRPart, 0, 2)
 
-        vTabs.addWidget(compileBtn)
+        hComp.addWidget(self.compileBtn)
+        hComp.addWidget(modeBtn)
+        vTabs.addWidget(wComp)
+        vTabs.addWidget(saveBtn)
 
         #adding the Layouts
         print("create; createUI; create: Adding the layouts to widgets")
@@ -200,6 +228,7 @@ class createUI:
         wLPart.setLayout(self.vLPart)
         wCPart.setLayout(self.vCPart)
         wRPart.setLayout(self.vRPart)
+        wComp.setLayout(hComp)
 
         print("create; createUI; create: Adding the layouts together")
         vTB.addLayout(tools)
@@ -212,13 +241,18 @@ class createUI:
     def switchCompStatus(self, newStatus):
         if newStatus == "compiling":
             self.compileBtn.setIcon(self.gearSpinning)
+            self.currentCompStat = "compiling"
         elif newStatus == "uncompiled":
             self.compileBtn.setIcon(self.gearIdleU)
+            self.currentCompStat = "uncompiled"
         elif newStatus == "compiled":
             self.compileBtn.setIcon(self.gearIdleC)
+            self.currentCompStat = "compiled"
         elif newStatus == "error":
             self.compileBtn.setIcon(self.gearIdleE)
+            self.currentCompStat = "error"
         elif newStatus == "leftovers":
             self.compileBtn.setIcon(self.gearIdleL)
+            self.currentCompStat = "leftovers"
         else:
             print("create; createUI; switchCompStatus: Error, unable to determine the new icon status!")
