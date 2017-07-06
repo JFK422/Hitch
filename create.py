@@ -66,7 +66,7 @@ class createUI:
         self.compileBtn.setObjectName("toolButtons")
         self.compileBtn.setMinimumSize(QtCore.QSize(50,50))
         self.compileBtn.setMaximumSize(QtCore.QSize(90,90))
-        self.compileBtn.clicked.connect(lambda:compiler.compiler.compile(self, "thing"))
+        self.compileBtn.clicked.connect(lambda:compiler.compiler.compile(self))
 
         compMenu = QtWidgets.QMenu()
         compMenu.addAction("Compile All")

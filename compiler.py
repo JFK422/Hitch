@@ -1,17 +1,12 @@
-import create, time
+import time, create
+from ProjectHandling import workareaData as wd
 
 class compiler:
 
     def __init__(self):
         print("compiler; compiler; init: INIT_CALLED")
 
-    def compile(self, mode):
+    def compile(self):
         print(print("compiler; compiler; compile: Compiling"))
         
-        create.switchCompStatus("compiling")
-        time.sleep(3)
-        create.switchCompStatus("compiled")
-        time.sleep(3)
-        create.switchCompStatus("error")
-        time.sleep(3)
-        create.switchCompStatus("leftovers")
+        create.createUI.switchCompStatus(self, "compiling")

@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 class Data:
     def __init__(self):
@@ -6,66 +7,78 @@ class Data:
     
     def readTemp(self):
         print("workareaData; Data; readTemp: Reading temp files")
-        emptyList = []
 
-        if Data.fileExists(self):        
-            openFiles = open("../Data/Temp/openFiles.tmp", "r")
-            tTempData = openFiles.read()
-            lTempData = OpenFiles.split(";")
-            return lTempData
+        Data.fileExists(self)
+        tempFile = open("./Data/Temp/EditorTemp.tmp", "r+")
+        tmpFileText = tempFile.read()
+        listOfTemp = tmpFileText.split(":")
+        self.openFiles = listOfTemp[0]
+        self.compileMode = listOfTemp[1]
+        self.unsavedFiles = listOfTemp[2]
+        self.selectedFile = listOfTemp[3]
+        self.uncompiledFiles = listOfTemp[4]
+        tempFile.close()
 
-        else: 
-            return emptyList
 
     def storeTemp(self, type, data=""):
         print("workareaData; Data; storeTemp: Storing temp files")
 
-        Data.fileExists(self)
-
-        #Variables for the temp file which stores all currently open files
-        openFiles = open("../Data/Temp/openFiles.tmp", "r+")
-        tOpenFiles = openFiles.read()
-        unsavedFiles = open("../Data/Temp/unsavedFiles.tmp", "r+")
-        tUnsavedFiles = unsavedFiles.read()
-
         if type == "openFilesAdd":
-            tOpenFiles += data
-            openFiles.write(tOpenFiles)
+            if self.openFiles == []:
+                self.openFiles.append(data)
+            else:
+                self.openFiles.append(";{0}".format(data))
 
         elif type == "openFilesRemove":
-            currentOF = tOpenFiles.split(";")
-            currentOF.remove(data)
-            newOpenFiles = ""
-            for i in range(len(currentOF)):
-                newOpenFiles += currentOF[i]
-            openFiles.write(newOpenFiles)
-        
-        elif type == "truncateTemp":
-            truncTemp = open("../Data/Temp/openFiles.tmp", "w+")
-            truncTemp.close()
+            self.openFiles.remove(data)
 
         elif type == "compMode":
-            self.compMode = data
+            self.compileMode = data
 
         elif type == "unsavedFilesAdd":
-            tUnsavedFiles += data
-            unsavedFiles.write(tUnsavedFiles)
+            if self.unsavedFiles == []:
+                self.unsavedFiles.append(data)
+            else:
+                self.unsavedFiles.append(";{0}".format(data))
+
+        elif type == "unsavedFilesRemove":
+            self.unsavedFiles.remove(data)
+
+        elif type == "uncompiledFilesAdd":
+            if self.uncompiledFiles == []:
+                self.uncompiledFiles.append(data)
+            else:
+                self.uncompiledFiles.append(";{0}".format(data))
+
+        elif type == "uncompiledFilesRemove":
+            self.uncompiledFiles.remove(data)
+
+        elif type == "selectedFile":
+            self.selectedFile = data
+
+    def saveTemp(self):
+        tempSave = ""
+        for i in range(len(self.openFiles)):
+            tempSave += self.openFiles[i]
+        tempSave += ":"
+        tempSave += self.compileMode
+        tempSave += ":"
+        for j in range(len(self.unsavedFiles)):
+            tempSave += self.unsavedFiles[j]
+        tempSave += ":"
+        tempSave += self.selectedFile
+        tempSave += ":"
+        for k in range(len(self.uncompiledFiles)):
+            tempSave += self.uncompiledFiles[k]
+
+        tempFile = open("./Data/Temp/EditorTemp.tmp", "w+")
+        tempFile.write(tempSave)
+        tempFile.close()
+
 
 
     def fileExists(self):
-        tempOFPresent = Path("../Data/Temp/openFiles.tmp")
-        tempUFPresent = Path("../Data/Temp/unsavedFiles.tmp")
-        if tempOFPresent.is_file() and tempUFPresent:
-            return True
-
-        elif not(tempOFPresent.is_file()):
-            print("workareaData; Data; fileExists: Temp open files not found, Creating it")
-            #tempFile = open("../Data/Temp/openFiles.tmp", "w+")
-            #tempFile.close()
-            return False
-
-        elif not(tempUFPresent.is_file()):
-            print("workareaData; Data; fileExists: Temp unsaved files not found, Creating it")
-            tempFile = open("../Data/Temp/unsavedFiles.tmp", "w+")
-            tempFile.close()
-            return False
+        if not(os.path.isfile("./Data/Temp/EditorTemp.tmp")):
+            unpresentFile = open("./Data/Temp/EditorTemp.tmp", "w+")
+            unpresentFile.write("::::")
+            unpresentFile.close()
