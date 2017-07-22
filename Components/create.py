@@ -1,66 +1,76 @@
-import sys, os, create, createWorkarea, compiler
+import sys, os, createWorkarea, compiler
 import qtawesome as qta
+from Components.Misc import openFileTabWidget
 from ProjectHandling import saveFiles as sf
+from Components.Menu import mainMenuWidget
 from ProjectHandling import workareaData as wd
 from PyQt5 import QtGui, QtCore, QtWidgets, QtMultimedia
 
 #This is the main file which is used for creating the window.
 
-class createUI:    
+class createUI:
+    hOpenFilesLay = None
     def create(self):
         print("create; createUI; create: Creating the main window layout")
         print("create; createUI; create: Creating widgets")
 
         #Create icons
-        minIco = qta.icon("fa.minus", color="white")
-        closeIco = qta.icon("fa.times", color="white")
-        setIco = qta.icon("fa.sliders", color="white")
-        maximIco = qta.icon("fa.arrows-alt", color="white")
-        filesIco = qta.icon("fa.file-text-o", color="white")
-        editIco = qta.icon("fa.pencil", color="white")
-        windIco = qta.icon("fa.square-o", color="white")
-        toolsIco = qta.icon("fa.cog", color="white")
+        compileStates = {"uncompiled" : "#a51946", "compiled" : "#4190ff", "error" : "#ffb041", "leftovers" : "#b041ff", "compiling" : "white"}
+        self.toolbarIcons = [qta.icon("fa.minus", color="white"), 
+                                    qta.icon("fa.times", color="white"), 
+                                    qta.icon("fa.sliders", color="white"), 
+                                    qta.icon("fa.arrows-alt", color="white"), 
+                                    qta.icon("fa.file-text-o", color="white"),
+                                    qta.icon("fa.pencil", color="white"),
+                                    qta.icon("fa.square-o", color="white"),
+                                    qta.icon("fa.cog", color="white"),
+                                    qta.icon("fa.gear", color=compileStates["compiling"]), #Later add a spin animation to this icon
+                                    qta.icon("fa.gear", color=compileStates["uncompiled"]),
+                                    qta.icon("fa.gear", color=compileStates["compiled"]),
+                                    qta.icon("fa.gear", color=compileStates["error"]),
+                                    qta.icon("fa.gear", color=compileStates["leftovers"]),
+                                    qta.icon("fa.caret-down", color="white"),
+                                    qta.icon("fa.floppy-o", color="white")]
 
         #Create window action buttons
-        mini = QtWidgets.QPushButton(minIco, "", self)
+        mini = QtWidgets.QPushButton(self.toolbarIcons[0], "", self)
         mini.setObjectName("minimize")
         mini.setMaximumSize(QtCore.QSize(30,30))
         mini.clicked.connect(self.minimize)
 
-        quitBtn = QtWidgets.QPushButton(closeIco, "", self)
+        quitBtn = QtWidgets.QPushButton(self.toolbarIcons[1], "", self)
         quitBtn.setObjectName("quitBtn")
         quitBtn.setMaximumSize(QtCore.QSize(30,30))
         quitBtn.clicked.connect(QtCore.QCoreApplication.instance().quit)
 
-        maxim = QtWidgets.QPushButton(maximIco, "", self)
+        settings = QtWidgets.QPushButton(self.toolbarIcons[2], "", self)
+        settings.setObjectName("settings")
+        settings.setMaximumSize(QtCore.QSize(30,30))
+
+        maxim = QtWidgets.QPushButton(self.toolbarIcons[3], "", self)
         maxim.setObjectName("maxim")
         maxim.setMaximumSize(QtCore.QSize(30,30))
         maxim.clicked.connect(self.maximize)
 
-        settings = QtWidgets.QPushButton(setIco, "", self)
-        settings.setObjectName("settings")
-        settings.setMaximumSize(QtCore.QSize(30,30))
-
         #Create Tool Buttons
-        files = QtWidgets.QPushButton(filesIco, "", self)
+        files = QtWidgets.QPushButton(self.toolbarIcons[4], "", self)
         files.setObjectName("tools")
         files.setMaximumSize(QtCore.QSize(30,30))
 
-        edit = QtWidgets.QPushButton(editIco, "", self)
+        edit = QtWidgets.QPushButton(self.toolbarIcons[5], "", self)
         edit.setObjectName("tools")
         edit.setMaximumSize(QtCore.QSize(30,30))
 
-        wind = QtWidgets.QPushButton(windIco, "", self)
+        wind = QtWidgets.QPushButton(self.toolbarIcons[6], "", self)
         wind.setObjectName("tools")
         wind.setMaximumSize(QtCore.QSize(30,30))
 
-        tool = QtWidgets.QPushButton(toolsIco, "", self)
+        tool = QtWidgets.QPushButton(self.toolbarIcons[7], "", self)
         tool.setObjectName("tools")
         tool.setMaximumSize(QtCore.QSize(30,30))
 
         #Create app buttons and icons
         mode = "current"
-        compileStates = {"uncompiled" : "#a51946", "compiled" : "#4190ff", "error" : "#ffb041", "leftovers" : "#b041ff", "compiling" : "white"}
 
         self.compileBtn = QtWidgets.QPushButton("", self)
         self.compileBtn.setObjectName("toolButtons")
@@ -84,18 +94,10 @@ class createUI:
         saveBtn.setMaximumSize(QtCore.QSize(90,90))
         saveBtn.clicked.connect(lambda:sf.saveFiles.saveAFile(self, "filePath"))
 
-        self.gearSpinning = qta.icon("fa.gear", color=compileStates["compiling"], animation=qta.Spin(self.compileBtn))
-        self.gearIdleU = qta.icon("fa.gear", color=compileStates["uncompiled"])
-        self.gearIdleC = qta.icon("fa.gear", color=compileStates["compiled"])
-        self.gearIdleE = qta.icon("fa.gear", color=compileStates["error"])
-        self.gearIdleL = qta.icon("fa.gear", color=compileStates["leftovers"])
-        triang = qta.icon("fa.caret-down", color="white")
-        floppy = qta.icon("fa.floppy-o", color="white")
-
-        self.compileBtn.setIcon(self.gearIdleL)
+        self.compileBtn.setIcon(self.toolbarIcons[12])
         self.compileBtn.setIconSize(QtCore.QSize(64, 64))
-        modeBtn.setIcon(triang)
-        saveBtn.setIcon(floppy)
+        modeBtn.setIcon(self.toolbarIcons[13])
+        saveBtn.setIcon(self.toolbarIcons[14])
         saveBtn.setIconSize(QtCore.QSize(64, 64))
 
         """
@@ -111,9 +113,6 @@ class createUI:
         dial = QtWidgets.QMessageBox()
 
         #Empty Widgets
-        wMenu = QtWidgets.QWidget()
-        wMenu.setObjectName("menu")
-
         wLPart = QtWidgets.QWidget()
         wLPart.setObjectName("leftEdit")
 
@@ -125,6 +124,9 @@ class createUI:
 
         wFileExplorer = QtWidgets.QWidget()
         wFileExplorer.setObjectName("fileExplorer")
+
+        wOpenFiles = QtWidgets.QWidget()
+        wOpenFiles.setObjectName("openFilesBar")
 
         wComp = QtWidgets.QWidget()
         #wComp.setObjectName("rightEdit")
@@ -138,6 +140,7 @@ class createUI:
 
         wLPart.setMaximumWidth(400)
         wRPart.setMaximumWidth(400)
+        wOpenFiles.setMaximumHeight(40)
 
         #Titlebar background
         cont = QtWidgets.QWidget(self)
@@ -147,20 +150,19 @@ class createUI:
 
         #Size Policy for layouts
         wCPart.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding))
-        wMenu.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding))
 
         print("create; createUI; create: Creating layouts")
         #Layouts
         vMain = QtWidgets.QVBoxLayout() #Backbone lay, important because of the titlebar
         gCenter = QtWidgets.QGridLayout() #Central grid layout of the app beacuse every part is a widget not a layout
-        vTB = QtWidgets.QHBoxLayout(cont) #Titlebat Layout
+        vTB = QtWidgets.QHBoxLayout(cont) #Titlebar Layout
         vTabs = QtWidgets.QHBoxLayout() #Tabs Layout in the Titlebar
         winAc  = QtWidgets.QGridLayout() #Window actions layout (Top left buttons)
         tools = QtWidgets.QGridLayout() #Grid Layout for the tool actions in the titlebar
-        vMenu = QtWidgets.QVBoxLayout() #Menu layout placed ontop of the stack vLPart
         self.vLPart = QtWidgets.QStackedLayout() #Left part of the editor
         self.vCPart = QtWidgets.QVBoxLayout() #Main layout of the editor
         self.vRPart = QtWidgets.QStackedLayout() #Right part of the editor
+        createUI.hOpenFilesLay  = QtWidgets.QHBoxLayout() #Layout for the open files ontop of the editor
         self.vFileExplorer = QtWidgets.QVBoxLayout() #Layout for the file explorer
         hComp = QtWidgets.QHBoxLayout() #Layout for the dropdown and the compile button
 
@@ -170,15 +172,15 @@ class createUI:
         winAc.setAlignment(QtCore.Qt.AlignRight)
         gCenter.setAlignment(QtCore.Qt.AlignTop)
         #self.vCPart.setAlignment(QtCore.Qt.AlignTop)
-        vMenu.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
+        createUI.hOpenFilesLay .setAlignment(QtCore.Qt.AlignLeft)
         hComp.setAlignment(QtCore.Qt.AlignLeft)
 
         #Margin
         vMain.setContentsMargins(QtCore.QMargins(0,0,0,0))
         winAc.setContentsMargins(QtCore.QMargins(0,0,0,0))
-        vMenu.setContentsMargins(QtCore.QMargins(20,20,0,0))
         gCenter.setContentsMargins(QtCore.QMargins(0,0,0,0))
         self.vCPart.setContentsMargins(QtCore.QMargins(0,0,0,0))
+        createUI.hOpenFilesLay.setContentsMargins(QtCore.QMargins(0,0,0,0))
         winAc.setContentsMargins(QtCore.QMargins(10,23,20,23))
         vTB.setContentsMargins(QtCore.QMargins(20,0,0,0))
         tools.setContentsMargins(QtCore.QMargins(0,23,30,23))
@@ -204,12 +206,14 @@ class createUI:
         tools.addWidget(wind, 1, 0)
         tools.addWidget(tool, 1, 1)
 
-        self.vLPart.addWidget(wMenu)
-        #vMenu.addWidget() #Add widgets to the menu
+        mainMenu = mainMenuWidget.mainMenu()
+        mainMenu.setup()
+        self.vLPart.addWidget(mainMenu)
 
         self.vRPart.addWidget(wFileExplorer)
         wFileExplorer.setLayout(self.vFileExplorer)
-        
+
+        self.vCPart.addWidget(wOpenFiles)
         wWorkarea = createWorkarea.createArea()
         self.vCPart.addWidget(wWorkarea)
 
@@ -224,11 +228,11 @@ class createUI:
 
         #adding the Layouts
         print("create; createUI; create: Adding the layouts to widgets")
-        wMenu.setLayout(vMenu)
         wLPart.setLayout(self.vLPart)
         wCPart.setLayout(self.vCPart)
         wRPart.setLayout(self.vRPart)
         wComp.setLayout(hComp)
+        wOpenFiles.setLayout(createUI.hOpenFilesLay )
 
         print("create; createUI; create: Adding the layouts together")
         vTB.addLayout(tools)
@@ -240,19 +244,19 @@ class createUI:
 
     def switchCompStatus(self, newStatus):
         if newStatus == "compiling":
-            self.compileBtn.setIcon(self.gearSpinning)
+            self.compileBtn.setIcon(self.toolbarIcons[8])
             self.currentCompStat = "compiling"
         elif newStatus == "uncompiled":
-            self.compileBtn.setIcon(self.gearIdleU)
+            self.compileBtn.setIcon(self.toolbarIcons[9])
             self.currentCompStat = "uncompiled"
         elif newStatus == "compiled":
-            self.compileBtn.setIcon(self.gearIdleC)
+            self.compileBtn.setIcon(self.toolbarIcons[10])
             self.currentCompStat = "compiled"
         elif newStatus == "error":
-            self.compileBtn.setIcon(self.gearIdleE)
+            self.compileBtn.setIcon(self.toolbarIcons[11])
             self.currentCompStat = "error"
         elif newStatus == "leftovers":
-            self.compileBtn.setIcon(self.gearIdleL)
+            self.compileBtn.setIcon(self.toolbarIcons[12])
             self.currentCompStat = "leftovers"
         else:
             print("create; createUI; switchCompStatus: Error, unable to determine the new icon status!")

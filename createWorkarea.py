@@ -8,8 +8,6 @@ from OpenGL import GL, GLU
 
 
 class createArea(QtWidgets.QOpenGLWidget):
-
-
     def paintGL(self):
         GL.glColor3f(0.0, 0.0, 1.0)
         GL.glRectf(-5, -5, 5, 5)
@@ -29,6 +27,12 @@ class createArea(QtWidgets.QOpenGLWidget):
         GL.glClearColor(0.0, 0.0, 0.0, 1.0)
         GL.glClear(GL.GL_COLOR_BUFFER_BIT)
 
+class editorActions:
+    def switchFile(self, filepath):
+        print("createWorkarea; editorActions; switchFile: Switching to file: {0}".format(filepath))
+        
+    def closeFile(self, filepath):
+        print("createWorkarea; editorActions; closeFile: Closing file: {0}".format(filepath))
 
 """
 if __name__ == '__main__':

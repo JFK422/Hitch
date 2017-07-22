@@ -1,4 +1,7 @@
 from pathlib import Path
+from Components.Misc import openFileTabWidget
+from Components import create
+import qtawesome as qta
 import os
 
 class Data:
@@ -19,6 +22,10 @@ class Data:
         self.uncompiledFiles = listOfTemp[4]
         tempFile.close()
 
+        for i in range(len(self.openFiles)):
+            openFileTab = openFileTabWidget.openFileTab()
+            openFileTab.setup("LOL", qta.icon("fa.cog", color = "white"), i)
+            create.createUI.hOpenFilesLay.addWidget(openFileTab)
 
     def storeTemp(self, type, data=""):
         print("workareaData; Data; storeTemp: Storing temp files")
@@ -86,10 +93,11 @@ class Data:
         tempFile.write(tempSave)
         tempFile.close()
 
-
-
     def fileExists(self):
         if not(os.path.isfile("./Data/Temp/EditorTemp.tmp")):
             unpresentFile = open("./Data/Temp/EditorTemp.tmp", "w+")
             unpresentFile.write("::::")
             unpresentFile.close()
+
+    def createFileTabs(self):
+        print("workareaData; Data; createFileTabs: Creating editor tabs from open files")

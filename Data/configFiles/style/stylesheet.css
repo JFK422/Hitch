@@ -53,17 +53,17 @@ QPushButton::menu-indicator
 }
 
 #minimize{
-    border-color: #7194bc;
+    border-color: #0084a8;
     border-style: solid;
-    background-color: #7194bc;
+    background-color: #0084a8;
     color: #ffffff;
     font-size: 18px;
 }
 
 #minimize:hover{
-    border-color: #5b83b0;
+    border-color: #006986;
     border-style: solid;
-    background-color: #5b83b0;
+    background-color: #006986;
     color: #ffffff;
     font-size: 18px;
 }
@@ -101,17 +101,17 @@ QPushButton::menu-indicator
 }
 
 #tools{
-    border-color: #6bd6d1;
+    border-color: #006986;
     border-style: solid;
-    background-color: #6bd6d1;
+    background-color: #0084a8;
     color: #ffffff;
     font-size: 18px;
 }
 
 #tools:hover{
-    border-color: #5dbab5;
+    border-color: #0084a8;
     border-style: solid;
-    background-color: #5dbab5;
+    background-color: #006986;
     color: #ffffff;
     font-size: 18px;
 }
@@ -130,19 +130,32 @@ QPushButton::menu-indicator
 }
 
 #leftEdit{
-    background-color: #6b9dd6;
+    background-color: #ffb041;
     border-style: solid;
-    color: #6b9dd6;
+    color: #ffb041;
 }
 
 #centerEdit{
-    background-color: #6b6bd6;
+    background-color: #18184A;
     border-style: solid;
-    color: #6b6bd6;
 }
 
 #rightEdit{
-    background-color: #6b9dd6;
+    background-color: #ffb041;
     border-style: solid;
-    color: #6b9dd6;
+    color: #ffb041;
+}
+
+#openFilesBar{
+    background-color: #18184A;
+}
+
+#openFilesTab{
+    background-color: #34c873;
+    font-size: 16px;
+}
+
+#openFilesTab:hover{
+    background-color: #2dad63;
+    font-size: 16px;
 }

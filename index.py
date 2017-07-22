@@ -1,5 +1,6 @@
-import sys, os, create
+import sys, os
 import qtawesome as qta
+from Components import create
 from ProjectHandling import workareaData as wd
 from PyQt5 import QtGui, QtCore, QtWidgets
 
@@ -15,8 +16,8 @@ class Window(QtWidgets.QWidget):
         self.setGeometry(50,50,1200,700)
         self.setWindowTitle("Hitch")
         #self.setWindowFlags(self.windowFlags() | QtCore.Qt.FramelessWindowHint) #Use this for a frameless window. Will be used later!
-        wd.Data.readTemp(self)
         create.createUI.create(self)
+        wd.Data.readTemp(self)
         self.icon()
         self.showMaximized()
         self.show()
