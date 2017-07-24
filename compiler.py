@@ -1,6 +1,6 @@
 import time
-from Components import create
-from ProjectHandling import workareaData as wd
+from components import create
+from projectHandling import workareaData as wd
 
 class compiler:
 

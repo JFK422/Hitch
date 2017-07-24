@@ -1,5 +1,5 @@
 import sys, os
-from Appearance import style
+from appearance import style
 from PyQt5 import QtGui, QtCore, QtWidgets, QtOpenGL
 from OpenGL import GL, GLU
 
