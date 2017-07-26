@@ -1,5 +1,6 @@
 import qtawesome as qta
 from components.Menu import menuSeperator
+from components.Menu import menuActions
 from PyQt5 import QtGui, QtCore, QtWidgets
 
 #Menu widget placed in the stack of vLPart
@@ -37,6 +38,12 @@ class MenuFile(QtWidgets.QWidget):
         openFile.setMaximumHeight(50)
         openFile.setObjectName("menuItem")
         scrollLay.addWidget(openFile)
+
+        openProject = QtWidgets.QPushButton("Open Project")
+        openProject.setMaximumHeight(50)
+        openProject.setObjectName("menuItem")
+        openProject.clicked.connect(lambda:menuActions.MenuAction.openProject(self))
+        scrollLay.addWidget(openProject)
 
         sep = menuSeperator.MenuSeperator()
         sep.setup()

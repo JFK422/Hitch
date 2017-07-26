@@ -111,7 +111,7 @@ QPushButton::menu-indicator
 #tools:hover{
     border-color: #0084a8;
     border-style: solid;
-    background-color: #006986;
+    background-color: #0084a8;
     color: #f9f9f9;
     font-size: 18px;
 }
@@ -124,9 +124,8 @@ QPushButton::menu-indicator
 }
 
 #leftEdit{
-    background-color: #ffb041;
+    background-color: #330033;
     border-style: solid;
-    color: #ffb041;
 }
 
 #centerEdit{
@@ -135,9 +134,8 @@ QPushButton::menu-indicator
 }
 
 #rightEdit{
-    background-color: #ffb041;
+    background-color: #330033;
     border-style: solid;
-    color: #ffb041;
 }
 
 #openFilesBar{
@@ -159,11 +157,6 @@ QPushButton::menu-indicator
     font-size: 45px;
     font-weight: italic;
     font-family: 'Comfortaa';
-}
-
-@font-face {
-    font-family: 'Comfortaa';
-    src: url('../../resources/fonts/Comfortaa/Comfortaa-Bold.ttf');
 }
 
 #menuLay{
@@ -238,11 +231,6 @@ QPushButton::menu-indicator
     color: #f9f9f9;
 }
 
-@font-face {
-    font-family: 'bignoodletoo';
-    src: url('../../resources/fonts/bignoodletoo/bignoodletoo.ttf');
-}
-
 #seperator{
     background-color: #f9f9f9;
 }
@@ -255,6 +243,50 @@ QPushButton::menu-indicator
 #normalTab{
     background-color: #ff634d;
     border-radius: 8px;
+}
+
+#greetText{
+    font-family: 'Bangers';
+    color: #ffb041;
+    font-size: 20px;
+}
+
+#titleText{
+    font-family: 'Comfortaa';
+    color: #f9f9f9;
+    font-size: 60px;
+}
+
+#lastProjects{
+    background-color: #330033;
+}
+
+#lastProjectsLaunch{
+    background-color: #330033;
+}
+
+#launchProject{
+    background-color: #0084a8;
+    color: #f9f9f9;
+}
+
+#launchProject:hover{
+    background-color: #006986;
+    color: #f9f9f9;
+}
+
+#projectName{
+    color: #f9f9f9;
+    background-color: #0084a8;
+    font-size: 30px;
+    font-weight: bold;
+    font-family: 'Roboto';
+}
+
+#infoText{
+    color: #f9f9f9;
+    font-family: 'Roboto';
+    font-size: 30px;
 }
 
 QScrollBar:vertical {
@@ -288,4 +320,20 @@ QScrollBar::sub-line:vertical {
     border: 0px solid;
     height: 0px;
     subcontrol-position: top;
+}
+
+
+@font-face {
+    font-family: 'Bangers';
+    src: url('../../resources/fonts/Bangers/Bangers-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'bignoodletoo';
+    src: url('../../resources/fonts/bignoodletoo/bignoodletoo.ttf');
+}
+
+@font-face {
+    font-family: 'Comfortaa';
+    src: url('../../resources/fonts/Comfortaa/Comfortaa-Bold.ttf');
 }

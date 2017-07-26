@@ -1,7 +1,6 @@
 import sys, os, createWorkarea, compiler
 import qtawesome as qta
 from components.Misc import openFileTabWidget
-from projectHandling import saveFiles as sf
 from components.Menu import menuRunTab
 from components.Menu import menuEditTab
 from components.Menu import menuFileTab
@@ -88,6 +87,7 @@ class CreateUI:
         compMenu = QtWidgets.QMenu()
         compMenu.addAction("Compile All")
         compMenu.addAction("Compile Current")
+        #Add later a package entry and/or another button in the toolbar to create a executable file of the project
         #compMenu.addAction("Package")
 
         modeBtn = QtWidgets.QPushButton("", self)
@@ -95,26 +95,9 @@ class CreateUI:
         modeBtn.setMenu(compMenu)
         modeBtn.setMaximumWidth(20)
 
-        saveBtn = QtWidgets.QPushButton("", self)
-        saveBtn.setObjectName("toolButtons")
-        saveBtn.setMinimumSize(QtCore.QSize(50,50))
-        saveBtn.setMaximumSize(QtCore.QSize(90,90))
-        saveBtn.clicked.connect(lambda:sf.saveFiles.saveAFile(self, "filePath"))
-
         self.compileBtn.setIcon(self.toolbarIcons[12])
         self.compileBtn.setIconSize(QtCore.QSize(64, 64))
         modeBtn.setIcon(self.toolbarIcons[13])
-        saveBtn.setIcon(self.toolbarIcons[14])
-        saveBtn.setIconSize(QtCore.QSize(64, 64))
-
-        """
-        Audio Test (doesnt work!)
-        url= QtCore.QUrl.fromLocalFile("./Tobu - Amplified.mp3")
-        content= QtMultimedia.QMediaContent(url)
-        player = QtMultimedia.QMediaPlayer()
-        player.setMedia(content)
-        player.play()
-        """
 
         #Dialogs
         dial = QtWidgets.QMessageBox()
@@ -234,6 +217,8 @@ class CreateUI:
         menuWindow.setup()
         self.vLPart.addWidget(menuWindow)
 
+        self.vLPart.setCurrentIndex(2)
+
         #Right side widgets
         self.vRPart.addWidget(wFileExplorer)
         wFileExplorer.setLayout(self.vFileExplorer)
@@ -252,7 +237,6 @@ class CreateUI:
         hComp.addWidget(self.compileBtn)
         hComp.addWidget(modeBtn)
         vTabs.addWidget(wComp)
-        vTabs.addWidget(saveBtn)
 
         #adding the Layouts
         print("create; createUI; create: Adding the layouts to widgets")

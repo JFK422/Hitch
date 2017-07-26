@@ -4,7 +4,8 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 
 #Tabwidget for the open files ontop of the editor
 
-class openFileTab(QtWidgets.QWidget):
+class OpenFileTab(QtWidgets.QWidget):
+    filePath = None
     def setup(self, text, icon, path):
         lay = QtWidgets.QHBoxLayout()
         fileBtn = QtWidgets.QPushButton()
@@ -18,7 +19,7 @@ class openFileTab(QtWidgets.QWidget):
         close.setIcon(qta.icon("fa.times", color = "white"))
         close.setObjectName("quitBtn")
         close.setMaximumWidth(20)
-        self.filePath = path                
+        OpenFileTab.filePath = path
 
         self.setLayout(lay)
         lay.addWidget(fileBtn)

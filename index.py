@@ -1,6 +1,7 @@
 import sys, os
 import qtawesome as qta
 from components import create
+from components import introductionWindow
 from projectHandling import workareaData as wd
 from PyQt5 import QtGui, QtCore, QtWidgets
 
@@ -20,6 +21,8 @@ class Window(QtWidgets.QWidget):
         self.icon()
         self.showMaximized()
         self.show()
+        self.startup = introductionWindow.Introduction()
+        self.startup.show()
 
     #Minimize and maximize methods for the new window action buttons
     def minimize(self):
@@ -41,14 +44,16 @@ class Window(QtWidgets.QWidget):
         app_icon.addFile('resources/icons/256x256.png', QtCore.QSize(256,256))
         app.setWindowIcon(app_icon)
 
-#Creating the QApplication
-app = QtWidgets.QApplication(sys.argv)
 
-#Set the main styling of the app
-with open("./appearance/style/stylesheet.css") as f:
-    theme = f.read()
-app.setStyleSheet(theme)
+if __name__ == '__main__':
+    #Creating the QApplication
+    app = QtWidgets.QApplication(sys.argv)
 
-#Misc stuff
-wid = Window()
-sys.exit(app.exec_())
+    #Set the main styling of the app
+    with open("./appearance/style/stylesheet.css") as f:
+        theme = f.read()
+    app.setStyleSheet(theme)
+
+    #Misc stuff
+    window = Window()
+    sys.exit(app.exec_())
