@@ -1,12 +1,10 @@
 from pathlib import Path
+from components.Misc import openFileTabWidget
 from components import create
+import qtawesome as qta
 import os
 
 class Data:
-    compMode = None
-    lastProjects = None
-    lastProjNames = None
-
     def __init__(self):
         print("workareaData; Data; init: INIT_CALLED")
     
@@ -17,23 +15,63 @@ class Data:
         tempFile = open("./Data/Temp/EditorTemp.tmp", "r+")
         tmpFileText = tempFile.read()
         listOfTemp = tmpFileText.split(":")
-        Data.compMode = listOfTemp[0]
-        Data.lastProjects = listOfTemp[1].split(";")
-        Data.lastProjNames = listOfTemp[2].split(";")
+        self.openFiles = listOfTemp[0]
+        Data.compMode = listOfTemp[1]
+        self.unsavedFiles = listOfTemp[2]
+        self.selectedFile = listOfTemp[3]
+        self.uncompiledFiles = listOfTemp[4]
         tempFile.close()
 
-    def storeTemp(self, type, data="", filename = ""):
+        for i in range(len(self.openFiles)):
+            openFileTab = openFileTabWidget.openFileTab()
+            openFileTab.setup("LOL", qta.icon("fa.cog", color = "white"), i)
+            create.createUI.hOpenFilesLay.addWidget(openFileTab)
+
+    def storeTemp(self, type, data=""):
         print("workareaData; Data; storeTemp: Storing temp files")
 
-        if type == "compMode":
+        if type == "openFilesAdd":
+            if self.openFiles == []:
+                self.openFiles.append(data)
+                Data.saveTemp(self)
+            else:
+                self.openFiles.append(";{0}".format(data))
+                Data.saveTemp(self)
+
+        elif type == "openFilesRemove":
+            self.openFiles.remove(data)
+            Data.saveTemp(self)
+
+        elif type == "compMode":
             Data.compMode = data
             Data.saveTemp(self)
 
-        elif type == "lastProjects":
-            if len(Data.lastProjects) < 6:
-                Data.lastProjects.add(data)
-                Data.lastProjNames.add(filename)
-            
+        elif type == "unsavedFilesAdd":
+            if self.unsavedFiles == []:
+                self.unsavedFiles.append(data)
+                Data.saveTemp(self)
+            else:
+                self.unsavedFiles.append(";{0}".format(data))
+                Data.saveTemp(self)
+
+        elif type == "unsavedFilesRemove":
+            self.unsavedFiles.remove(data)
+            Data.saveTemp(self)
+
+        elif type == "uncompiledFilesAdd":
+            if self.uncompiledFiles == []:
+                self.uncompiledFiles.append(data)
+                Data.saveTemp(self)
+            else:
+                self.uncompiledFiles.append(";{0}".format(data))
+                Data.saveTemp(self)
+
+        elif type == "uncompiledFilesRemove":
+            self.uncompiledFiles.remove(data)
+            Data.saveTemp(self)
+
+        elif type == "selectedFile":
+            self.selectedFile = data
             Data.saveTemp(self)
 
     def saveTemp(self):
@@ -58,7 +96,7 @@ class Data:
     def fileExists(self):
         if not(os.path.isfile("./Data/Temp/EditorTemp.tmp")):
             unpresentFile = open("./Data/Temp/EditorTemp.tmp", "w+")
-            unpresentFile.write("::")
+            unpresentFile.write("::::")
             unpresentFile.close()
 
     def createFileTabs(self):

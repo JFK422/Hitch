@@ -1,6 +1,6 @@
 import qtawesome as qta
 import random, sys, os
-from projectHandling import workareaData
+from projectHandling import startupData
 from components.Misc import projectItem
 from components.Menu import menuActions
 from PyQt5 import QtGui, QtCore, QtWidgets
@@ -9,10 +9,12 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 
 class Introduction(QtWidgets.QWidget):
     vLastProjects = None
-    selectedProject = None
-    selectedProjectName = None
+    selectedProject = ""
+    selectedProjectName = ""
+    selectedFolder = ""
     infoName = None
     infoPath = None
+    infoTabOpen = True
     def __init__(self):
         super(Introduction, self).__init__()
         greetings = ["Hello Old Friend", 
@@ -54,38 +56,48 @@ class Introduction(QtWidgets.QWidget):
         wLastProjects.setLayout(Introduction.vLastProjects)
         hBottom.addWidget(wLastProjects)
 
+        self.sCenter = QtWidgets.QStackedLayout()
+        self.sCenter.setAlignment(QtCore.Qt.AlignTop)
+        wCenter = QtWidgets.QWidget()
+        wCenter.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred))
+        wCenter.setObjectName("lastProjects")
+        wCenter.setLayout(self.sCenter)
+
         vInfo = QtWidgets.QVBoxLayout()
         vInfo.setAlignment(QtCore.Qt.AlignTop)
         wInfo = QtWidgets.QWidget()
         wInfo.setLayout(vInfo)
-        wInfo.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred))
-        wInfo.setObjectName("lastProjects")
+        self.sCenter.addWidget(wInfo)
+
         Introduction.infoName = QtWidgets.QLabel("")
         Introduction.infoName.setObjectName("infoText")
         Introduction.infoPath = QtWidgets.QLabel("")
+
         Introduction.infoPath.setObjectName("infoText")
+        Introduction.infoPath.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding))
         Introduction.infoPath.setWordWrap(True)
+        Introduction.infoPath.setAlignment(QtCore.Qt.AlignTop)
+
         vInfo.addWidget(Introduction.infoName)
         vInfo.addWidget(Introduction.infoPath)
 
-        hBottom.addWidget(wInfo)
+        hBottom.addWidget(wCenter)
 
         hLaunch = QtWidgets.QVBoxLayout()
-        #hLaunch.setAlignment(QtCore.Qt.AlignCenter)
         hLaunch.setContentsMargins(QtCore.QMargins(10,10,10,10))
-        #hLaunch.setSpacing(15)
         wLaunch = QtWidgets.QWidget()
         wLaunch.setLayout(hLaunch)
         wLaunch.setObjectName("lastProjectsLaunch")
 
         #add the last opened projects as items
-        for i in range(len(workareaData.Data.lastProjects)):
+        for i in range(len(startupData.Data.lastProjNames)):
             projItem = projectItem.LastProjItem()
-            projItem.setup(text = workareaData.Data.lastProjNames[i], path = workareaData.Data.lastProjects[i])
+            projItem.setup(text = startupData.Data.lastProjNames[i], path = startupData.Data.lastProjects[i])
             Introduction.vLastProjects.addWidget(projItem)
 
         launchBtn = QtWidgets.QPushButton("Launch")
         launchBtn.setObjectName("launchProject")
+        launchBtn.clicked.connect(lambda:menuActions.MenuAction.launchProject(self))
         hLaunch.addWidget(launchBtn)
         hBottom.addWidget(wLaunch)
 
@@ -93,8 +105,58 @@ class Introduction(QtWidgets.QWidget):
         openBtn.clicked.connect(lambda:menuActions.MenuAction.openProject(self))
         hLaunch.addWidget(openBtn)
 
-        createBtn = QtWidgets.QPushButton("Create")
-        hLaunch.addWidget(createBtn)
+        self.createBtn = QtWidgets.QPushButton("Create")
+        self.createBtn.clicked.connect(lambda:Introduction.switchTab(self))
+        hLaunch.addWidget(self.createBtn)
+
+        gCreate = QtWidgets.QGridLayout()
+        gCreate.setAlignment(QtCore.Qt.AlignTop)
+        wCreate = QtWidgets.QWidget()
+        wCreate.setLayout(gCreate)
+
+        vBackLay = QtWidgets.QVBoxLayout()
+        vBackLay.setAlignment(QtCore.Qt.AlignTop)
+        wBackLay = QtWidgets.QWidget()
+        wBackLay.setLayout(vBackLay)
+        vBackLay.addWidget(wCreate)
+        self.sCenter.addWidget(wBackLay)
+
+        #Stuff for the tab on creating a new project
+        nameLabel = QtWidgets.QLabel("Name: ")
+        nameLabel.setObjectName("infoText")
+
+        self.nameEdit = QtWidgets.QLineEdit()
+        self.nameEdit.setObjectName("projectTextEdit")
+        self.nameEdit.textChanged.connect(lambda:Introduction.appendProjectName(self))
+
+        pathLabel = QtWidgets.QLabel("Path: ")
+        pathLabel.setObjectName("infoText")
+
+        self.pathEdit = QtWidgets.QLineEdit()
+        self.pathEdit.setObjectName("projectTextEdit")
+        self.pathEdit.textChanged.connect(lambda:Introduction.appendProjectName(self))
+        
+        folder = qta.icon("fa.folder", color="#f9f9f9")
+        pathSelect = QtWidgets.QPushButton(folder, "")
+        pathSelect.setIconSize(QtCore.QSize(20, 20))
+        pathSelect.setMaximumSize(QtCore.QSize(30, 30))
+        pathSelect.clicked.connect(lambda:menuActions.MenuAction.selectProjectFolder(self))
+        pathSelect.setObjectName("launchProject")
+
+        self.createSubfolder = QtWidgets.QCheckBox("Create in subfolder")
+        self.createSubfolder.setObjectName("createSubfolder")
+        self.createSubfolder.clicked.connect(lambda:Introduction.appendProjectName(self))
+
+        infoLabel = QtWidgets.QLabel("Press launch to create the Project.")
+        infoLabel.setObjectName("infoTextCreate")
+
+        gCreate.addWidget(nameLabel, 0, 0)
+        gCreate.addWidget(self.nameEdit, 0, 1)
+        gCreate.addWidget(pathLabel, 1, 0)
+        gCreate.addWidget(self.pathEdit, 1, 1)
+        gCreate.addWidget(pathSelect, 1, 2)
+        vBackLay.addWidget(self.createSubfolder)
+        vBackLay.addWidget(infoLabel)
 
         title = QtWidgets.QLabel("Hitch")
         title.setObjectName("titleText")
@@ -114,6 +176,7 @@ class Introduction(QtWidgets.QWidget):
 
         mainLay.addWidget(wBottom)
 
+        #fix later that the motd gets bigger and smaller over time
         """
         size = ["font-size: 40px;", "font-size: 35px;"]
         anim = QtCore.QPropertyAnimation(self, 'stlyesheet')
@@ -133,15 +196,15 @@ class Introduction(QtWidgets.QWidget):
 
         self.setLayout(mainLay)
 
-    def selectProject(self, path):
-        for i in range(Introduction.vLastProjects.count()):
-            wid = Introduction.vLastProjects.itemAt(i).widget()
-            wid.setStyleSheet("background-color: #0084a8;")
-        self.setStyleSheet("background-color: #006986;")
-        Introduction.selectedProject = self.path
-        Introduction.selectedProjectName = self.name
+    def selectProject(self):
+        if Introduction.infoTabOpen:
+            for i in range(Introduction.vLastProjects.count()):
+                Introduction.vLastProjects.itemAt(i).widget().setStyleSheet("background-color: #0084a8;")
+            Introduction.selectedProject = self.path
+            Introduction.selectedProjectName = self.name
+            self.setStyleSheet("background-color: #006986;")
 
-        Introduction.setProjectInfo(self, "fromList")
+            Introduction.setProjectInfo(self, "fromList")
 
     def setProjectInfo(self, place):
         if place == "fromList":
@@ -153,6 +216,27 @@ class Introduction(QtWidgets.QWidget):
             Introduction.infoName.setVisible(False)
             print(Introduction.selectedProject)
             Introduction.infoPath.setText("Path: {0}".format(Introduction.selectedProject))
+            print(Introduction.infoPath.text())
+
+        elif place == "fromCreate":
+            self.pathEdit.setText(Introduction.selectedFolder)
+
+    def appendProjectName(self):
+        Introduction.selectedProjectName = self.nameEdit.text()
+        Introduction.selectedFolder = self.pathEdit.text()
+        if self.createSubfolder.isChecked() and Introduction.selectedFolder != "":
+            self.pathEdit.setText(Introduction.selectedFolder + self.nameEdit.text() + "/")
+
+    def switchTab(self):
+        if Introduction.infoTabOpen:
+            self.sCenter.setCurrentIndex(1)
+            self.createBtn.setText("Info")
+            Introduction.appendProjectName(self)
+            Introduction.infoTabOpen = False
+        else:
+            self.sCenter.setCurrentIndex(0)
+            self.createBtn.setText("Create")
+            Introduction.infoTabOpen = True
 
 #For executing this file standalone
 if __name__ == '__main__':
