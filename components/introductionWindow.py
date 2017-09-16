@@ -102,7 +102,7 @@ class Introduction(QtWidgets.QWidget):
         hBottom.addWidget(wLaunch)
 
         openBtn = QtWidgets.QPushButton("Open")
-        openBtn.clicked.connect(lambda:menuActions.MenuAction.openProject(self))
+        openBtn.clicked.connect(lambda:menuActions.MenuAction.openProjectFromFile(self))
         hLaunch.addWidget(openBtn)
 
         self.createBtn = QtWidgets.QPushButton("Create")
@@ -230,7 +230,7 @@ class Introduction(QtWidgets.QWidget):
     def switchTab(self):
         if Introduction.infoTabOpen:
             self.sCenter.setCurrentIndex(1)
-            self.createBtn.setText("Info")
+            self.createBtn.setText("Last\nProjects")
             Introduction.appendProjectName(self)
             Introduction.infoTabOpen = False
         else:

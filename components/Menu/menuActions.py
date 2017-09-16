@@ -1,5 +1,6 @@
 from PyQt5 import QtGui, QtCore, QtWidgets
 from components import introductionWindow
+from projectHandling import startupData
 
 class MenuAction:
     selecedProject = ""
@@ -11,9 +12,9 @@ class MenuAction:
     def openFile(self):
         print("open file")
 
-    def openProject(self):
-        print("open project")
-        self.filePath = QtWidgets.QFileDialog.getOpenFileName(self, "Open Project")
+    def openProjectFromFile(self):
+        print("menuActions; MenuAction; openProjectFromFile: open project from file")
+        self.filePath = QtWidgets.QFileDialog.getOpenFileName(self, "Open Project From File")
         if not(self.filePath[0] == ""):
             introductionWindow.Introduction.selectedProject = self.filePath[0]
             introductionWindow.Introduction.setProjectInfo(self, "fromFile")
@@ -26,9 +27,10 @@ class MenuAction:
             introductionWindow.Introduction.selectedFolder = self.selectFilePath
             introductionWindow.Introduction.setProjectInfo(self, "fromCreate")
             introductionWindow.Introduction.appendProjectName(self)
+            startupData.Data.storeTemp(self, "lastProjects", data=self.selectFilePath)
 
     def launchProject(self):
-        print("launchingProject")
+        print("menuActions; MenuAction; launchProject: Launching Project")
         intro = introductionWindow.Introduction
 
         if intro.infoTabOpen:
