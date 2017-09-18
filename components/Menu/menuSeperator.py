@@ -15,3 +15,13 @@ class MenuSeperator(QtWidgets.QWidget):
         vMenu.addWidget(wid)
 
         self.setLayout(vMenu)
+
+"""
+#          #     #####     #               #               ######
+#          #     #               #               #               #          #
+#          #     #               #               #               #          #
+######     ###          #               #               #          #
+#         #      #               #               #               #          #
+#         #      #               #               #               #          #
+#         #      #####     #####     #####     ######
+"""

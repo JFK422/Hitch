@@ -289,6 +289,23 @@ QPushButton::menu-indicator
     font-size: 30px;
 }
 
+#projectTextEdit{
+    background-color: #34c873;
+    color: #f9f9f9;
+    border-radius: 8px;
+    font-size: 18px;
+}
+
+#createSubfolder{
+    color: #f9f9f9;
+    font-size: 18px;
+}
+
+#infoTextCreate{
+    color: #f9f9f9;
+    font-size: 16px;
+}
+
 QScrollBar:vertical {
     background-color: #34c873;
 }

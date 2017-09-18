@@ -42,7 +42,7 @@ class MenuFile(QtWidgets.QWidget):
         openProject = QtWidgets.QPushButton("Open Project")
         openProject.setMaximumHeight(50)
         openProject.setObjectName("menuItem")
-        openProject.clicked.connect(lambda:menuActions.MenuAction.openProject(self))
+        openProject.clicked.connect(lambda:menuActions.MenuAction.openProjectFromFile(self))
         scrollLay.addWidget(openProject)
 
         sep = menuSeperator.MenuSeperator()

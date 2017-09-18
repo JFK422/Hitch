@@ -6,7 +6,6 @@ from components.Menu import menuEditTab
 from components.Menu import menuFileTab
 from components.Menu import menuSettingsTab
 from components.Menu import menuWindowTab
-from projectHandling import workareaData as wd
 from PyQt5 import QtGui, QtCore, QtWidgets, QtMultimedia
 
 #This is the main file which is used for creating the window.
@@ -18,22 +17,22 @@ class CreateUI:
         print("create; createUI; create: Creating widgets")
 
         #Create icons
-        compileStates = {"uncompiled" : "#a51946", "compiled" : "#4190ff", "error" : "#ffb041", "leftovers" : "#b041ff", "compiling" : "white"}
-        self.toolbarIcons = [qta.icon("fa.minus", color="white"), 
-                                    qta.icon("fa.times", color="white"), 
-                                    qta.icon("fa.sliders", color="white"), 
-                                    qta.icon("fa.arrows-alt", color="white"), 
-                                    qta.icon("fa.file-text-o", color="white"),
-                                    qta.icon("fa.pencil", color="white"),
-                                    qta.icon("fa.square-o", color="white"),
-                                    qta.icon("fa.play", color="white"),
+        compileStates = {"uncompiled" : "#a51946", "compiled" : "#4190ff", "error" : "#ffb041", "leftovers" : "#b041ff", "compiling" : "#f9f9f9"}
+        self.toolbarIcons = [qta.icon("fa.minus", color="#f9f9f9"), 
+                                    qta.icon("fa.times", color="#f9f9f9"), 
+                                    qta.icon("fa.sliders", color="#f9f9f9"), 
+                                    qta.icon("fa.arrows-alt", color="#f9f9f9"), 
+                                    qta.icon("fa.file-text-o", color="#f9f9f9"),
+                                    qta.icon("fa.pencil", color="#f9f9f9"),
+                                    qta.icon("fa.square-o", color="#f9f9f9"),
+                                    qta.icon("fa.play", color="#f9f9f9"),
                                     qta.icon("fa.gear", color=compileStates["compiling"]), #Later add a spin animation to this icon
                                     qta.icon("fa.gear", color=compileStates["uncompiled"]),
                                     qta.icon("fa.gear", color=compileStates["compiled"]),
                                     qta.icon("fa.gear", color=compileStates["error"]),
                                     qta.icon("fa.gear", color=compileStates["leftovers"]),
-                                    qta.icon("fa.caret-down", color="white"),
-                                    qta.icon("fa.floppy-o", color="white")]
+                                    qta.icon("fa.caret-down", color="#f9f9f9"),
+                                    qta.icon("fa.floppy-o", color="#f9f9f9")]
 
         #Create window action buttons
         mini = QtWidgets.QPushButton(self.toolbarIcons[0], "", self)

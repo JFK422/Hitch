@@ -6,24 +6,23 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 #Tabwidget for the open files ontop of the editor
 
 class LastProjItem(QtWidgets.QWidget):
-    name = None
-    path = None
+    projBtn = None
     def setup(self, text, path):
         lay = QtWidgets.QHBoxLayout()
-        projBtn = QtWidgets.QPushButton()
+        LastProjItem.projBtn = QtWidgets.QPushButton()
 
-        LastProjItem.path = path
-        LastProjItem.name = text
+        self.path = path
+        self.name = text
 
         lay.setContentsMargins(QtCore.QMargins(0,0,0,0))
-        projBtn.setText(text)
-        projBtn.setMaximumHeight(51)
-        projBtn.setMinimumWidth(150)
-        #projBtn.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred))
-        projBtn.setObjectName("projectName")
-        projBtn.clicked.connect(lambda:introductionWindow.Introduction.selectProject(self, LastProjItem.path))
+        LastProjItem.projBtn.setText(text)
+        LastProjItem.projBtn.setMaximumHeight(51)
+        LastProjItem.projBtn.setMinimumWidth(160)
+        #LastProjItem.projBtn.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred))
+        LastProjItem.projBtn.setObjectName("projectName")
+        LastProjItem.projBtn.clicked.connect(lambda:introductionWindow.Introduction.selectProject(self))
 
         self.setLayout(lay)
-        lay.addWidget(projBtn)
+        lay.addWidget(LastProjItem.projBtn)
 
         self.setMaximumWidth(150)
