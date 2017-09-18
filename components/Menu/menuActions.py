@@ -32,7 +32,7 @@ class MenuAction:
     def launchProject(self):
         print("menuActions; MenuAction; launchProject: Launching Project")
         intro = introductionWindow.Introduction
-
+        #Check which tab was open and open the path.
         if intro.infoTabOpen:
             if intro.selectedProject != "":
                 project = open(intro.selectedProject, "r+")

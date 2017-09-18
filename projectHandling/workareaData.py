@@ -4,6 +4,8 @@ from components import create
 import qtawesome as qta
 import os
 
+#This is the old file for handling temp data, just ignore it and look at the startupData.py file.
+
 class Data:
     def __init__(self):
         print("workareaData; Data; init: INIT_CALLED")

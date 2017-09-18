@@ -5,9 +5,10 @@ from components.Misc import projectItem
 from components.Menu import menuActions
 from PyQt5 import QtGui, QtCore, QtWidgets
 
-#Menu widget placed in the stack of vLPart
+#Menu shown on startup used to select a project
 
 class Introduction(QtWidgets.QWidget):
+    #Variables for some recursion, idk how to do it otherwise!
     vLastProjects = None
     selectedProject = ""
     selectedProjectName = ""
@@ -15,17 +16,26 @@ class Introduction(QtWidgets.QWidget):
     infoName = None
     infoPath = None
     infoTabOpen = True
+    createBtn = None
+    
+    #Init the window
     def __init__(self):
         super(Introduction, self).__init__()
-        greetings = ["Hello Old Friend", 
+        #Add your own motd here!
+        motdVar = ["Hello Old Friend", 
                             "M' Lady", 
                             "Copy pasted Pseudocode", 
                             "Written in the language of snakes", 
                             "Has hidden ASCII art in the code", 
-                            "The stylesheets consists mostly of linebreak } linebreak" ]
+                            "The stylesheets consists mostly of linebreak } linebreak",
+                            "This is my jam!",
+                            "Digital Hug ༼つ ◕_◕ ༽つ",
+                            "Full of stale memes",
+                            "ಠ_ಠ"]
         self.setGeometry(50,50,700,500)
         self.setWindowTitle("Hitch")
 
+        #Create the layouts and their backbone widgets
         mainLay = QtWidgets.QVBoxLayout()
         mainLay.setAlignment(QtCore.Qt.AlignTop)
         mainLay.setContentsMargins(QtCore.QMargins(0,0,0,0))
@@ -56,19 +66,20 @@ class Introduction(QtWidgets.QWidget):
         wLastProjects.setLayout(Introduction.vLastProjects)
         hBottom.addWidget(wLastProjects)
 
-        self.sCenter = QtWidgets.QStackedLayout()
-        self.sCenter.setAlignment(QtCore.Qt.AlignTop)
+        Introduction.sCenter = QtWidgets.QStackedLayout()
+        Introduction.sCenter.setAlignment(QtCore.Qt.AlignTop)
         wCenter = QtWidgets.QWidget()
         wCenter.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred))
         wCenter.setObjectName("lastProjects")
-        wCenter.setLayout(self.sCenter)
+        wCenter.setLayout(Introduction.sCenter)
 
         vInfo = QtWidgets.QVBoxLayout()
         vInfo.setAlignment(QtCore.Qt.AlignTop)
         wInfo = QtWidgets.QWidget()
         wInfo.setLayout(vInfo)
-        self.sCenter.addWidget(wInfo)
+        Introduction.sCenter.addWidget(wInfo)
 
+        #Create the windows widgets
         Introduction.infoName = QtWidgets.QLabel("")
         Introduction.infoName.setObjectName("infoText")
         Introduction.infoPath = QtWidgets.QLabel("")
@@ -89,7 +100,7 @@ class Introduction(QtWidgets.QWidget):
         wLaunch.setLayout(hLaunch)
         wLaunch.setObjectName("lastProjectsLaunch")
 
-        #add the last opened projects as items
+        #Add the last opened projects as items
         for i in range(len(startupData.Data.lastProjNames)):
             projItem = projectItem.LastProjItem()
             projItem.setup(text = startupData.Data.lastProjNames[i], path = startupData.Data.lastProjects[i])
@@ -97,7 +108,7 @@ class Introduction(QtWidgets.QWidget):
 
         launchBtn = QtWidgets.QPushButton("Launch")
         launchBtn.setObjectName("launchProject")
-        launchBtn.clicked.connect(lambda:menuActions.MenuAction.launchProject(self))
+        launchBtn.clicked.connect(lambda:Introduction.launchTheProject(self))
         hLaunch.addWidget(launchBtn)
         hBottom.addWidget(wLaunch)
 
@@ -105,9 +116,9 @@ class Introduction(QtWidgets.QWidget):
         openBtn.clicked.connect(lambda:menuActions.MenuAction.openProjectFromFile(self))
         hLaunch.addWidget(openBtn)
 
-        self.createBtn = QtWidgets.QPushButton("Create")
-        self.createBtn.clicked.connect(lambda:Introduction.switchTab(self))
-        hLaunch.addWidget(self.createBtn)
+        Introduction.createBtn = QtWidgets.QPushButton("Create")
+        Introduction.createBtn.clicked.connect(lambda:Introduction.switchTab(self))
+        hLaunch.addWidget(Introduction.createBtn)
 
         gCreate = QtWidgets.QGridLayout()
         gCreate.setAlignment(QtCore.Qt.AlignTop)
@@ -119,7 +130,7 @@ class Introduction(QtWidgets.QWidget):
         wBackLay = QtWidgets.QWidget()
         wBackLay.setLayout(vBackLay)
         vBackLay.addWidget(wCreate)
-        self.sCenter.addWidget(wBackLay)
+        Introduction.sCenter.addWidget(wBackLay)
 
         #Stuff for the tab on creating a new project
         nameLabel = QtWidgets.QLabel("Name: ")
@@ -150,6 +161,7 @@ class Introduction(QtWidgets.QWidget):
         infoLabel = QtWidgets.QLabel("Press launch to create the Project.")
         infoLabel.setObjectName("infoTextCreate")
 
+        #Stitch everything together
         gCreate.addWidget(nameLabel, 0, 0)
         gCreate.addWidget(self.nameEdit, 0, 1)
         gCreate.addWidget(pathLabel, 1, 0)
@@ -170,7 +182,7 @@ class Introduction(QtWidgets.QWidget):
         motdw.setLayout(motd)
         mainLay.addWidget(motdw)
 
-        label = QtWidgets.QLabel(greetings[random.randint(0, len(greetings) - 1)])
+        label = QtWidgets.QLabel(motdVar[random.randint(0, len(motdVar) - 1)])
         label.setObjectName("greetText")
         motd.addWidget(label)
 
@@ -195,18 +207,27 @@ class Introduction(QtWidgets.QWidget):
         """
 
         self.setLayout(mainLay)
-
+    
+    #Called when the project item button is pressed
     def selectProject(self):
-        if Introduction.infoTabOpen:
-            for i in range(Introduction.vLastProjects.count()):
-                Introduction.vLastProjects.itemAt(i).widget().setStyleSheet("background-color: #0084a8;")
-            Introduction.selectedProject = self.path
-            Introduction.selectedProjectName = self.name
-            self.setStyleSheet("background-color: #006986;")
+        #Switch to last projects tab when button is clicked on creation tab.
+        if not(Introduction.infoTabOpen):
+            Introduction.sCenter.setCurrentIndex(0)
+            Introduction.createBtn.setText("Create")
+            Introduction.infoTabOpen = True
 
-            Introduction.setProjectInfo(self, "fromList")
+        #Set the buttons to the standard colour.
+        for i in range(Introduction.vLastProjects.count()):
+            Introduction.vLastProjects.itemAt(i).widget().setStyleSheet("background-color: #0084a8;")
+        #Set the variables acording to the selected project
+        Introduction.selectedProject = self.path
+        Introduction.selectedProjectName = self.name
+        #Set the selected projects colour.
+        self.setStyleSheet("background-color: #006986;")
+        Introduction.setProjectInfo(self, "fromList")
 
     def setProjectInfo(self, place):
+        
         if place == "fromList":
             Introduction.infoName.setVisible(True)
             Introduction.infoName.setText("Name: {0}".format(Introduction.selectedProjectName))
@@ -221,7 +242,13 @@ class Introduction(QtWidgets.QWidget):
         elif place == "fromCreate":
             self.pathEdit.setText(Introduction.selectedFolder)
 
+    def launchTheProject(self):
+        #Update the variables so the edited text will get used and launch it!
+        Introduction.appendProjectName(self)
+        lambda:menuActions.MenuAction.launchProject(self)
+
     def appendProjectName(self):
+        #Get the data from the textedits and store it in variables. Also append the project name if wanted.
         Introduction.selectedProjectName = self.nameEdit.text()
         Introduction.selectedFolder = self.pathEdit.text()
         if self.createSubfolder.isChecked() and Introduction.selectedFolder != "":
@@ -229,19 +256,20 @@ class Introduction(QtWidgets.QWidget):
 
     def switchTab(self):
         if Introduction.infoTabOpen:
-            self.sCenter.setCurrentIndex(1)
-            self.createBtn.setText("Last\nProjects")
+            Introduction.sCenter.setCurrentIndex(1)
+            Introduction.createBtn.setText("Last\nProjects")
             Introduction.appendProjectName(self)
             Introduction.infoTabOpen = False
         else:
-            self.sCenter.setCurrentIndex(0)
-            self.createBtn.setText("Create")
+            Introduction.sCenter.setCurrentIndex(0)
+            Introduction.createBtn.setText("Create")
             Introduction.infoTabOpen = True
 
 #For executing this file standalone
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
-    #Set the main styling of the app
+    
+    #Set the main styling of dis window aswell
     with open("../appearance/style/stylesheet.css") as f:
         theme = f.read()
     app.setStyleSheet(theme)
