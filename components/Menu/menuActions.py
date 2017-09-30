@@ -46,7 +46,8 @@ class MenuAction:
                 project.close()
 
             else:
-                print("Error")
+                print(clr.Fore.RED + "menuActions; MenuAction; launchProject: Error launching project!")
+                print(clr.Style.RESET_ALL + "Clearing colour marking!")
 
     def saveFile(self):
         print("save file")

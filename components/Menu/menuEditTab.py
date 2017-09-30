@@ -61,7 +61,8 @@ class MenuEdit(QtWidgets.QWidget):
         sep2.setup()
         scrollLay.addWidget(sep2)
 
-        search = QtWidgets.QLineEdit("Search")
+        search = QtWidgets.QLineEdit("")
+        search.setPlaceholderText("Search")
         search.setMinimumHeight(50)
         search.setObjectName("menuSearch")
         scrollLay.addWidget(search)
