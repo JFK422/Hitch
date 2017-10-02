@@ -10,4 +10,4 @@ class compiler:
     def compile(self):
         print(print("compiler; compiler; compile: Compiling"))
         
-        create.createUI.switchCompStatus(self, "compiling")
+        create.CreateUI.switchCompStatus(self, "compiling")

@@ -11,12 +11,11 @@ class Introduction(QtWidgets.QWidget):
     #Variables for some recursion, idk how to do it otherwise!
     vLastProjects = None
     selectedProject = ""
-    selectedProjectName = ""
-    selectedFolder = ""
     infoName = None
     infoPath = None
     infoTabOpen = True
     createBtn = None
+    nameEdit = None
     
     #Init the window
     def __init__(self):
@@ -32,7 +31,7 @@ class Introduction(QtWidgets.QWidget):
                             "Digital Hug ༼つ ◕_◕ ༽つ",
                             "Full of stale memes",
                             "ಠ_ಠ"]
-        self.setGeometry(50,50,700,500)
+        self.setGeometry(50,50,1000,500)
         self.setWindowTitle("Hitch")
 
         #Create the layouts and their backbone widgets
@@ -82,8 +81,8 @@ class Introduction(QtWidgets.QWidget):
         #Create the windows widgets
         Introduction.infoName = QtWidgets.QLabel("")
         Introduction.infoName.setObjectName("infoText")
-        Introduction.infoPath = QtWidgets.QLabel("")
 
+        Introduction.infoPath = QtWidgets.QLabel("")
         Introduction.infoPath.setObjectName("infoText")
         Introduction.infoPath.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding))
         Introduction.infoPath.setWordWrap(True)
@@ -101,14 +100,14 @@ class Introduction(QtWidgets.QWidget):
         wLaunch.setObjectName("lastProjectsLaunch")
 
         #Add the last opened projects as items
-        for i in range(len(startupData.Data.lastProjNames)):
+        for i in range(startupData.Data.lengthOfDB(self)):
             projItem = projectItem.LastProjItem()
-            projItem.setup(text = startupData.Data.lastProjNames[i], path = startupData.Data.lastProjects[i])
+            projItem.setup(name = startupData.Data.readDB(self, i)[1], path = startupData.Data.readDB(self, i)[2], itemIndex = i)
             Introduction.vLastProjects.addWidget(projItem)
 
         launchBtn = QtWidgets.QPushButton("Launch")
         launchBtn.setObjectName("launchProject")
-        launchBtn.clicked.connect(lambda:Introduction.launchTheProject(self))
+        launchBtn.clicked.connect(lambda:menuActions.MenuAction.launchProject(self))
         hLaunch.addWidget(launchBtn)
         hBottom.addWidget(wLaunch)
 
@@ -127,6 +126,7 @@ class Introduction(QtWidgets.QWidget):
 
         vBackLay = QtWidgets.QVBoxLayout()
         vBackLay.setAlignment(QtCore.Qt.AlignTop)
+        vBackLay.setContentsMargins(QtCore.QMargins(0,0,0,0))
         wBackLay = QtWidgets.QWidget()
         wBackLay.setLayout(vBackLay)
         vBackLay.addWidget(wCreate)
@@ -136,16 +136,15 @@ class Introduction(QtWidgets.QWidget):
         nameLabel = QtWidgets.QLabel("Name: ")
         nameLabel.setObjectName("infoText")
 
-        self.nameEdit = QtWidgets.QLineEdit()
-        self.nameEdit.setObjectName("projectTextEdit")
-        self.nameEdit.textChanged.connect(lambda:Introduction.appendProjectName(self))
+        Introduction.nameEdit = QtWidgets.QLineEdit()
+        Introduction.nameEdit.setObjectName("projectTextEdit")
+        Introduction.nameEdit.setMaximumWidth(200)
 
         pathLabel = QtWidgets.QLabel("Path: ")
         pathLabel.setObjectName("infoText")
 
-        self.pathEdit = QtWidgets.QLineEdit()
-        self.pathEdit.setObjectName("projectTextEdit")
-        self.pathEdit.textChanged.connect(lambda:Introduction.appendProjectName(self))
+        Introduction.pathEdit = QtWidgets.QLineEdit()
+        Introduction.pathEdit.setObjectName("projectTextEdit")
         
         folder = qta.icon("fa.folder", color="#f9f9f9")
         pathSelect = QtWidgets.QPushButton(folder, "")
@@ -154,21 +153,16 @@ class Introduction(QtWidgets.QWidget):
         pathSelect.clicked.connect(lambda:menuActions.MenuAction.selectProjectFolder(self))
         pathSelect.setObjectName("launchProject")
 
-        self.createSubfolder = QtWidgets.QCheckBox("Create in subfolder")
-        self.createSubfolder.setObjectName("createSubfolder")
-        self.createSubfolder.clicked.connect(lambda:Introduction.appendProjectName(self))
-
         infoLabel = QtWidgets.QLabel("Press launch to create the Project.")
         infoLabel.setObjectName("infoTextCreate")
 
         #Stitch everything together
-        gCreate.addWidget(nameLabel, 0, 0)
-        gCreate.addWidget(self.nameEdit, 0, 1)
-        gCreate.addWidget(pathLabel, 1, 0)
-        gCreate.addWidget(self.pathEdit, 1, 1)
+        gCreate.addWidget(nameLabel, 0, 1)
+        gCreate.addWidget(Introduction.nameEdit, 1, 1)
+        gCreate.addWidget(pathLabel, 0, 0)
+        gCreate.addWidget(Introduction.pathEdit, 1, 0)
         gCreate.addWidget(pathSelect, 1, 2)
-        vBackLay.addWidget(self.createSubfolder)
-        vBackLay.addWidget(infoLabel)
+        gCreate.addWidget(infoLabel, 3, 0)
 
         title = QtWidgets.QLabel("Hitch")
         title.setObjectName("titleText")
@@ -208,57 +202,46 @@ class Introduction(QtWidgets.QWidget):
 
         self.setLayout(mainLay)
     
-    #Called when the project item button is pressed
+    #Called when a item in the last projects list is clicked
     def selectProject(self):
         #Switch to last projects tab when button is clicked on creation tab.
         if not(Introduction.infoTabOpen):
             Introduction.sCenter.setCurrentIndex(0)
             Introduction.createBtn.setText("Create")
             Introduction.infoTabOpen = True
-
-        #Set the buttons to the standard colour.
+        
+        #Manage the buttons colours and update the text
         for i in range(Introduction.vLastProjects.count()):
             Introduction.vLastProjects.itemAt(i).widget().setStyleSheet("background-color: #0084a8;")
-        #Set the variables acording to the selected project
-        Introduction.selectedProject = self.path
-        Introduction.selectedProjectName = self.name
-        #Set the selected projects colour.
+        data = [self.name, self.path]
         self.setStyleSheet("background-color: #006986;")
-        Introduction.setProjectInfo(self, "fromList")
+        Introduction.setProjectInfo(self, "fromList", data)
 
-    def setProjectInfo(self, place):
-        
+    #Set the projects textedit and such to the data variable. Place defines what to set.
+    def setProjectInfo(self, place, data):
         if place == "fromList":
             Introduction.infoName.setVisible(True)
-            Introduction.infoName.setText("Name: {0}".format(Introduction.selectedProjectName))
-            Introduction.infoPath.setText("Path: {0}".format(Introduction.selectedProject))
+            Introduction.infoName.setText("Name: {0}".format(data[0]))
+            Introduction.infoPath.setText("Path: {0}".format(data[1]))
+            Introduction.selectedProject = data[1]
+            print("introductionWindow; Introduction; setProjectInfo: Selected Project:{0}".format(data[1]))
         
         elif place == "fromFile":
-            Introduction.infoName.setVisible(False)
-            print(Introduction.selectedProject)
-            Introduction.infoPath.setText("Path: {0}".format(Introduction.selectedProject))
-            print(Introduction.infoPath.text())
+            Introduction.infoName.setVisible(True)
+            Introduction.infoName.setText("Name: {0}".format(os.path.splitext(os.path.basename(data))[0]))
+            Introduction.infoPath.setText("Path: {0}".format(data))
+            Introduction.selectedProject = data
+            print("introductionWindow; Introduction; setProjectInfo: Selected Project from:{0} to open".format(data))
 
         elif place == "fromCreate":
-            self.pathEdit.setText(Introduction.selectedFolder)
+            print("introductionWindow; Introduction; setProjectInfo: Selected Project Creation folder:{0}".format(data))
+            Introduction.pathEdit.setText(data)
 
-    def launchTheProject(self):
-        #Update the variables so the edited text will get used and launch it!
-        Introduction.appendProjectName(self)
-        lambda:menuActions.MenuAction.launchProject(self)
-
-    def appendProjectName(self):
-        #Get the data from the textedits and store it in variables. Also append the project name if wanted.
-        Introduction.selectedProjectName = self.nameEdit.text()
-        Introduction.selectedFolder = self.pathEdit.text()
-        if self.createSubfolder.isChecked() and Introduction.selectedFolder != "":
-            self.pathEdit.setText(Introduction.selectedFolder + self.nameEdit.text() + "/")
-
+    #Switch betwen the create and open project tabs
     def switchTab(self):
         if Introduction.infoTabOpen:
             Introduction.sCenter.setCurrentIndex(1)
             Introduction.createBtn.setText("Last\nProjects")
-            Introduction.appendProjectName(self)
             Introduction.infoTabOpen = False
         else:
             Introduction.sCenter.setCurrentIndex(0)

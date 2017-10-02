@@ -1,4 +1,3 @@
-import qtawesome as qta
 import createWorkarea
 from components import introductionWindow
 from PyQt5 import QtGui, QtCore, QtWidgets
@@ -7,15 +6,16 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 
 class LastProjItem(QtWidgets.QWidget):
     projBtn = None
-    def setup(self, text, path):
+    def setup(self, name, path, itemIndex):
         lay = QtWidgets.QHBoxLayout()
         LastProjItem.projBtn = QtWidgets.QPushButton()
 
         self.path = path
-        self.name = text
+        self.name = name
+        self.index = itemIndex
 
         lay.setContentsMargins(QtCore.QMargins(0,0,0,0))
-        LastProjItem.projBtn.setText(text)
+        LastProjItem.projBtn.setText(name)
         LastProjItem.projBtn.setMaximumHeight(51)
         LastProjItem.projBtn.setMinimumWidth(160)
         #LastProjItem.projBtn.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred))

@@ -6,12 +6,16 @@ from components.Menu import menuEditTab
 from components.Menu import menuFileTab
 from components.Menu import menuSettingsTab
 from components.Menu import menuWindowTab
+from components.Menu import menuActions
+from components.Misc import directoryItem
 from PyQt5 import QtGui, QtCore, QtWidgets, QtMultimedia
 
 #This is the main file which is used for creating the window.
 
 class CreateUI:
     hOpenFilesLay = None
+    vFileExplorer = None
+    openProject = ""
     def create(self):
         print("create; createUI; create: Creating the main window layout")
         print("create; createUI; create: Creating widgets")
@@ -94,9 +98,17 @@ class CreateUI:
         modeBtn.setMenu(compMenu)
         modeBtn.setMaximumWidth(20)
 
+        self.saveBtn = QtWidgets.QPushButton("", self)
+        self.saveBtn.setObjectName("toolButtons")
+        self.saveBtn.setMinimumSize(QtCore.QSize(50,50))
+        self.saveBtn.setMaximumSize(QtCore.QSize(90,90))
+        #self.saveBtn.clicked.connect(lambda:menuActions.MenuAction.saveFile(self, "/!REPLACE!"))
+
         self.compileBtn.setIcon(self.toolbarIcons[12])
         self.compileBtn.setIconSize(QtCore.QSize(64, 64))
         modeBtn.setIcon(self.toolbarIcons[13])
+        self.saveBtn.setIcon(self.toolbarIcons[4])
+        self.saveBtn.setIconSize(QtCore.QSize(64, 64))
 
         #Dialogs
         dial = QtWidgets.QMessageBox()
@@ -113,6 +125,8 @@ class CreateUI:
 
         wFileExplorer = QtWidgets.QWidget()
         wFileExplorer.setObjectName("fileExplorer")
+        wFileExplorer.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding))
+        wRPart.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding))
 
         wOpenFiles = QtWidgets.QWidget()
         wOpenFiles.setObjectName("openFilesBar")
@@ -152,7 +166,7 @@ class CreateUI:
         self.vCPart = QtWidgets.QVBoxLayout() #Main layout of the editor
         self.vRPart = QtWidgets.QStackedLayout() #Right part of the editor
         CreateUI.hOpenFilesLay  = QtWidgets.QHBoxLayout() #Layout for the open files ontop of the editor
-        self.vFileExplorer = QtWidgets.QVBoxLayout() #Layout for the file explorer
+        CreateUI.vFileExplorer = QtWidgets.QGridLayout() #Layout for the file explorer
         hComp = QtWidgets.QHBoxLayout() #Layout for the dropdown and the compile button
 
         print("create; createUI; create: Seting layouts alignment and margins")
@@ -163,6 +177,7 @@ class CreateUI:
         #self.vCPart.setAlignment(QtCore.Qt.AlignTop)
         CreateUI.hOpenFilesLay .setAlignment(QtCore.Qt.AlignLeft)
         hComp.setAlignment(QtCore.Qt.AlignLeft)
+        CreateUI.vFileExplorer.setAlignment(QtCore.Qt.AlignTop | QtCore.Qt.AlignLeft)
 
         #Margin
         vMain.setContentsMargins(QtCore.QMargins(0,0,0,0))
@@ -175,6 +190,7 @@ class CreateUI:
         tools.setContentsMargins(QtCore.QMargins(0,23,30,23))
         vTabs.setContentsMargins(QtCore.QMargins(0,0,0,0))
         hComp.setContentsMargins(QtCore.QMargins(0,0,10,0))
+        self.vRPart.setContentsMargins(QtCore.QMargins(0,0,0,0))
 
         #Stretch
         #vLPart.addStretch(1)
@@ -219,8 +235,11 @@ class CreateUI:
         self.vLPart.setCurrentIndex(2)
 
         #Right side widgets
-        self.vRPart.addWidget(wFileExplorer)
-        wFileExplorer.setLayout(self.vFileExplorer)
+        wFileExplorer.setLayout(CreateUI.vFileExplorer)
+        fileScroll = QtWidgets.QScrollArea()
+        fileScroll.setWidget(wFileExplorer)
+        fileScroll.setWidgetResizable(True)
+        self.vRPart.addWidget(fileScroll)
 
         #Center part widgets
         self.vCPart.addWidget(wOpenFiles)
@@ -236,6 +255,7 @@ class CreateUI:
         hComp.addWidget(self.compileBtn)
         hComp.addWidget(modeBtn)
         vTabs.addWidget(wComp)
+        vTabs.addWidget(self.saveBtn)
 
         #adding the Layouts
         print("create; createUI; create: Adding the layouts to widgets")
@@ -274,3 +294,33 @@ class CreateUI:
 
     def switchMenu(self, index):
         self.vLPart.setCurrentIndex(index)
+
+    def openProjectInEditor(self):
+        f = open(CreateUI.openProject, "r")
+        text = f.read()
+        f.close()
+        assetsDirectory = text.split("\n")[1].split("=")[1]
+        index = 0
+        row = 0
+        items = []
+
+        #Sort the files and directorys
+        for i in os.listdir(assetsDirectory):
+            items.append(i)
+        items = sorted(items)
+
+        #Add ze items in a grid formation to the layout
+        for h in items:
+            item = directoryItem.DirectoryItem()
+            if os.path.isfile(assetsDirectory + h):
+                item.setup(h, assetsDirectory + h, "file")
+            else:
+                item.setup(h, assetsDirectory + h, "directory")
+            if index < 4:
+                CreateUI.vFileExplorer.addWidget(item, row, index)
+                index += 1
+            else:
+                row += 1
+                index = 0
+                CreateUI.vFileExplorer.addWidget(item, row, index)
+                index +=1

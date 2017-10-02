@@ -101,7 +101,7 @@ QPushButton::menu-indicator
 }
 
 #tools{
-    border-color: #006986;
+    border-color: #0084a8;
     border-style: solid;
     background-color: #0084a8;
     color: #f9f9f9;
@@ -109,9 +109,9 @@ QPushButton::menu-indicator
 }
 
 #tools:hover{
-    border-color: #0084a8;
+    border-color: #006986;
     border-style: solid;
-    background-color: #0084a8;
+    background-color: #006986;
     color: #f9f9f9;
     font-size: 18px;
 }
@@ -304,6 +304,21 @@ QPushButton::menu-indicator
 #infoTextCreate{
     color: #f9f9f9;
     font-size: 16px;
+}
+
+#directoryItem{
+    background-color: #ffb041;
+}
+
+#directoryText{
+    color: #f9f9f9;
+    font-family: 'Comfortaa';
+    font-size: 15px;
+}
+
+#fileExplorer{
+    background-color: #330033;
+    border-style: solid;
 }
 
 QScrollBar:vertical {

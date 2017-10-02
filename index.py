@@ -2,7 +2,6 @@ import sys, os
 import qtawesome as qta
 from components import create
 from components import introductionWindow
-from projectHandling import startupData as sd
 from PyQt5 import QtGui, QtCore, QtWidgets
 import colorama as clr
 
@@ -18,7 +17,6 @@ class Window(QtWidgets.QWidget):
         self.setWindowTitle("Hitch")
         #self.setWindowFlags(self.windowFlags() | QtCore.Qt.FramelessWindowHint) #Use this for a frameless window. Will be used later!
         create.CreateUI.create(self)
-        sd.Data.readTemp(self)
         #init colorama
         clr.init()
         #Set the app icon, maximize the window, show it and the startup window.
