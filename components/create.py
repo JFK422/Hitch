@@ -364,8 +364,8 @@ class CreateUI:
         f.close()
         assetsDirectory = text.split("\n")[1].split("=")[1]
         CreateUI.currentDir = assetsDirectory
-        index = 0
-        row = 0
+        CreateUI.index = 0
+        CreateUI.row = 0
         items = []
 
         #Sort the files and directorys
@@ -381,6 +381,7 @@ class CreateUI:
             else:
                 item.setup(h, assetsDirectory + h, "directory")
             if CreateUI.index < 4:
+                print("Index: {0}; Row: {1}".format(CreateUI.index, CreateUI.row))
                 CreateUI.vFileExplorer.addWidget(item, CreateUI.row, CreateUI.index)
                 CreateUI.index += 1
             else:

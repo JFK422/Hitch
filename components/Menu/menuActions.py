@@ -39,16 +39,17 @@ class MenuAction:
         if intro.infoTabOpen:
             if intro.selectedProject != "":
                 #Open the project file
-                try:
-                    project = open(intro.selectedProject, "r+")
-                    name = os.path.splitext(os.path.basename(intro.selectedProject))[0]
-                    startupData.Data.insert(self, name, intro.selectedProject)
-                    project.close()
-                    create.CreateUI.openProject = intro.selectedProject
-                    create.CreateUI.openProjectInEditor(self)
-                    self.hide()
+                #try:
+                project = open(intro.selectedProject, "r+")
+                name = os.path.splitext(os.path.basename(intro.selectedProject))[0]
+                startupData.Data.insert(self, name, intro.selectedProject)
+                project.close()
+                create.CreateUI.openProject = intro.selectedProject
+                create.CreateUI.openProjectInEditor(self)
+                self.hide()
 
                 #Catch the exception if it doesnt exist
+                """
                 except:
                     create.CreateUI.dial.setText("Selected file not found!")
                     create.CreateUI.dial.setIcon(QtWidgets.QMessageBox.Information)
@@ -57,6 +58,7 @@ class MenuAction:
 
                     print(clr.Fore.RED + "menuActions; MenuAction; launchProject: Project file not found!")
                     print(clr.Style.RESET_ALL)
+                """
                 
             else:
                 print(clr.Fore.RED + "menuActions; MenuAction; launchProject: Error launching project! No name or path defined!")
