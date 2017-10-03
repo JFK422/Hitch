@@ -1,13 +1,12 @@
 from PyQt5 import QtGui, QtCore, QtWidgets
 from components import introductionWindow
+from components.Misc import directoryItem
 from projectHandling import startupData
 from components import create
 import colorama as clr
 import os
 
 class MenuAction:
-    selecedProject = ""
-
     #Menu file tab
     def newFile(self):
         print("new file")
@@ -39,15 +38,26 @@ class MenuAction:
         #Open one of the latest projects
         if intro.infoTabOpen:
             if intro.selectedProject != "":
-                project = open(intro.selectedProject, "r+")
-                name = os.path.splitext(os.path.basename(intro.selectedProject))[0]
-                startupData.Data.insert(self, name, intro.selectedProject)
-                project.close()
-                create.CreateUI.openProject = intro.selectedProject
-                create.CreateUI.openProjectInEditor(self)
-                self.hide()
-                #Add the project loading setup here later!
+                #Open the project file
+                try:
+                    project = open(intro.selectedProject, "r+")
+                    name = os.path.splitext(os.path.basename(intro.selectedProject))[0]
+                    startupData.Data.insert(self, name, intro.selectedProject)
+                    project.close()
+                    create.CreateUI.openProject = intro.selectedProject
+                    create.CreateUI.openProjectInEditor(self)
+                    self.hide()
 
+                #Catch the exception if it doesnt exist
+                except:
+                    create.CreateUI.dial.setText("Selected file not found!")
+                    create.CreateUI.dial.setIcon(QtWidgets.QMessageBox.Information)
+                    create.CreateUI.dial.setWindowTitle("File Error")
+                    create.CreateUI.dial.show()
+
+                    print(clr.Fore.RED + "menuActions; MenuAction; launchProject: Project file not found!")
+                    print(clr.Style.RESET_ALL)
+                
             else:
                 print(clr.Fore.RED + "menuActions; MenuAction; launchProject: Error launching project! No name or path defined!")
                 print(clr.Style.RESET_ALL)
@@ -59,21 +69,24 @@ class MenuAction:
             if name != "" and file != "":
                 #Add the new projet to the list of the latest projects
                 try:
-                    project = open(file + name + "/" + name + ".hth", "w+")
+                    project = open(file + name + "/" + name + ".hthp", "w+")
                     os.makedirs(file + name + "/Assets")
+                    mainFile = open(file + name + "/Assets/main" + ".hth", "w+")
                     project.close()
                 except:
                     os.makedirs(file + name + "/")
-                    project = open(file + name + "/" + name + ".hth", "w+")
+                    project = open(file + name + "/" + name + ".hthp", "w+")
                     os.makedirs(file + name + "/Assets")
-                startupData.Data.insert(self, name, file + name + "/" + name + ".hth")
-                create.CreateUI.openProject = file + name + "/" + name + ".hth"
+                    mainFile = open(file + name + "/Assets/main" + ".hth", "w+")
+                startupData.Data.insert(self, name, file + name + "/" + name + ".hthp")
+                create.CreateUI.openProject = file + name + "/" + name + ".hthp"
+                create.CreateUI.mainProjectFile = file + name + "/Assets/main" + ".hth"
                 project.write("name={0}\n".format(name))
                 project.write("assets={0}\n".format(file + name + "/Assets/"))
+                project.write("mainFile={0}\n".format(file + name + "/Assets/main.hth"))
                 project.close()
                 create.CreateUI.openProjectInEditor(self)
                 self.hide()
-                #Split with ', may be hard to see with some fonts!
 
             else:
                 print(clr.Fore.RED + "menuActions; MenuAction; launchProject: Error launching project! No name or path defined!")
@@ -93,3 +106,9 @@ class MenuAction:
 
     def switchProject(self):
         print("switch project")
+
+    def createNewFile(self):
+        print("creating new file!")
+        item = directoryItem.DirectoryItem()
+        item.setup("", create.CreateUI.currentDir, "create")
+        create.CreateUI.vFileExplorer.addWidget(item)

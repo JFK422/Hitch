@@ -129,7 +129,7 @@ QPushButton::menu-indicator
 }
 
 #centerEdit{
-    background-color: #18184A;
+    background-color: #330033;
     border-style: solid;
 }
 
@@ -310,6 +310,10 @@ QPushButton::menu-indicator
     background-color: #ffb041;
 }
 
+#directoryItem:hover{
+    background-color: #f19f2d;
+}
+
 #directoryText{
     color: #f9f9f9;
     font-family: 'Comfortaa';
@@ -319,6 +323,50 @@ QPushButton::menu-indicator
 #fileExplorer{
     background-color: #330033;
     border-style: solid;
+}
+
+#bcName{
+    background-color: #34c873;
+    border-style: solid;
+}
+
+#bcName:hover{
+    background-color: #2dad63;
+    border-style: solid;
+}
+
+#bcBar{
+    background-color: #18184A;
+    border-style: solid;
+}
+
+#toolsBar{
+    background-color: #18184A;
+    border-style: solid;
+}
+
+#saveAll{
+    background-color: #34c873;
+}
+
+#saveAll:hover{
+    background-color: #2dad63;
+}
+
+#newFile{
+    background-color: #34c873;
+}
+
+#newFile:hover{
+    background-color: #2dad63;
+}
+
+#refreshFiles{
+    background-color: #34c873;
+}
+
+#refreshFiles:hover{
+    background-color: #2dad63;
 }
 
 QScrollBar:vertical {
