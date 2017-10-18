@@ -6,33 +6,47 @@ from components.Menu import menuEditTab
 from components.Menu import menuFileTab
 from components.Menu import menuSettingsTab
 from components.Menu import menuWindowTab
+from components.Menu import menuActions
+from components.Misc import directoryItem
+from components.Misc import breadCrumb
 from PyQt5 import QtGui, QtCore, QtWidgets, QtMultimedia
 
 #This is the main file which is used for creating the window.
 
 class CreateUI:
     hOpenFilesLay = None
+    vFileExplorer = None
+    hBread = None
+    dial = None
+    hTools = None
+    openProject = ""
+    mainProjectFile = ""
+    currentDir = ""
+    index = 0
+    row = 0
     def create(self):
         print("create; createUI; create: Creating the main window layout")
         print("create; createUI; create: Creating widgets")
 
         #Create icons
+        #Colours: Red, Blue, Yellow, Pink, White
         compileStates = {"uncompiled" : "#a51946", "compiled" : "#4190ff", "error" : "#ffb041", "leftovers" : "#b041ff", "compiling" : "#f9f9f9"}
-        self.toolbarIcons = [qta.icon("fa.minus", color="#f9f9f9"), 
-                                    qta.icon("fa.times", color="#f9f9f9"), 
-                                    qta.icon("fa.sliders", color="#f9f9f9"), 
-                                    qta.icon("fa.arrows-alt", color="#f9f9f9"), 
-                                    qta.icon("fa.file-text-o", color="#f9f9f9"),
-                                    qta.icon("fa.pencil", color="#f9f9f9"),
-                                    qta.icon("fa.square-o", color="#f9f9f9"),
-                                    qta.icon("fa.play", color="#f9f9f9"),
-                                    qta.icon("fa.gear", color=compileStates["compiling"]), #Later add a spin animation to this icon
-                                    qta.icon("fa.gear", color=compileStates["uncompiled"]),
-                                    qta.icon("fa.gear", color=compileStates["compiled"]),
-                                    qta.icon("fa.gear", color=compileStates["error"]),
-                                    qta.icon("fa.gear", color=compileStates["leftovers"]),
-                                    qta.icon("fa.caret-down", color="#f9f9f9"),
-                                    qta.icon("fa.floppy-o", color="#f9f9f9")]
+        self.toolbarIcons = [qta.icon("fa.minus", color="#f9f9f9"), #0
+                                    qta.icon("fa.times", color="#f9f9f9"), #1
+                                    qta.icon("fa.sliders", color="#f9f9f9"), #2
+                                    qta.icon("fa.arrows-alt", color="#f9f9f9"), #3 
+                                    qta.icon("fa.file-text-o", color="#f9f9f9"), #4
+                                    qta.icon("fa.pencil", color="#f9f9f9"), #5
+                                    qta.icon("fa.square-o", color="#f9f9f9"), #6
+                                    qta.icon("fa.play", color="#f9f9f9"), #7
+                                    qta.icon("fa.gear", color=compileStates["compiling"]), #8 Later add a spin animation to this icon
+                                    qta.icon("fa.gear", color=compileStates["uncompiled"]), #9
+                                    qta.icon("fa.gear", color=compileStates["compiled"]), #10
+                                    qta.icon("fa.gear", color=compileStates["error"]), #11
+                                    qta.icon("fa.gear", color=compileStates["leftovers"]), #12
+                                    qta.icon("fa.caret-down", color="#f9f9f9"), #13
+                                    qta.icon("fa.floppy-o", color="#f9f9f9"), #14
+                                    qta.icon("fa.plus", color="#f9f9f9")] #15
 
         #Create window action buttons
         mini = QtWidgets.QPushButton(self.toolbarIcons[0], "", self)
@@ -87,19 +101,28 @@ class CreateUI:
         compMenu.addAction("Compile All")
         compMenu.addAction("Compile Current")
         #Add later a package entry and/or another button in the toolbar to create a executable file of the project
-        #compMenu.addAction("Package")
+        #compMenu.addAction("Package Project")
 
         modeBtn = QtWidgets.QPushButton("", self)
         modeBtn.setObjectName("toolButtons")
         modeBtn.setMenu(compMenu)
         modeBtn.setMaximumWidth(20)
 
+        self.saveBtn = QtWidgets.QPushButton("", self)
+        self.saveBtn.setObjectName("toolButtons")
+        self.saveBtn.setMinimumSize(QtCore.QSize(50,50))
+        self.saveBtn.setMaximumSize(QtCore.QSize(90,90))
+        #self.saveBtn.clicked.connect(lambda:menuActions.MenuAction.saveFile(self, "/!REPLACE!"))
+
         self.compileBtn.setIcon(self.toolbarIcons[12])
         self.compileBtn.setIconSize(QtCore.QSize(64, 64))
         modeBtn.setIcon(self.toolbarIcons[13])
+        self.saveBtn.setIcon(self.toolbarIcons[4])
+        self.saveBtn.setIconSize(QtCore.QSize(64, 64))
 
         #Dialogs
-        dial = QtWidgets.QMessageBox()
+        CreateUI.dial = QtWidgets.QMessageBox()
+        CreateUI.dial.setEscapeButton(True)
 
         #Empty Widgets
         wLPart = QtWidgets.QWidget()
@@ -117,8 +140,28 @@ class CreateUI:
         wOpenFiles = QtWidgets.QWidget()
         wOpenFiles.setObjectName("openFilesBar")
 
+        breadCrump = QtWidgets.QWidget()
+        breadCrump.setObjectName("bcBar")
+
+        saveAllBtn = QtWidgets.QPushButton("Save All")
+        saveAllBtn.setObjectName("saveAll")
+        saveAllBtn.setIcon(self.toolbarIcons[4])
+        #saveAllBtn.clicked.connect(lambda:menuActions.MenuAction.saveAllFiles(self))
+
+        createNew = QtWidgets.QPushButton("New File")
+        createNew.setObjectName("newFile")
+        createNew.setIcon(self.toolbarIcons[15])
+        createNew.clicked.connect(lambda:menuActions.MenuAction.createNewFile(self))
+
+        refreshFiles = QtWidgets.QPushButton("Refresh")
+        refreshFiles.setObjectName("refreshFiles")
+        #refreshFiles.setIcon(self.toolbarIcons[15])
+        refreshFiles.clicked.connect(lambda:CreateUI.openProjectInEditor(self))
+
+        toolsBar = QtWidgets.QWidget()
+        toolsBar.setObjectName("toolsBar")
+
         wComp = QtWidgets.QWidget()
-        #wComp.setObjectName("rightEdit")
         wComp.setMaximumSize(QtCore.QSize(110, 90))
         wComp.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum))
 
@@ -130,6 +173,11 @@ class CreateUI:
         wLPart.setMaximumWidth(400)
         wRPart.setMaximumWidth(400)
         wOpenFiles.setMaximumHeight(40)
+        wOpenFiles.setMaximumHeight(40)
+        breadCrump.setMinimumHeight(40)
+        breadCrump.setMaximumHeight(40)
+        toolsBar.setMinimumHeight(40)
+        toolsBar.setMaximumHeight(40)
 
         #Titlebar background
         cont = QtWidgets.QWidget(self)
@@ -150,10 +198,12 @@ class CreateUI:
         tools = QtWidgets.QGridLayout() #Grid Layout for the tool actions in the titlebar
         self.vLPart = QtWidgets.QStackedLayout() #Left part of the editor
         self.vCPart = QtWidgets.QVBoxLayout() #Main layout of the editor
-        self.vRPart = QtWidgets.QStackedLayout() #Right part of the editor
+        self.vRPart = QtWidgets.QVBoxLayout() #Right part of the editor
         CreateUI.hOpenFilesLay  = QtWidgets.QHBoxLayout() #Layout for the open files ontop of the editor
-        self.vFileExplorer = QtWidgets.QVBoxLayout() #Layout for the file explorer
+        CreateUI.vFileExplorer = QtWidgets.QGridLayout() #Layout for the file explorer
         hComp = QtWidgets.QHBoxLayout() #Layout for the dropdown and the compile button
+        CreateUI.hBread = QtWidgets.QHBoxLayout() #Layout for the breadcrumbs of the file explorer
+        CreateUI.hTools = QtWidgets.QHBoxLayout() #Layout for the tools of the file explorer
 
         print("create; createUI; create: Seting layouts alignment and margins")
         #Alignment
@@ -161,8 +211,16 @@ class CreateUI:
         winAc.setAlignment(QtCore.Qt.AlignRight)
         gCenter.setAlignment(QtCore.Qt.AlignTop)
         #self.vCPart.setAlignment(QtCore.Qt.AlignTop)
-        CreateUI.hOpenFilesLay .setAlignment(QtCore.Qt.AlignLeft)
+        CreateUI.hOpenFilesLay.setAlignment(QtCore.Qt.AlignLeft)
         hComp.setAlignment(QtCore.Qt.AlignLeft)
+        CreateUI.vFileExplorer.setAlignment(QtCore.Qt.AlignTop | QtCore.Qt.AlignLeft)
+        self.vRPart.setAlignment(QtCore.Qt.AlignTop)
+        CreateUI.hBread.setAlignment(QtCore.Qt.AlignLeft)
+
+        #Spacing
+        self.vCPart.setSpacing(0)
+        self.vRPart.setSpacing(0)
+        CreateUI.hTools.setSpacing(5)
 
         #Margin
         vMain.setContentsMargins(QtCore.QMargins(0,0,0,0))
@@ -175,6 +233,9 @@ class CreateUI:
         tools.setContentsMargins(QtCore.QMargins(0,23,30,23))
         vTabs.setContentsMargins(QtCore.QMargins(0,0,0,0))
         hComp.setContentsMargins(QtCore.QMargins(0,0,10,0))
+        self.vRPart.setContentsMargins(QtCore.QMargins(0,0,0,0))
+        CreateUI.hBread.setContentsMargins(QtCore.QMargins(0,0,0,0))
+        CreateUI.hTools.setContentsMargins(QtCore.QMargins(5,5,5,5))
 
         #Stretch
         #vLPart.addStretch(1)
@@ -219,8 +280,26 @@ class CreateUI:
         self.vLPart.setCurrentIndex(2)
 
         #Right side widgets
-        self.vRPart.addWidget(wFileExplorer)
-        wFileExplorer.setLayout(self.vFileExplorer)
+        wFileExplorer.setLayout(CreateUI.vFileExplorer)
+        breadCrump.setLayout(CreateUI.hBread)
+
+        toolsBar.setLayout(CreateUI.hTools)
+        CreateUI.hTools.addWidget(createNew)
+        CreateUI.hTools.addWidget(saveAllBtn)
+        CreateUI.hTools.addWidget(refreshFiles)
+
+        fileScroll = QtWidgets.QScrollArea()
+        fileScroll.setWidget(wFileExplorer)
+        fileScroll.setWidgetResizable(True)
+
+        self.vRPart.addWidget(toolsBar)
+        self.vRPart.addWidget(fileScroll)
+        self.vRPart.addWidget(breadCrump)
+
+        #Create the initial breadcrumb!
+        startCrumb = breadCrumb.Breadcrumb()
+        startCrumb.setup("", CreateUI.openProject, 0, "start")
+        CreateUI.hBread.addWidget(startCrumb)
 
         #Center part widgets
         self.vCPart.addWidget(wOpenFiles)
@@ -236,6 +315,7 @@ class CreateUI:
         hComp.addWidget(self.compileBtn)
         hComp.addWidget(modeBtn)
         vTabs.addWidget(wComp)
+        vTabs.addWidget(self.saveBtn)
 
         #adding the Layouts
         print("create; createUI; create: Adding the layouts to widgets")
@@ -254,6 +334,8 @@ class CreateUI:
         self.setLayout(vMain)
 
     def switchCompStatus(self, newStatus):
+        #States: Uncompiled, Compiled, Error, Leftovers, Compiling
+        #Colours: Red, Blue, Yellow, Pink, White
         if newStatus == "compiling":
             self.compileBtn.setIcon(self.toolbarIcons[8])
             self.currentCompStat = "compiling"
@@ -274,3 +356,40 @@ class CreateUI:
 
     def switchMenu(self, index):
         self.vLPart.setCurrentIndex(index)
+
+    def openProjectInEditor(self):
+        CreateUI.clearFileList(self)
+        f = open(CreateUI.openProject, "r")
+        text = f.read()
+        f.close()
+        assetsDirectory = text.split("\n")[1].split("=")[1]
+        CreateUI.currentDir = assetsDirectory
+        CreateUI.index = 0
+        CreateUI.row = 0
+        items = []
+
+        #Sort the files and directorys
+        for i in os.listdir(assetsDirectory):
+            items.append(i)
+        items = sorted(items)
+
+        #Add ze items in a grid formation to ze layout
+        for h in items:
+            item = directoryItem.DirectoryItem()
+            if os.path.isfile(assetsDirectory + h):
+                item.setup(h, assetsDirectory + h, "file")
+            else:
+                item.setup(h, assetsDirectory + h, "directory")
+            if CreateUI.index < 4:
+                print("Index: {0}; Row: {1}".format(CreateUI.index, CreateUI.row))
+                CreateUI.vFileExplorer.addWidget(item, CreateUI.row, CreateUI.index)
+                CreateUI.index += 1
+            else:
+                CreateUI.row += 1
+                CreateUI.index = 0
+                CreateUI.vFileExplorer.addWidget(item, CreateUI.row, CreateUI.index)
+                CreateUI.index +=1
+
+    def clearFileList(self):
+        for i in reversed(range(CreateUI.vFileExplorer.count())):
+            CreateUI.vFileExplorer.itemAt(i).widget().setParent(None)

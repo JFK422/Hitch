@@ -34,11 +34,6 @@ class MenuFile(QtWidgets.QWidget):
         newFile.setObjectName("menuItem")
         scrollLay.addWidget(newFile)
 
-        openFile = QtWidgets.QPushButton("Open File")
-        openFile.setMaximumHeight(50)
-        openFile.setObjectName("menuItem")
-        scrollLay.addWidget(openFile)
-
         openProject = QtWidgets.QPushButton("Open Project")
         openProject.setMaximumHeight(50)
         openProject.setObjectName("menuItem")
