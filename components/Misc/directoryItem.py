@@ -36,11 +36,11 @@ class DirectoryItem(QtWidgets.QWidget):
         if self.type == "directory":
             DirectoryItem.itmBtn.setIcon(dirIco)
             DirectoryItem.itmBtn.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-            DirectoryItem.itmBtn.customContextMenuRequested.connect(self, QtCore.SIGNAL('customContextMenuRequested(const QPoint&)'), DirectoryItem.onRightclick)
+            DirectoryItem.itmBtn.customContextMenuRequested.connect(DirectoryItem.onRightClick)
         elif self.type == "file":
             DirectoryItem.itmBtn.setIcon(fileIco)
             DirectoryItem.itmBtn.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-            DirectoryItem.itmBtn.customContextMenuRequested.connect(self, QtCore.SIGNAL('customContextMenuRequested(const QPoint&)'), DirectoryItem.onRightclick)
+            DirectoryItem.itmBtn.customContextMenuRequested.connect(DirectoryItem.onRightClick)
         
 
         #Edit/Creting types
@@ -106,11 +106,16 @@ class DirectoryItem(QtWidgets.QWidget):
             DirectoryItem.itmBtn.setIcon(dirIco)
             DirectoryItem.isDirCreating = True
 
-    def onRightclick(self, pos):
-        popMenu = QtGui.QMenu( self )
-        popMenu.addAction("Edit")
-        popMenu.addSeparator()
-        popMenu.addAction("Delete")
-        popMenu.addAction("Move")
+    def onRightClick(self):
+        moveIco = qta.icon("fa.arrows-alt", color="#f9f9f9")
+        editIco = qta.icon("fa.pencil", color="#f9f9f9")
+        deleteIco = qta.icon("fa.trash-o", color="#f9f9f9")
 
-        popMenu.exec_(DirectoryItem.itmBtn.mapToGlobal(pos))
+        popMenu = QtWidgets.QMenu()
+        popMenu.setObjectName("rightClkMenu")
+        popMenu.addAction(editIco, "Edit")
+        popMenu.addAction(moveIco, "Move")
+        popMenu.addSeparator()
+        popMenu.addAction(deleteIco, "Delete")
+
+        popMenu.exec_(DirectoryItem.itmBtn.mapToGlobal(self))

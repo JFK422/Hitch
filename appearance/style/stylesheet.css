@@ -369,6 +369,15 @@ QPushButton::menu-indicator
     background-color: #2dad63;
 }
 
+#rightClkMenu{
+    background-color: #0084a8;
+    border-style: solid;
+    border: 0px;
+    color: #f9f9f9;
+    font-family: 'Comfortaa';
+    font-size: 14px;
+}
+
 QScrollBar:vertical {
     background-color: #34c873;
 }
