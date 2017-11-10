@@ -15,7 +15,7 @@ class Window(QtWidgets.QWidget):
         super(Window, self).__init__()
         self.setGeometry(50,50,1200,700)
         self.setWindowTitle("Hitch")
-        #self.setWindowFlags(self.windowFlags() | QtCore.Qt.FramelessWindowHint) #Use this for a frameless window. Will be used later!
+        self.setWindowFlags(self.windowFlags() | QtCore.Qt.FramelessWindowHint) #Use this for a frameless window. Will be used later!
         create.CreateUI.create(self)
         #init colorama
         clr.init()

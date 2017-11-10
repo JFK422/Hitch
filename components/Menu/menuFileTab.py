@@ -1,6 +1,7 @@
 import qtawesome as qta
 from components.Menu import menuSeperator
 from components.Menu import menuActions
+from components import introductionWindow
 from PyQt5 import QtGui, QtCore, QtWidgets
 
 #Menu widget placed in the stack of vLPart
@@ -71,6 +72,7 @@ class MenuFile(QtWidgets.QWidget):
         switchProj = QtWidgets.QPushButton("Switch Project")
         switchProj.setMaximumHeight(50)
         switchProj.setObjectName("menuItem")
+        switchProj.clicked.connect(lambda:MenuFile.launchStartupMenu(self))
         scrollLay.addWidget(switchProj)
 
         sep3 = menuSeperator.MenuSeperator()
@@ -85,3 +87,7 @@ class MenuFile(QtWidgets.QWidget):
 
         self.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding))
         self.setLayout(vMenu)
+
+    def launchStartupMenu(self):
+        startup = introductionWindow.Introduction()
+        startup.show()

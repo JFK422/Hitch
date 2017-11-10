@@ -1,4 +1,5 @@
 import qtawesome as qta
+import colorama as clr
 import random, sys, os
 from projectHandling import startupData
 from components.Misc import projectItem
@@ -30,7 +31,8 @@ class Introduction(QtWidgets.QWidget):
                             "This is my jam!",
                             "Digital Hug ༼つ ◕_◕ ༽つ",
                             "Full of stale memes",
-                            "ಠ_ಠ"]
+                            "ಠ_ಠ",
+                            "Insert cool phrase about programming here!"]
         self.setGeometry(50,50,1000,500)
         self.setWindowTitle("Hitch")
 
@@ -101,9 +103,17 @@ class Introduction(QtWidgets.QWidget):
 
         #Add the last opened projects as items
         for i in range(startupData.Data.lengthOfDB(self)):
-            projItem = projectItem.LastProjItem()
-            projItem.setup(name = startupData.Data.readDB(self, i)[1], path = startupData.Data.readDB(self, i)[2], itemIndex = i)
-            Introduction.vLastProjects.addWidget(projItem)
+            try:
+                fileTest = open(startupData.Data.readDB(self, i)[2], "r")
+                projItem = projectItem.LastProjItem()
+                projItem.setup(name = startupData.Data.readDB(self, i)[1], path = startupData.Data.readDB(self, i)[2], itemIndex = i, colour = False)
+                Introduction.vLastProjects.addWidget(projItem)
+            except:
+                projItem = projectItem.LastProjItem()
+                projItem.setup(name = startupData.Data.readDB(self, i)[1], path = startupData.Data.readDB(self, i)[2], itemIndex = i, colour = True)
+                Introduction.vLastProjects.addWidget(projItem)
+                print(clr.Fore.RED + "introductionWindow; Introduction; __init__: Error finding project path!")
+                print(clr.Style.RESET_ALL)
 
         launchBtn = QtWidgets.QPushButton("Launch")
         launchBtn.setObjectName("launchProject")
@@ -234,8 +244,12 @@ class Introduction(QtWidgets.QWidget):
             print("introductionWindow; Introduction; setProjectInfo: Selected Project from:{0} to open".format(data))
 
         elif place == "fromCreate":
-            print("introductionWindow; Introduction; setProjectInfo: Selected Project Creation folder:{0}".format(data))
+            print("introductionWindow; Introduction; setProjectInfo: Selected Project Creation Folder:{0}".format(data))
             Introduction.pathEdit.setText(data)
+        
+        else:
+            print(clr.Fore.RED + "introductionWindow; Introduction; setProjectInfo: Error setting the selected projects info!")
+            print(clr.Style.RESET_ALL)
 
     #Switch betwen the create and open project tabs
     def switchTab(self):
