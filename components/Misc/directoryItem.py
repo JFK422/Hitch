@@ -52,8 +52,7 @@ class DirectoryItem(QtWidgets.QWidget):
         
         #check for faulty strings!
         else:
-            print(clr.Fore.RED + "directoryItem; DirectoryItem; setup: Unknown filetype of item: {0}".format(path+"/"+name))
-            print(clr.Style.RESET_ALL)
+            print(clr.Fore.RED + "directoryItem; DirectoryItem; setup: Unknown filetype of item: {0}".format(path+"/"+name) + clr.Style.RESET_ALL)
         
         DirectoryItem.itmBtn.setIconSize(QtCore.QSize(64, 64))
         DirectoryItem.itmBtn.setObjectName("directoryItem")
@@ -83,18 +82,20 @@ class DirectoryItem(QtWidgets.QWidget):
         else:
             f = open(path + file + ".hth", "w+")
             f.close()
-        create.CreateUI.openProjectInEditor(self)
+        create.CreateUI.openProjectInEditor(self, "refresh")
         
     def abortChanges(self):
-        create.CreateUI.openProjectInEditor(self)
+        create.CreateUI.openProjectInEditor(self, "refresh")
 
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key_Enter:
             DirectoryItem.createFile(self)
         elif event.key() == QtCore.Qt.Key_Escape:
             DirectoryItem.abortChanges(self)
+        elif False:
+            print("D")
         else:
-            print("E{0}".format(QtCore.Qt.Key_Enter))
+            print("{0}".format(QtCore.Qt.Key_Enter))
     
     def changeType(self):
         dirIco = qta.icon("fa.folder", color="#f9f9f9")
@@ -118,4 +119,18 @@ class DirectoryItem(QtWidgets.QWidget):
         popMenu.addSeparator()
         popMenu.addAction(deleteIco, "Delete")
 
-        popMenu.exec_(DirectoryItem.itmBtn.mapToGlobal(self))
+        selected = popMenu.exec_(DirectoryItem.itmBtn.mapToGlobal(self))
+
+        #Check wich action was executed (needs to be implemented)
+        if selected:
+            print("Stuff")
+
+    def keyPressEvent(self, event):
+        if event.key() == QtCore.Qt.Key_Enter:
+            DirectoryItem.createFile(self)
+        elif event.key() == QtCore.Qt.Key_Escape:
+            DirectoryItem.abortChanges(self)
+        elif event.key() == 16777220:
+            DirectoryItem.createFile(self)
+        else:
+            print("{0}".format(event.key()))

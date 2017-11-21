@@ -17,10 +17,33 @@ QPushButton:hover{
     color: #f9f9f9;
     font-size: 18px;
 }
+QLabel{
+    font-family: 'Hind Siliguri';
+}
 
 QPushButton::menu-indicator
 {
     background-color: #ff634d;
+}
+
+QMessageBox QPushButton{
+    background-color: #ff634d;
+    color: #f9f9f9;
+    font-size: 18px;
+    height: 50%;
+    border-radius: 10px;
+}
+
+QMessageBox QPushButton:hover{
+    background-color: #ff5840;
+    color: #f9f9f9;
+    font-size: 18px;
+    height: 50%;
+    border-radius: 10px;
+}
+
+QFileDialog QPushButton{
+    height: 50%;
 }
 
 #toolButtons{
@@ -411,7 +434,6 @@ QScrollBar::sub-line:vertical {
     subcontrol-position: top;
 }
 
-
 @font-face {
     font-family: 'Bangers';
     src: url('../../resources/fonts/Bangers/Bangers-Regular.ttf');
@@ -425,4 +447,9 @@ QScrollBar::sub-line:vertical {
 @font-face {
     font-family: 'Comfortaa';
     src: url('../../resources/fonts/Comfortaa/Comfortaa-Bold.ttf');
+}
+
+@font-face {
+    font-family: 'Hind Siliguri';
+    src: url('../../resources/fonts/Hind_Siliguri/HindSiliguri-Regular.ttf');
 }

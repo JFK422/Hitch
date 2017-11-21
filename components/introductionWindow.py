@@ -101,19 +101,7 @@ class Introduction(QtWidgets.QWidget):
         wLaunch.setLayout(hLaunch)
         wLaunch.setObjectName("lastProjectsLaunch")
 
-        #Add the last opened projects as items
-        for i in range(startupData.Data.lengthOfDB(self)):
-            try:
-                fileTest = open(startupData.Data.readDB(self, i)[2], "r")
-                projItem = projectItem.LastProjItem()
-                projItem.setup(name = startupData.Data.readDB(self, i)[1], path = startupData.Data.readDB(self, i)[2], itemIndex = i, colour = False)
-                Introduction.vLastProjects.addWidget(projItem)
-            except:
-                projItem = projectItem.LastProjItem()
-                projItem.setup(name = startupData.Data.readDB(self, i)[1], path = startupData.Data.readDB(self, i)[2], itemIndex = i, colour = True)
-                Introduction.vLastProjects.addWidget(projItem)
-                print(clr.Fore.RED + "introductionWindow; Introduction; __init__: Error finding project path!")
-                print(clr.Style.RESET_ALL)
+        Introduction.addProjects(self)
 
         launchBtn = QtWidgets.QPushButton("Launch")
         launchBtn.setObjectName("launchProject")
@@ -248,8 +236,7 @@ class Introduction(QtWidgets.QWidget):
             Introduction.pathEdit.setText(data)
         
         else:
-            print(clr.Fore.RED + "introductionWindow; Introduction; setProjectInfo: Error setting the selected projects info!")
-            print(clr.Style.RESET_ALL)
+            print(clr.Fore.RED + "introductionWindow; Introduction; setProjectInfo: Error setting the selected projects info!" + clr.Style.RESET_ALL)
 
     #Switch betwen the create and open project tabs
     def switchTab(self):
@@ -261,6 +248,39 @@ class Introduction(QtWidgets.QWidget):
             Introduction.sCenter.setCurrentIndex(0)
             Introduction.createBtn.setText("Create")
             Introduction.infoTabOpen = True
+
+    def projNotFound(self, place):
+        rmvDialog = QtWidgets.QMessageBox()
+        rmvDialog.setWindowTitle("Remove Project?")
+        rmvDialog.setText("This project can't be found anymore at {0}\n should it be removed from the list?".format(place))
+        rmvDialog.setStandardButtons(QtWidgets.QMessageBox.Yes)
+        rmvDialog.addButton(QtWidgets.QMessageBox.No)
+        rmvDialog.setDefaultButton(QtWidgets.QMessageBox.Yes)
+        if(rmvDialog.exec() == QtWidgets.QMessageBox.Yes):
+            Introduction.removeProject(self, place)
+    
+    def removeProject(self, path):
+        startupData.Data.removeItem(self, path)
+        Introduction.addProjects(self)
+
+    def addProjects(self):
+        #Clearing of the projects list
+        for i in reversed(range(Introduction.vLastProjects.count())):
+            Introduction.vLastProjects.itemAt(i).widget().setParent(None)
+
+        #Add the last opened projects as items
+        for i in range(startupData.Data.lengthOfDB(self)):
+            try:
+                fileTest = open(startupData.Data.readDB(self, i)[2], "r")
+                projItem = projectItem.LastProjItem()
+                projItem.setup(name = startupData.Data.readDB(self, i)[1], path = startupData.Data.readDB(self, i)[2], itemIndex = i, colour = False)
+                Introduction.vLastProjects.addWidget(projItem)
+            except:
+                projItem = projectItem.LastProjItem()
+                projItem.setup(name = startupData.Data.readDB(self, i)[1], path = startupData.Data.readDB(self, i)[2], itemIndex = i, colour = True)
+                Introduction.vLastProjects.addWidget(projItem)
+                print(clr.Fore.YELLOW + "introductionWindow; Introduction; __init__: Error finding project path!" + clr.Style.RESET_ALL)
+
 
 #For executing this file standalone
 if __name__ == '__main__':

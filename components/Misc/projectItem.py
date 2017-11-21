@@ -21,12 +21,10 @@ class LastProjItem(QtWidgets.QWidget):
         LastProjItem.projBtn.setMinimumWidth(160)
         if colour:
             LastProjItem.projBtn.setStyleSheet("background-color: #a51946;")
-            #Create a dialog here, when the button is clicked, asking if the project is wanted to be removed.
-            #LastProjItem.projBtn.clicked.connect(lambda:introductionWindow.Introduction.projNotFound(self))
+            LastProjItem.projBtn.clicked.connect(lambda:introductionWindow.Introduction.projNotFound(self, self.path))
         else:
             LastProjItem.projBtn.setObjectName("projectName")
             LastProjItem.projBtn.clicked.connect(lambda:introductionWindow.Introduction.selectProject(self))
-        #LastProjItem.projBtn.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred))
 
         self.setLayout(lay)
         lay.addWidget(LastProjItem.projBtn)

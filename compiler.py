@@ -1,6 +1,5 @@
 import time
 from components import create
-from projectHandling import workareaData as wd
 
 class compiler:
 

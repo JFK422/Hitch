@@ -7,7 +7,7 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 
 class Breadcrumb(QtWidgets.QWidget):
     bc = None
-    def setup(self, name, path, itemIndex, bcType):
+    def setup(self, name, path, itemIndex, bcType = ""):
         lay = QtWidgets.QHBoxLayout()
         Breadcrumb.bc = QtWidgets.QPushButton()
 

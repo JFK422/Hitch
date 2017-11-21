@@ -156,7 +156,7 @@ class CreateUI:
         refreshFiles = QtWidgets.QPushButton("Refresh")
         refreshFiles.setObjectName("refreshFiles")
         #refreshFiles.setIcon(self.toolbarIcons[15])
-        refreshFiles.clicked.connect(lambda:CreateUI.openProjectInEditor(self))
+        refreshFiles.clicked.connect(lambda:CreateUI.openProjectInEditor(self, "refresh"))
 
         toolsBar = QtWidgets.QWidget()
         toolsBar.setObjectName("toolsBar")
@@ -357,7 +357,7 @@ class CreateUI:
     def switchMenu(self, index):
         self.vLPart.setCurrentIndex(index)
 
-    def openProjectInEditor(self):
+    def openProjectInEditor(self, cause):
         CreateUI.clearFileList(self)
         f = open(CreateUI.openProject, "r")
         text = f.read()
@@ -373,10 +373,16 @@ class CreateUI:
             items.append(i)
         items = sorted(items)
 
+        if cause == "create":
+            items.append("")
+
+
         #Add ze items in a grid formation to ze layout
         for h in items:
             item = directoryItem.DirectoryItem()
-            if os.path.isfile(assetsDirectory + h):
+            if h == "":
+                item.setup(h, assetsDirectory + h, "create")
+            elif os.path.isfile(assetsDirectory + h):
                 item.setup(h, assetsDirectory + h, "file")
             else:
                 item.setup(h, assetsDirectory + h, "directory")
