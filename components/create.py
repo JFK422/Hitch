@@ -357,7 +357,7 @@ class CreateUI:
     def switchMenu(self, index):
         self.vLPart.setCurrentIndex(index)
 
-    def openProjectInEditor(self, cause):
+    def openProjectInEditor(self, cause, editName = ""):
         CreateUI.clearFileList(self)
         f = open(CreateUI.openProject, "r")
         text = f.read()
@@ -380,8 +380,12 @@ class CreateUI:
         #Add ze items in a grid formation to ze layout
         for h in items:
             item = directoryItem.DirectoryItem()
-            if h == "":
-                item.setup(h, assetsDirectory + h, "create")
+            if h == editName:
+                if cause == "edit":
+                    item.setup(h, assetsDirectory + h, "edit")
+                    print("L")
+                else:
+                    item.setup(h, assetsDirectory + h, "create")
             elif os.path.isfile(assetsDirectory + h):
                 item.setup(h, assetsDirectory + h, "file")
             else:
