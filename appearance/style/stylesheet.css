@@ -1,3 +1,4 @@
+/*Set the general appearance of undefined widgets*/
 QPushButton {
     border-color: #ff634d;
     border-style: solid;
@@ -17,6 +18,7 @@ QPushButton:hover{
     color: #f9f9f9;
     font-size: 18px;
 }
+
 QLabel{
     font-family: 'Hind Siliguri';
 }
@@ -46,6 +48,7 @@ QFileDialog QPushButton{
     height: 50%;
 }
 
+/*The buttons in the toolbar for compiling saving and such*/
 #toolButtons{
     border-color: #ff634d;
     border-style: solid;
@@ -59,6 +62,7 @@ QFileDialog QPushButton{
     background-color: #ff5840;
 }
 
+/*The for buttons on the right side for window interaction*/
 #quitBtn{
     border-color: #a51946;
     border-style: solid;
@@ -123,6 +127,7 @@ QFileDialog QPushButton{
     font-size: 18px;
 }
 
+/*The style of the tool buttons on teh left side*/
 #tools{
     border-color: #0084a8;
     border-style: solid;
@@ -139,6 +144,7 @@ QFileDialog QPushButton{
     font-size: 18px;
 }
 
+/*The background color of the title bar*/
 #titlebar {
     border-color: #18184A;
     border-style: solid;
@@ -146,6 +152,7 @@ QFileDialog QPushButton{
     color: #18184a;
 }
 
+/*The style of the left, center and right background of the editor*/
 #leftEdit{
     background-color: #330033;
     border-style: solid;
@@ -161,10 +168,12 @@ QFileDialog QPushButton{
     border-style: solid;
 }
 
+/*The style of the bar on top of the editor which shows the open files*/
 #openFilesBar{
     background-color: #18184A;
 }
 
+/*And how a tab of that bar should look like*/
 #openFilesTab{
     background-color: #34c873;
     font-size: 16px;
@@ -175,6 +184,7 @@ QFileDialog QPushButton{
     font-size: 16px;
 }
 
+/*The style of the titletext in a menu*/
 #menuTitle{
     color: #f9f9f9;
     font-size: 45px;
@@ -182,25 +192,28 @@ QFileDialog QPushButton{
     font-family: 'Comfortaa';
 }
 
-#menuLay{
+/*The style of the layout of a scrollarea on the left editor area*/
+#scrollMenuLay{
     background-color: #006986;
     border-style: solid;
     color: #006986;
 }
 
-#menuItem{
+/*Style of an item in the above mentioned scroll area*/
+#scrollMenuItem{
     background-color: #34c873;
     border-style:  solid;
     border-radius: 8px;
     color: #f9f9f9;
 }
 
-#menuItem:hover{
+#scrollMenuItem:hover{
     background-color: #2dad63;
     border-radius: 8px;
     color: #f9f9f9;
 }
 
+/*Style of the quit button on the file menu tab inside the scrollarea*/
 #quitBtnFile{
     border-color: #a51946;
     border-style: solid;
@@ -219,6 +232,7 @@ QFileDialog QPushButton{
     font-size: 18px;
 }
 
+/*How the selector of the file to rin looks like*/
 #menuRunChooser{
     background-color: #34c873;
     border-style:  solid;
@@ -237,6 +251,7 @@ QFileDialog QPushButton{
     background-color: #2dad63;
 }
 
+/*Style of the search bar in the edit tab of the menu*/
 #menuSearch{
     background-color: #18184a;
     color: #f9f9f9;
@@ -244,6 +259,7 @@ QFileDialog QPushButton{
     font-size: 18px;
 }
 
+/*How the console looks like in the run menu*/
 #console{
     background-color: #18184a;
 }
@@ -254,10 +270,12 @@ QFileDialog QPushButton{
     color: #f9f9f9;
 }
 
+/*Style of a menu item seperator*/
 #seperator{
     background-color: #f9f9f9;
 }
 
+/*Style of the currently open/closed tab in the settings window*/
 #openTab{
     background-color: #e54f39;
     border-radius: 8px;
@@ -268,26 +286,31 @@ QFileDialog QPushButton{
     border-radius: 8px;
 }
 
+/*StYLe oF ThE MOtD In THe tItLEwiNdOw*/
 #greetText{
     font-family: 'Bangers';
     color: #ffb041;
     font-size: 20px;
 }
 
+/*The big "Hitch" text on the startupwindow*/
 #titleText{
     font-family: 'Comfortaa';
     color: #f9f9f9;
     font-size: 60px;
 }
 
+/*how the layout of the last projects names panel looks like*/
 #lastProjects{
     background-color: #330033;
 }
 
+/*This defines how the layout of the action buttons on the titlewindow looks*/
 #lastProjectsLaunch{
     background-color: #330033;
 }
 
+/*This is the launch project button of it*/
 #launchProject{
     background-color: #0084a8;
     color: #f9f9f9;
@@ -298,6 +321,7 @@ QFileDialog QPushButton{
     color: #f9f9f9;
 }
 
+/*This is how a project item in the last projects layout looks*/
 #projectName{
     color: #f9f9f9;
     background-color: #0084a8;
@@ -306,12 +330,14 @@ QFileDialog QPushButton{
     font-family: 'Roboto';
 }
 
+/*and this is the style of the info text displyed when clicking on it*/
 #infoText{
     color: #f9f9f9;
     font-family: 'Roboto';
     font-size: 30px;
 }
 
+/*how the text edit for creating a new project looks*/
 #projectTextEdit{
     background-color: #34c873;
     color: #f9f9f9;
@@ -319,16 +345,13 @@ QFileDialog QPushButton{
     font-size: 18px;
 }
 
-#createSubfolder{
-    color: #f9f9f9;
-    font-size: 18px;
-}
-
+/*This is the style of the info text below the creation options*/
 #infoTextCreate{
     color: #f9f9f9;
     font-size: 16px;
 }
 
+/*how an item in the file explorer looks like*/
 #directoryItem{
     background-color: #ffb041;
 }
@@ -343,11 +366,13 @@ QFileDialog QPushButton{
     font-size: 15px;
 }
 
+/*how the layout of the fileexplorer looks*/
 #fileExplorer{
     background-color: #330033;
     border-style: solid;
 }
 
+/*the look of the breadcrumb text and bar*/
 #bcName{
     background-color: #34c873;
     border-style: solid;
@@ -363,11 +388,13 @@ QFileDialog QPushButton{
     border-style: solid;
 }
 
+/*how the bar above the file explorer with the tools looks like*/
 #toolsBar{
     background-color: #18184A;
     border-style: solid;
 }
 
+/*Style of the save all button in that bar*/
 #saveAll{
     background-color: #34c873;
 }
@@ -376,6 +403,7 @@ QFileDialog QPushButton{
     background-color: #2dad63;
 }
 
+/*Style of the new file button in that bar*/
 #newFile{
     background-color: #34c873;
 }
@@ -384,6 +412,7 @@ QFileDialog QPushButton{
     background-color: #2dad63;
 }
 
+/*Style of the refresh button in that bar*/
 #refreshFiles{
     background-color: #34c873;
 }
@@ -392,6 +421,7 @@ QFileDialog QPushButton{
     background-color: #2dad63;
 }
 
+/*how the rightclickmenu in the filebrowser appears*/
 #rightClkMenu{
     background-color: #0084a8;
     border-style: solid;
@@ -401,6 +431,7 @@ QFileDialog QPushButton{
     font-size: 14px;
 }
 
+/*Style of all scrollbars*/
 QScrollBar:vertical {
     background-color: #34c873;
 }
@@ -421,7 +452,6 @@ QScrollBar::down-arrow:vertical{
     border-style: solid;
 }
 
-
 QScrollBar::add-line:vertical {
     border: 0px solid;
     height: 0px;
@@ -434,6 +464,8 @@ QScrollBar::sub-line:vertical {
     subcontrol-position: top;
 }
 
+/*The fonts used
+Attention: They need to be installed on the system in order to work!*/
 @font-face {
     font-family: 'Bangers';
     src: url('../../resources/fonts/Bangers/Bangers-Regular.ttf');

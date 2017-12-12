@@ -39,7 +39,7 @@ class MenuAction:
         #Open one of the latest projects
         if intro.infoTabOpen:
             if intro.selectedProject != "":
-                #Open the project file
+                #Open the project file and catch it if it cant be found in the designated path
                 #try:
                 project = open(intro.selectedProject, "r+")
                 name = os.path.splitext(os.path.basename(intro.selectedProject))[0]
@@ -48,8 +48,7 @@ class MenuAction:
                 create.CreateUI.openProject = intro.selectedProject
                 create.CreateUI.openProjectInEditor(self, "refresh")
                 self.hide()
-
-                #Catch the exception if it doesnt exist
+                
                 """
                 except:
                     create.CreateUI.dial.setText("Selected file not found!")

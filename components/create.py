@@ -46,7 +46,8 @@ class CreateUI:
                                     qta.icon("fa.gear", color=compileStates["leftovers"]), #12
                                     qta.icon("fa.caret-down", color="#f9f9f9"), #13
                                     qta.icon("fa.floppy-o", color="#f9f9f9"), #14
-                                    qta.icon("fa.plus", color="#f9f9f9")] #15
+                                    qta.icon("fa.plus", color="#f9f9f9"), #15
+                                    qta.icon("fa.refresh", color="#f9f9f9")] #16
 
         #Create window action buttons
         mini = QtWidgets.QPushButton(self.toolbarIcons[0], "", self)
@@ -155,7 +156,7 @@ class CreateUI:
 
         refreshFiles = QtWidgets.QPushButton("Refresh")
         refreshFiles.setObjectName("refreshFiles")
-        #refreshFiles.setIcon(self.toolbarIcons[15])
+        refreshFiles.setIcon(self.toolbarIcons[16])
         refreshFiles.clicked.connect(lambda:CreateUI.openProjectInEditor(self, "refresh"))
 
         toolsBar = QtWidgets.QWidget()
