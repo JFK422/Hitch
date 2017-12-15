@@ -431,6 +431,16 @@ QFileDialog QPushButton{
     font-size: 14px;
 }
 
+/*The look of the carousel*/
+#carouselFrame{
+    background-color: #34c873;
+    color: #9b123e;
+}
+
+#carouselSideButtons{
+    background-color: #e54f39;
+}
+
 /*Style of all scrollbars*/
 QScrollBar:vertical {
     background-color: #34c873;

@@ -4,6 +4,7 @@ import random, sys, os
 from projectHandling import startupData
 from components.Misc import projectItem
 from components.Menu import menuActions
+from components import carousel
 from PyQt5 import QtGui, QtCore, QtWidgets
 
 #Menu shown on startup used to select a project
@@ -79,6 +80,10 @@ class Introduction(QtWidgets.QWidget):
         wInfo = QtWidgets.QWidget()
         wInfo.setLayout(vInfo)
         Introduction.sCenter.addWidget(wInfo)
+
+        crl = carousel.Carousel()
+        crl.setup()
+        vInfo.addWidget(crl)
 
         #Create the windows widgets
         Introduction.infoName = QtWidgets.QLabel("")
