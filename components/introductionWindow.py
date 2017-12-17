@@ -4,7 +4,7 @@ import random, sys, os
 from projectHandling import startupData
 from components.Misc import projectItem
 from components.Menu import menuActions
-from components import carousel
+from components.carousel import carousel
 from PyQt5 import QtGui, QtCore, QtWidgets
 
 #Menu shown on startup used to select a project
@@ -77,6 +77,8 @@ class Introduction(QtWidgets.QWidget):
 
         vInfo = QtWidgets.QVBoxLayout()
         vInfo.setAlignment(QtCore.Qt.AlignTop)
+        vInfo.setSpacing(0)
+        vInfo.setContentsMargins(QtCore.QMargins(0,0,0,0))
         wInfo = QtWidgets.QWidget()
         wInfo.setLayout(vInfo)
         Introduction.sCenter.addWidget(wInfo)
@@ -95,8 +97,8 @@ class Introduction(QtWidgets.QWidget):
         Introduction.infoPath.setWordWrap(True)
         Introduction.infoPath.setAlignment(QtCore.Qt.AlignTop)
 
-        vInfo.addWidget(Introduction.infoName)
-        vInfo.addWidget(Introduction.infoPath)
+        #vInfo.addWidget(Introduction.infoName)
+        #vInfo.addWidget(Introduction.infoPath)
 
         hBottom.addWidget(wCenter)
 

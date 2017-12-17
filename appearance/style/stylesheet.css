@@ -437,7 +437,15 @@ QFileDialog QPushButton{
     color: #9b123e;
 }
 
+#carouselItemFrame{
+    background-color: #f9f9f9;
+}
+
 #carouselSideButtons{
+    background-color: #ff634d;
+}
+
+#carouselSideButtons:hover{
     background-color: #e54f39;
 }
 
