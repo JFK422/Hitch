@@ -5,29 +5,34 @@ import sys
 
 class CarouselItem(QtWidgets.QWidget):
     
-    def setup(self, name = "", imgPath = ""):
+    def setup(self, name = "", path = "", existing = True):
         self.name = name
-        self.imgPath = imgPath
+        self.projPath = path
+        projFile = open(path, "r")
+        projImg = QtGui.QPixmap(projFile.read().split("\n")[3].split("=")[1])
 
         frameWidget = QtWidgets.QWidget()
-        frameWidget.setObjectName("carouselItemFrame")
+        if existing:
+            frameWidget.setObjectName("carouselItemFrame")
+        else:
+            frameWidget.setObjectName("carouselItemFrameNonExisting")
 
         pName = QtWidgets.QLabel(name)
+        pName.setObjectName("projectLabel")
+        pImg = QtWidgets.QLabel("")
+        pImg.setObjectName("projectLabel")
+        pImg.setPixmap(projImg)
+
+        mainLay = QtWidgets.QVBoxLayout()
+        mainLay.setAlignment(QtCore.Qt.AlignTop | QtCore.Qt.AlignCenter)
+        mainLay.setContentsMargins(QtCore.QMargins(0,10,0,10))
+        frameWidget.setLayout(mainLay)
+
+        mainLay.addWidget(pName)
+        mainLay.addWidget(pImg)
 
         backLay = QtWidgets.QHBoxLayout()
-        backLay.setContentsMargins(QtCore.QMargins(0,0,0,0))
+        backLay.setContentsMargins(QtCore.QMargins(0,10,0,10))
         backLay.addWidget(frameWidget)
 
         self.setLayout(backLay)
-
-#For executing this file standalone
-if __name__ == '__main__':
-    app = QtWidgets.QApplication(sys.argv)
-    
-    #Set the main styling of dis window aswell
-    with open("../appearance/style/stylesheet.css") as f:
-        theme = f.read()
-    app.setStyleSheet(theme)
-    gui = Carousel()
-    gui.show()
-    app.exec_()

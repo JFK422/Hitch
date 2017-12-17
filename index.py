@@ -21,10 +21,19 @@ class Window(QtWidgets.QWidget):
         clr.init()
         #Set the app icon, maximize the window, show it and the startup window.
         self.icon()
+        self.center()
         self.showMaximized()
         self.show()
         self.startup = introductionWindow.Introduction()
         self.startup.show()
+
+    #Center the window on the monitor where the mouse cursor is
+    def center(self):
+        frameGm = self.frameGeometry()
+        screen = QtWidgets.QApplication.desktop().screenNumber(QtWidgets.QApplication.desktop().cursor().pos())
+        centerPoint = QtWidgets.QApplication.desktop().screenGeometry(screen).center()
+        frameGm.moveCenter(centerPoint)
+        self.move(frameGm.topLeft())
 
     #Minimize and maximize methods for the new window action buttons
     def minimize(self):

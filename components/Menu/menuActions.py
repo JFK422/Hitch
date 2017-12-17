@@ -73,18 +73,20 @@ class MenuAction:
                     project = open(file + name + "/" + name + ".hthp", "w+")
                     os.makedirs(file + name + "/Assets")
                     mainFile = open(file + name + "/Assets/main" + ".hth", "w+")
-                    project.close()
                 except:
                     os.makedirs(file + name + "/")
                     project = open(file + name + "/" + name + ".hthp", "w+")
                     os.makedirs(file + name + "/Assets")
                     mainFile = open(file + name + "/Assets/main" + ".hth", "w+")
+                mainFile.close()
+                os.makedirs(file + name + "/Resources")
                 startupData.Data.insert(self, name, file + name + "/" + name + ".hthp")
                 create.CreateUI.openProject = file + name + "/" + name + ".hthp"
                 create.CreateUI.mainProjectFile = file + name + "/Assets/main" + ".hth"
                 project.write("name={0}\n".format(name))
                 project.write("assets={0}\n".format(file + name + "/Assets/"))
                 project.write("mainFile={0}\n".format(file + name + "/Assets/main.hth"))
+                project.write("projImg={0}".format(file + name + "/Resources/titleImg.jpg"))
                 project.close()
                 create.CreateUI.openProjectInEditor(self, "refresh")
                 self.hide()

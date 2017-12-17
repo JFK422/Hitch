@@ -441,12 +441,21 @@ QFileDialog QPushButton{
     background-color: #f9f9f9;
 }
 
+#carouselItemFrameNonExisting{
+    background-color: #FF5454;
+}
+
 #carouselSideButtons{
     background-color: #ff634d;
 }
 
 #carouselSideButtons:hover{
     background-color: #e54f39;
+}
+
+#projectLabel{
+    color: #414241;
+    font-size: 24px;
 }
 
 /*Style of all scrollbars*/

@@ -5,6 +5,7 @@ from projectHandling import startupData
 from components.Misc import projectItem
 from components.Menu import menuActions
 from components.carousel import carousel
+from components.carousel import carouselItem
 from PyQt5 import QtGui, QtCore, QtWidgets
 
 #Menu shown on startup used to select a project
@@ -34,8 +35,10 @@ class Introduction(QtWidgets.QWidget):
                             "Full of stale memes",
                             "ಠ_ಠ",
                             "Insert cool phrase about programming here!"]
-        self.setGeometry(50,50,1000,500)
+        self.setGeometry(200,200,650,500)
         self.setWindowTitle("Hitch")
+        self.setFixedSize(QtCore.QSize(650,500))
+        Introduction.center(self)
 
         #Create the layouts and their backbone widgets
         mainLay = QtWidgets.QVBoxLayout()
@@ -66,7 +69,7 @@ class Introduction(QtWidgets.QWidget):
         wLastProjects.setMinimumWidth(170)
         wLastProjects.setObjectName("lastProjects")
         wLastProjects.setLayout(Introduction.vLastProjects)
-        hBottom.addWidget(wLastProjects)
+        #hBottom.addWidget(wLastProjects)
 
         Introduction.sCenter = QtWidgets.QStackedLayout()
         Introduction.sCenter.setAlignment(QtCore.Qt.AlignTop)
@@ -83,8 +86,22 @@ class Introduction(QtWidgets.QWidget):
         wInfo.setLayout(vInfo)
         Introduction.sCenter.addWidget(wInfo)
 
+        #Add the last opened projects as items and setup the carousel
+        projList = []
+        for i in range(startupData.Data.lengthOfDB(self)):
+            try:
+                fileTest = open(startupData.Data.readDB(self, i)[2], "r")
+                projItem = carouselItem.CarouselItem()
+                projItem.setup(name = startupData.Data.readDB(self, i)[1], path = startupData.Data.readDB(self, i)[2], existing = True)
+                projList.append(projItem)
+            except:
+                projItem = carouselItem.CarouselItem()
+                projItem.setup(name = startupData.Data.readDB(self, i)[1], path = startupData.Data.readDB(self, i)[2], existing = False)
+                projList.append(projItem)
+                print(clr.Fore.YELLOW + "introductionWindow; Introduction; __init__: Error finding project path!" + clr.Style.RESET_ALL)
+
         crl = carousel.Carousel()
-        crl.setup()
+        crl.setup(projList)
         vInfo.addWidget(crl)
 
         #Create the windows widgets
@@ -287,6 +304,14 @@ class Introduction(QtWidgets.QWidget):
                 projItem.setup(name = startupData.Data.readDB(self, i)[1], path = startupData.Data.readDB(self, i)[2], itemIndex = i, colour = True)
                 Introduction.vLastProjects.addWidget(projItem)
                 print(clr.Fore.YELLOW + "introductionWindow; Introduction; __init__: Error finding project path!" + clr.Style.RESET_ALL)
+
+    #Same function as in the index file which puts this window where the mouse cursor is at
+    def center(self):
+        frameGm = self.frameGeometry()
+        screen = QtWidgets.QApplication.desktop().screenNumber(QtWidgets.QApplication.desktop().cursor().pos())
+        centerPoint = QtWidgets.QApplication.desktop().screenGeometry(screen).center()
+        frameGm.moveCenter(centerPoint)
+        self.move(frameGm.topLeft())
 
 
 #For executing this file standalone

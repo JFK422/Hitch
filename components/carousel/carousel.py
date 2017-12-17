@@ -1,12 +1,14 @@
 from PyQt5 import QtGui, QtCore, QtWidgets
+from components.carousel import carouselItem
 import colorama as clr
 import qtawesome as qta
 import sys
 
 class Carousel(QtWidgets.QWidget):
     
-    def setup(self, carouselWidgets = "", widgetsShowAmmount = 3):
+    def setup(self, carouselWidgets, startPos = 0, elemAsButtons = False):
         self.cWidgets = carouselWidgets
+        self.pos = startPos
 
         frameWidget = QtWidgets.QWidget()
         frameWidget.setObjectName("carouselFrame")
@@ -17,13 +19,13 @@ class Carousel(QtWidgets.QWidget):
         goLeft = QtWidgets.QPushButton(left, "")
         goLeft.setObjectName("carouselSideButtons")
         goLeft.setIconSize(QtCore.QSize(64, 64))
-        goLeft.setMaximumWidth(100)
+        goLeft.setMaximumWidth(70)
         goLeft.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding))
 
         goRight = QtWidgets.QPushButton(right, "")
         goRight.setObjectName("carouselSideButtons")
         goRight.setIconSize(QtCore.QSize(64, 64))
-        goRight.setMaximumWidth(100)
+        goRight.setMaximumWidth(70)
         goRight.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding))
 
         backLay = QtWidgets.QHBoxLayout()
@@ -33,7 +35,13 @@ class Carousel(QtWidgets.QWidget):
         cLay = QtWidgets.QGridLayout()
         cLay.setContentsMargins(QtCore.QMargins(0,0,0,0))
         cLay.addWidget(goLeft, 0, 0)
+        if elemAsButtons:
+            itmBtn = QtWidgets.QPushButton(self.cWidgets[self.pos])
+            cLay.addWidget(itmBtn, 0, 1)
+        else:
+            cLay.addWidget(self.cWidgets[self.pos], 0, 1)
         cLay.addWidget(goRight, 0, 2)
+        cLay.setSpacing(10)
         frameWidget.setLayout(cLay)
 
 
