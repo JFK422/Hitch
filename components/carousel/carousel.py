@@ -5,10 +5,13 @@ import qtawesome as qta
 import sys
 
 class Carousel(QtWidgets.QWidget):
-    
+    itemsLay = None
+
     def setup(self, carouselWidgets, startPos = 0, elemAsButtons = False):
         self.cWidgets = carouselWidgets
         self.pos = startPos
+
+        print(len(carouselWidgets))
 
         frameWidget = QtWidgets.QWidget()
         frameWidget.setObjectName("carouselFrame")
@@ -21,12 +24,14 @@ class Carousel(QtWidgets.QWidget):
         goLeft.setIconSize(QtCore.QSize(64, 64))
         goLeft.setMaximumWidth(70)
         goLeft.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding))
+        goLeft.clicked.connect(lambda:Carousel.prevItem(self))
 
         goRight = QtWidgets.QPushButton(right, "")
         goRight.setObjectName("carouselSideButtons")
         goRight.setIconSize(QtCore.QSize(64, 64))
         goRight.setMaximumWidth(70)
         goRight.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding))
+        goRight.clicked.connect(lambda:Carousel.nextItem(self))
 
         backLay = QtWidgets.QHBoxLayout()
         backLay.setContentsMargins(QtCore.QMargins(0,0,0,0))
@@ -35,17 +40,37 @@ class Carousel(QtWidgets.QWidget):
         cLay = QtWidgets.QGridLayout()
         cLay.setContentsMargins(QtCore.QMargins(0,0,0,0))
         cLay.addWidget(goLeft, 0, 0)
-        if elemAsButtons:
-            itmBtn = QtWidgets.QPushButton(self.cWidgets[self.pos])
-            cLay.addWidget(itmBtn, 0, 1)
-        else:
-            cLay.addWidget(self.cWidgets[self.pos], 0, 1)
+
+        centerItem = QtWidgets.QWidget()
+        Carousel.itemsLay = QtWidgets.QStackedLayout()
+        Carousel.itemsLay.setContentsMargins(QtCore.QMargins(0,0,0,0))
+        centerItem.setLayout(Carousel.itemsLay)
+        cLay.addWidget(centerItem, 0, 1)
+
+        for i in range(len(self.cWidgets)):
+            if elemAsButtons:
+                itmBtn = QtWidgets.QPushButton(self.cWidgets[i])
+                Carousel.itemsLay.addWidget(itmBtn)
+            else:
+                Carousel.itemsLay.addWidget(self.cWidgets[i])
+
         cLay.addWidget(goRight, 0, 2)
         cLay.setSpacing(10)
         frameWidget.setLayout(cLay)
 
-
         self.setLayout(backLay)
+
+    def nextItem(self):
+        self.pos += 1
+        if(self.pos >= len(self.cWidgets)):
+            self.pos = 0
+        Carousel.itemsLay.setCurrentIndex(self.pos)
+
+    def prevItem(self):
+        self.pos -= 1
+        if(self.pos < 0):
+            self.pos = len(self.cWidgets)-1
+        Carousel.itemsLay.setCurrentIndex(self.pos)
 
 #For executing this file standalone
 if __name__ == '__main__':

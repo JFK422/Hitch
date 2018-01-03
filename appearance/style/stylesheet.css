@@ -455,7 +455,8 @@ QFileDialog QPushButton{
 
 #projectLabel{
     color: #414241;
-    font-size: 24px;
+    font-size: 30px;
+    font-family: 'Playfair Display';
 }
 
 /*Style of all scrollbars*/
@@ -511,4 +512,9 @@ Attention: They need to be installed on the system in order to work!*/
 @font-face {
     font-family: 'Hind Siliguri';
     src: url('../../resources/fonts/Hind_Siliguri/HindSiliguri-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Playfair Display';
+    src: url('../../resources/fonts/Playfair_Display/PlayfairDisplay-Regular.ttf');
 }
