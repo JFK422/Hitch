@@ -384,7 +384,6 @@ class CreateUI:
             if h == editName:
                 if cause == "edit":
                     item.setup(h, assetsDirectory + h, "edit")
-                    print("L")
                 else:
                     item.setup(h, assetsDirectory + h, "create")
             elif os.path.isfile(assetsDirectory + h):

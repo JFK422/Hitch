@@ -6,10 +6,12 @@ import sys
 
 class Carousel(QtWidgets.QWidget):
     itemsLay = None
+    globalPos = 0
 
     def setup(self, carouselWidgets, startPos = 0, elemAsButtons = False):
         self.cWidgets = carouselWidgets
         self.pos = startPos
+        globalPos = startPos
 
         print(len(carouselWidgets))
 
@@ -61,16 +63,21 @@ class Carousel(QtWidgets.QWidget):
         self.setLayout(backLay)
 
     def nextItem(self):
-        self.pos += 1
-        if(self.pos >= len(self.cWidgets)):
-            self.pos = 0
-        Carousel.itemsLay.setCurrentIndex(self.pos)
+        Carousel.globalPos += 1
+        if(Carousel.globalPos >= len(self.cWidgets)):
+            Carousel.globalPos = 0
+        Carousel.itemsLay.setCurrentIndex(Carousel.globalPos)
+        self.pos = Carousel.globalPos
 
     def prevItem(self):
-        self.pos -= 1
-        if(self.pos < 0):
-            self.pos = len(self.cWidgets)-1
-        Carousel.itemsLay.setCurrentIndex(self.pos)
+        Carousel.globalPos -= 1
+        if(Carousel.globalPos < 0):
+            Carousel.globalPos = len(self.cWidgets)-1
+        Carousel.itemsLay.setCurrentIndex(Carousel.globalPos)
+        self.pos = Carousel.globalPos
+    
+    def getCurrentPos(self):
+        return Carousel.globalPos
 
 #For executing this file standalone
 if __name__ == '__main__':

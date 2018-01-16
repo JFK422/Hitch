@@ -32,36 +32,40 @@ class MenuAction:
 
 
     #Launch Button: Causes the project to be launched!
-    def launchProject(self):
+    def launchProject(self, prjSelectTabOpen, currentPos, prjPathList, prjNotFoundIndexList):
         print("menuActions; MenuAction; launchProject: Launching Project")
         intro = introductionWindow.Introduction
         #Check which tab was open and open the path.
         #Open one of the latest projects
-        if intro.infoTabOpen:
-            if intro.selectedProject != "":
-                #Open the project file and catch it if it cant be found in the designated path
-                #try:
-                project = open(intro.selectedProject, "r+")
-                name = os.path.splitext(os.path.basename(intro.selectedProject))[0]
-                startupData.Data.insert(self, name, intro.selectedProject)
-                project.close()
-                create.CreateUI.openProject = intro.selectedProject
-                create.CreateUI.openProjectInEditor(self, "refresh")
-                self.hide()
+        if prjSelectTabOpen:
+            for i in range(len(prjNotFoundIndexList)):
+                if currentPos == prjNotFoundIndexList[i]:
+                    print(clr.Fore.RED + "menuActions; MenuAction; launchProject: Error launching project! No project defined!" + clr.Style.RESET_ALL)
+                    MenuAction.showErrorDialog(self, "Error, no project found at location:\n{0}".format(prjPathList[currentPos]), "Undefined Project")
+                    #figure the break out here!
                 
-                """
-                except:
-                    create.CreateUI.dial.setText("Selected file not found!")
-                    create.CreateUI.dial.setIcon(QtWidgets.QMessageBox.Information)
-                    create.CreateUI.dial.setWindowTitle("File Error")
-                    create.CreateUI.dial.show()
+                else:
+                    #Open the project file and catch it if it cant be found in the designated path
+                    #try:
+                    print("sdf"+prjPathList[currentPos])
+                    project = open(prjPathList[currentPos], "r+")
+                    name = os.path.splitext(os.path.basename(prjPathList[currentPos]))[0]
+                    startupData.Data.insert(self, name, prjPathList[currentPos])
+                    project.close()
+                    create.CreateUI.openProject = prjPathList[currentPos]
+                    create.CreateUI.openProjectInEditor(self, "refresh")
+                    self.hide()
+                    break
+                
+                    """
+                    except:
+                        create.CreateUI.dial.setText("Selected file not found!")
+                        create.CreateUI.dial.setIcon(QtWidgets.QMessageBox.Information)
+                        create.CreateUI.dial.setWindowTitle("File Error")
+                        create.CreateUI.dial.show()
 
-                    print(clr.Fore.RED + "menuActions; MenuAction; launchProject: Project file not found!" + clr.Style.RESET_ALL)
-                """
-                
-            else:
-                print(clr.Fore.RED + "menuActions; MenuAction; launchProject: Error launching project! No project defined!" + clr.Style.RESET_ALL)
-                MenuAction.showErrorDialog(self, "Error, no project defined!", "Undefined Project")
+                        print(clr.Fore.RED + "menuActions; MenuAction; launchProject: Project file not found!" + clr.Style.RESET_ALL)
+                    """
 
         #Create a new project and open it
         else:

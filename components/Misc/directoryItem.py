@@ -10,6 +10,7 @@ class DirectoryItem(QtWidgets.QWidget):
     itmBtn = None
     itmName = None
     itmEdit = None
+    lastName = [False, "", ""]
     gPath = ""
     isDirCreating = True
     def setup(self, name, path, dType):
@@ -37,12 +38,11 @@ class DirectoryItem(QtWidgets.QWidget):
         if self.type == "directory":
             DirectoryItem.itmBtn.setIcon(dirIco)
             DirectoryItem.itmBtn.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-            DirectoryItem.itmBtn.customContextMenuRequested.connect(lambda:DirectoryItem.onRightClick(self.button, self.name))
+            DirectoryItem.itmBtn.customContextMenuRequested.connect(lambda:DirectoryItem.onRightClick(self.button, self.name, path))
         elif self.type == "file":
             DirectoryItem.itmBtn.setIcon(fileIco)
             DirectoryItem.itmBtn.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-            DirectoryItem.itmBtn.customContextMenuRequested.connect(lambda:DirectoryItem.onRightClick(self.button, self.name))
-
+            DirectoryItem.itmBtn.customContextMenuRequested.connect(lambda:DirectoryItem.onRightClick(self.button, self.name, path))
         elif self.type == "create":
             DirectoryItem.itmBtn.setIcon(dirIco)
             DirectoryItem.itmBtn.clicked.connect(lambda:DirectoryItem.changeType(self))
@@ -106,7 +106,13 @@ class DirectoryItem(QtWidgets.QWidget):
             DirectoryItem.itmBtn.setIcon(dirIco)
             DirectoryItem.isDirCreating = True
 
-    def onRightClick(self, name):
+    def renameFile(self):
+        oldPath = "/"
+        for j in range(len(DirectoryItem.lastName[2].split("/"))):
+            oldPath += DirectoryItem.lastName[2].split("/")[j]
+        os.rename(DirectoryItem.lastName[2], oldPath + "/" + DirectoryItem.itmEdit.text())
+
+    def onRightClick(self, name, path):
         moveIco = qta.icon("fa.arrows-alt", color="#f9f9f9")
         editIco = qta.icon("fa.pencil", color="#f9f9f9")
         deleteIco = qta.icon("fa.trash-o", color="#f9f9f9")
@@ -120,23 +126,36 @@ class DirectoryItem(QtWidgets.QWidget):
 
         selected = popMenu.exec_(self.mapToGlobal(self.pos()))
 
-        #Check wich action was executed (needs to be implemented)
+        #Check wich action was executed
+        try:
+            if selected.text() == "Edit":
+                create.CreateUI.openProjectInEditor(self, "edit", name)
+                DirectoryItem.lastName[0] = True
+                DirectoryItem.lastName[1] = name
+                DirectoryItem.lastName[2] = path
+            elif selected.text() == "Move":
+                print("Move object")
+            elif selected.text() == "Delete":
+                print("Delete dis")
+        except:
+            print(clr.Fore.YELLOW + "directoryItem; DirectoryItem; onRightClick: Dismissed righclick menu" + clr.Style.RESET_ALL)
         
-        if selected.text() == "Edit":
-            create.CreateUI.openProjectInEditor(self, "edit", name)
-        elif selected.text() == "Move":
-            print("Move object")
-        elif selected.text() == "Delete":
-            print("Delete Item")
-        
-
-
     def keyPressEvent(self, event):
-        if event.key() == QtCore.Qt.Key_Enter:
-            DirectoryItem.createFile(self)
-        elif event.key() == QtCore.Qt.Key_Escape:
-            DirectoryItem.abortChanges(self)
-        elif event.key() == 16777220:
-            DirectoryItem.createFile(self)
+        if DirectoryItem.lastName[0]:
+            if event.key() == QtCore.Qt.Key_Enter:
+                DirectoryItem.renameFile(self)
+            elif event.key() == QtCore.Qt.Key_Escape:
+                DirectoryItem.abortChanges(self)
+            elif event.key() == 16777220:
+                DirectoryItem.renameFile(self)
+            else:
+                print("{0} Pressed".format(event.key()))
         else:
-            print("{0}".format(event.key()))
+            if event.key() == QtCore.Qt.Key_Enter:
+                DirectoryItem.createFile(self)
+            elif event.key() == QtCore.Qt.Key_Escape:
+                DirectoryItem.abortChanges(self)
+            elif event.key() == 16777220:
+                DirectoryItem.createFile(self)
+            else:
+                print("{0} Pressed".format(event.key()))

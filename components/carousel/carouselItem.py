@@ -12,10 +12,6 @@ class CarouselItem(QtWidgets.QWidget):
         projImg = ""
 
         frameWidget = QtWidgets.QWidget()
-        if existing:
-            frameWidget.setObjectName("carouselItemFrame")
-        else:
-            frameWidget.setObjectName("carouselItemFrameNonExisting")
 
         pName = QtWidgets.QLabel(name)
         pName.setObjectName("projectLabel")
@@ -27,10 +23,14 @@ class CarouselItem(QtWidgets.QWidget):
         #print(projFile.read())
         #print(projFile.read().split("\n")[3].split("=")[1])
         #QtGui.QPixmap(projFile.read().split("\n")[3].split("=")[1])
-        im = Image.open("/home/jfk422/Projects/HitchTestProj/Resources/titleImg.png")
-        pic = QtGui.QPixmap("/home/jfk422/Projects/HitchTestProj/Resources/titleImg.png")
-        print(im.size)
-        pImg.setPixmap(pic.scaled(256, 256, QtCore.Qt.KeepAspectRatio))
+
+        if existing:
+            frameWidget.setObjectName("carouselItemFrame")
+            pImg.setPixmap(QtGui.QPixmap("/home/jfk422/Projects/HitchTestProj/Resources/titleImg.png").scaled(256, 256, QtCore.Qt.KeepAspectRatio))
+        else:
+            frameWidget.setObjectName("carouselItemFrameNonExisting")
+            pImg.setPixmap(QtGui.QPixmap("./resources/projectImages/pImgO.png").scaled(256, 256, QtCore.Qt.KeepAspectRatio))
+
 
         mainLay = QtWidgets.QVBoxLayout()
         mainLay.setContentsMargins(QtCore.QMargins(0,0,0,0))
