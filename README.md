@@ -1,4 +1,6 @@
 # Hitch 
 This my attempt on creating visual scripting for Python.
 
-Trello Board: https://trello.com/b/kJdPALpV/hitch
+Message me if you want to help out or get information about the project.
+
+Feel free to explore the code :)
