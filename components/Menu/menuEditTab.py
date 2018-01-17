@@ -15,7 +15,7 @@ class MenuEdit(QtWidgets.QWidget):
         scrollLay.setAlignment(QtCore.Qt.AlignTop)
 
         scrollLayWid = QtWidgets.QWidget()
-        scrollLayWid.setObjectName("menuLay")
+        scrollLayWid.setObjectName("scrollMenuLay")
         scrollLayWid.setLayout(scrollLay)
 
         fileText = QtWidgets.QLabel("Edit")
@@ -30,12 +30,12 @@ class MenuEdit(QtWidgets.QWidget):
         #Add icons later!
         undo = QtWidgets.QPushButton("Undo")
         undo.setMaximumHeight(50)
-        undo.setObjectName("menuItem")
+        undo.setObjectName("scrollMenuItem")
         scrollLay.addWidget(undo)
 
         redo = QtWidgets.QPushButton("Redo")
         redo.setMaximumHeight(50)
-        redo.setObjectName("menuItem")
+        redo.setObjectName("scrollMenuItem")
         scrollLay.addWidget(redo)
 
         sep = menuSeperator.MenuSeperator()
@@ -44,17 +44,17 @@ class MenuEdit(QtWidgets.QWidget):
 
         cut = QtWidgets.QPushButton("Cut")
         cut.setMaximumHeight(50)
-        cut.setObjectName("menuItem")
+        cut.setObjectName("scrollMenuItem")
         scrollLay.addWidget(cut)
 
         copy = QtWidgets.QPushButton("Copy")
         copy.setMaximumHeight(50)
-        copy.setObjectName("menuItem")
+        copy.setObjectName("scrollMenuItem")
         scrollLay.addWidget(copy)
 
         paste = QtWidgets.QPushButton("Paste")
         paste.setMaximumHeight(50)
-        paste.setObjectName("menuItem")
+        paste.setObjectName("scrollMenuItem")
         scrollLay.addWidget(paste)
 
         sep2 = menuSeperator.MenuSeperator()

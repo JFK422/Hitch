@@ -1,6 +1,7 @@
 import qtawesome as qta
 from components.Menu import menuSeperator
 from components.Menu import menuActions
+from components import introductionWindow
 from PyQt5 import QtGui, QtCore, QtWidgets
 
 #Menu widget placed in the stack of vLPart
@@ -16,7 +17,7 @@ class MenuFile(QtWidgets.QWidget):
         scrollLay.setAlignment(QtCore.Qt.AlignTop)
 
         scrollLayWid = QtWidgets.QWidget()
-        scrollLayWid.setObjectName("menuLay")
+        scrollLayWid.setObjectName("scrollMenuLay")
         scrollLayWid.setLayout(scrollLay)
 
         fileText = QtWidgets.QLabel("File")
@@ -31,12 +32,12 @@ class MenuFile(QtWidgets.QWidget):
         #Add icons later!
         newFile = QtWidgets.QPushButton("New File")
         newFile.setMaximumHeight(50)
-        newFile.setObjectName("menuItem")
+        newFile.setObjectName("scrollMenuItem")
         scrollLay.addWidget(newFile)
 
         openProject = QtWidgets.QPushButton("Open Project")
         openProject.setMaximumHeight(50)
-        openProject.setObjectName("menuItem")
+        openProject.setObjectName("scrollMenuItem")
         openProject.clicked.connect(lambda:menuActions.MenuAction.openProjectFromFile(self))
         scrollLay.addWidget(openProject)
 
@@ -46,12 +47,12 @@ class MenuFile(QtWidgets.QWidget):
 
         saveFile = QtWidgets.QPushButton("Save File")
         saveFile.setMaximumHeight(50)
-        saveFile.setObjectName("menuItem")
+        saveFile.setObjectName("scrollMenuItem")
         scrollLay.addWidget(saveFile)
 
         saveAllFiles = QtWidgets.QPushButton("Save All")
         saveAllFiles.setMaximumHeight(50)
-        saveAllFiles.setObjectName("menuItem")
+        saveAllFiles.setObjectName("scrollMenuItem")
         scrollLay.addWidget(saveAllFiles)
 
         sep2 = menuSeperator.MenuSeperator()
@@ -60,17 +61,18 @@ class MenuFile(QtWidgets.QWidget):
 
         projSettings = QtWidgets.QPushButton("Project Settings")
         projSettings.setMaximumHeight(50)
-        projSettings.setObjectName("menuItem")
+        projSettings.setObjectName("scrollMenuItem")
         scrollLay.addWidget(projSettings)
 
         editSettings = QtWidgets.QPushButton("Editor Settings")
         editSettings.setMaximumHeight(50)
-        editSettings.setObjectName("menuItem")
+        editSettings.setObjectName("scrollMenuItem")
         scrollLay.addWidget(editSettings)
 
         switchProj = QtWidgets.QPushButton("Switch Project")
         switchProj.setMaximumHeight(50)
-        switchProj.setObjectName("menuItem")
+        switchProj.setObjectName("scrollMenuItem")
+        switchProj.clicked.connect(lambda:MenuFile.launchStartupMenu(self))
         scrollLay.addWidget(switchProj)
 
         sep3 = menuSeperator.MenuSeperator()
@@ -85,3 +87,7 @@ class MenuFile(QtWidgets.QWidget):
 
         self.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding))
         self.setLayout(vMenu)
+
+    def launchStartupMenu(self):
+        startup = introductionWindow.Introduction()
+        startup.show()

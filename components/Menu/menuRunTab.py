@@ -44,7 +44,7 @@ class MenuRun(QtWidgets.QWidget):
 
         runBtn = QtWidgets.QPushButton("Run File")
         runBtn.setMaximumHeight(40)
-        runBtn.setObjectName("menuItem")
+        runBtn.setObjectName("scrollMenuItem")
         hSettings.addWidget(runBtn)
 
         for i in range (100):

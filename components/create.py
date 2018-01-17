@@ -46,7 +46,8 @@ class CreateUI:
                                     qta.icon("fa.gear", color=compileStates["leftovers"]), #12
                                     qta.icon("fa.caret-down", color="#f9f9f9"), #13
                                     qta.icon("fa.floppy-o", color="#f9f9f9"), #14
-                                    qta.icon("fa.plus", color="#f9f9f9")] #15
+                                    qta.icon("fa.plus", color="#f9f9f9"), #15
+                                    qta.icon("fa.refresh", color="#f9f9f9")] #16
 
         #Create window action buttons
         mini = QtWidgets.QPushButton(self.toolbarIcons[0], "", self)
@@ -155,8 +156,8 @@ class CreateUI:
 
         refreshFiles = QtWidgets.QPushButton("Refresh")
         refreshFiles.setObjectName("refreshFiles")
-        #refreshFiles.setIcon(self.toolbarIcons[15])
-        refreshFiles.clicked.connect(lambda:CreateUI.openProjectInEditor(self))
+        refreshFiles.setIcon(self.toolbarIcons[16])
+        refreshFiles.clicked.connect(lambda:CreateUI.openProjectInEditor(self, "refresh"))
 
         toolsBar = QtWidgets.QWidget()
         toolsBar.setObjectName("toolsBar")
@@ -357,7 +358,7 @@ class CreateUI:
     def switchMenu(self, index):
         self.vLPart.setCurrentIndex(index)
 
-    def openProjectInEditor(self):
+    def openProjectInEditor(self, cause, editName = ""):
         CreateUI.clearFileList(self)
         f = open(CreateUI.openProject, "r")
         text = f.read()
@@ -373,10 +374,19 @@ class CreateUI:
             items.append(i)
         items = sorted(items)
 
+        if cause == "create":
+            items.append("")
+
+
         #Add ze items in a grid formation to ze layout
         for h in items:
             item = directoryItem.DirectoryItem()
-            if os.path.isfile(assetsDirectory + h):
+            if h == editName:
+                if cause == "edit":
+                    item.setup(h, assetsDirectory + h, "edit")
+                else:
+                    item.setup(h, assetsDirectory + h, "create")
+            elif os.path.isfile(assetsDirectory + h):
                 item.setup(h, assetsDirectory + h, "file")
             else:
                 item.setup(h, assetsDirectory + h, "directory")

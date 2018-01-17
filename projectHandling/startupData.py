@@ -45,7 +45,7 @@ class Data:
                 else:
                     #Update the time of the project in the list
                     Data.cur.execute("SELECT filePath  FROM ProjTable")
-                    Data.cur.execute("UPDATE ProjTable SET tmstp = ? where filePath = ?", (time.time(), Data.cur.fetchall()[i][0]))
+                    Data.cur.execute("UPDATE ProjTable SET tmstp = ? WHERE filePath = ?", (time.time(), Data.cur.fetchall()[i][0]))
                     Data.db.commit()
         else:
             #Determine the oldest project and replace it!
@@ -60,13 +60,26 @@ class Data:
                     oldestIndex = i
             
             #Update the oldest project
-            Data.cur.execute("UPDATE ProjTable SET name = ? where prim = ?", (name, oldestIndex))
-            Data.cur.execute("UPDATE ProjTable SET filePath = ? where prim = ?", (filePath, oldestIndex))
-            Data.cur.execute("UPDATE ProjTable SET tmstp = ? where prim = ?", (time.time(), oldestIndex))
+            Data.cur.execute("UPDATE ProjTable SET name = ? WHERE prim = ?", (name, oldestIndex))
+            Data.cur.execute("UPDATE ProjTable SET filePath = ? WHERE prim = ?", (filePath, oldestIndex))
+            Data.cur.execute("UPDATE ProjTable SET tmstp = ? WHERE prim = ?", (time.time(), oldestIndex))
+            Data.db.commit()
 
     def readDB(self, row):
         Data.cur.execute("SELECT *  FROM ProjTable")
         return Data.cur.fetchall()[row]
+
+    def removeItem(self, where):
+        if isinstance(where, str):
+            Data.cur.execute("SELECT *  FROM ProjTable")
+            Data.cur.execute("DELETE From Projtable WHERE filePath = ?", (where,))
+        elif isinstance(where, int):
+            Data.cur.execute("SELECT *  FROM ProjTable")
+            Data.cur.execute("DELETE From Projtable WHERE prim = ?", (where,))
+        else:
+            print(clr.Fore.RED + "startupData; Data; removeItem: Unable to delete item from database" + clr.Style.RESET_ALL)
+
+        Data.db.commit()
 
     #Get the length of the database
     def lengthOfDB(self):

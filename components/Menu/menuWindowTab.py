@@ -15,7 +15,7 @@ class MenuWindow(QtWidgets.QWidget):
         scrollLay.setAlignment(QtCore.Qt.AlignTop)
 
         scrollLayWid = QtWidgets.QWidget()
-        scrollLayWid.setObjectName("menuLay")
+        scrollLayWid.setObjectName("scrollMenuLay")
         scrollLayWid.setLayout(scrollLay)
 
         fileText = QtWidgets.QLabel("Window")
@@ -30,17 +30,17 @@ class MenuWindow(QtWidgets.QWidget):
         #Add icons later! Also further additions may needed
         fileExplorer = QtWidgets.QPushButton("File Explorer")
         fileExplorer.setMaximumHeight(50)
-        fileExplorer.setObjectName("menuItem")
+        fileExplorer.setObjectName("scrollMenuItem")
         scrollLay.addWidget(fileExplorer)
 
         closeAllEditors = QtWidgets.QPushButton("Close all Editors")
         closeAllEditors.setMaximumHeight(50)
-        closeAllEditors.setObjectName("menuItem")
+        closeAllEditors.setObjectName("scrollMenuItem")
         scrollLay.addWidget(closeAllEditors)
 
         console = QtWidgets.QPushButton("Show Console")
         console.setMaximumHeight(50)
-        console.setObjectName("menuItem")
+        console.setObjectName("scrollMenuItem")
         scrollLay.addWidget(console)
 
         self.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding))

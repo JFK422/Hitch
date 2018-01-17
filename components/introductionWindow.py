@@ -1,8 +1,11 @@
 import qtawesome as qta
+import colorama as clr
 import random, sys, os
 from projectHandling import startupData
 from components.Misc import projectItem
 from components.Menu import menuActions
+from components.carousel import carousel
+from components.carousel import carouselItem
 from PyQt5 import QtGui, QtCore, QtWidgets
 
 #Menu shown on startup used to select a project
@@ -10,10 +13,7 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 class Introduction(QtWidgets.QWidget):
     #Variables for some recursion, idk how to do it otherwise!
     vLastProjects = None
-    selectedProject = ""
-    infoName = None
-    infoPath = None
-    infoTabOpen = True
+    prjSelectTabOpen = True
     createBtn = None
     nameEdit = None
     
@@ -30,9 +30,12 @@ class Introduction(QtWidgets.QWidget):
                             "This is my jam!",
                             "Digital Hug ༼つ ◕_◕ ༽つ",
                             "Full of stale memes",
-                            "ಠ_ಠ"]
-        self.setGeometry(50,50,1000,500)
+                            "ಠ_ಠ",
+                            "Insert cool phrase about programming here!"]
+        self.setGeometry(200,200,650,500)
         self.setWindowTitle("Hitch")
+        self.setFixedSize(QtCore.QSize(650,500))
+        Introduction.center(self)
 
         #Create the layouts and their backbone widgets
         mainLay = QtWidgets.QVBoxLayout()
@@ -63,7 +66,7 @@ class Introduction(QtWidgets.QWidget):
         wLastProjects.setMinimumWidth(170)
         wLastProjects.setObjectName("lastProjects")
         wLastProjects.setLayout(Introduction.vLastProjects)
-        hBottom.addWidget(wLastProjects)
+        #hBottom.addWidget(wLastProjects)
 
         Introduction.sCenter = QtWidgets.QStackedLayout()
         Introduction.sCenter.setAlignment(QtCore.Qt.AlignTop)
@@ -74,22 +77,17 @@ class Introduction(QtWidgets.QWidget):
 
         vInfo = QtWidgets.QVBoxLayout()
         vInfo.setAlignment(QtCore.Qt.AlignTop)
+        vInfo.setSpacing(0)
+        vInfo.setContentsMargins(QtCore.QMargins(0,0,0,0))
         wInfo = QtWidgets.QWidget()
         wInfo.setLayout(vInfo)
         Introduction.sCenter.addWidget(wInfo)
 
-        #Create the windows widgets
-        Introduction.infoName = QtWidgets.QLabel("")
-        Introduction.infoName.setObjectName("infoText")
-
-        Introduction.infoPath = QtWidgets.QLabel("")
-        Introduction.infoPath.setObjectName("infoText")
-        Introduction.infoPath.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding))
-        Introduction.infoPath.setWordWrap(True)
-        Introduction.infoPath.setAlignment(QtCore.Qt.AlignTop)
-
-        vInfo.addWidget(Introduction.infoName)
-        vInfo.addWidget(Introduction.infoPath)
+        #Create the carousel with its items
+        projList = Introduction.createCItems(self)[0]
+        crl = carousel.Carousel()
+        crl.setup(projList)
+        vInfo.addWidget(crl)
 
         hBottom.addWidget(wCenter)
 
@@ -99,15 +97,9 @@ class Introduction(QtWidgets.QWidget):
         wLaunch.setLayout(hLaunch)
         wLaunch.setObjectName("lastProjectsLaunch")
 
-        #Add the last opened projects as items
-        for i in range(startupData.Data.lengthOfDB(self)):
-            projItem = projectItem.LastProjItem()
-            projItem.setup(name = startupData.Data.readDB(self, i)[1], path = startupData.Data.readDB(self, i)[2], itemIndex = i)
-            Introduction.vLastProjects.addWidget(projItem)
-
         launchBtn = QtWidgets.QPushButton("Launch")
         launchBtn.setObjectName("launchProject")
-        launchBtn.clicked.connect(lambda:menuActions.MenuAction.launchProject(self))
+        launchBtn.clicked.connect(lambda:menuActions.MenuAction.launchProject(self, Introduction.prjSelectTabOpen, crl.getCurrentPos(), Introduction.createCItems(self)[1], Introduction.createCItems(self)[2]))
         hLaunch.addWidget(launchBtn)
         hBottom.addWidget(wLaunch)
 
@@ -182,71 +174,64 @@ class Introduction(QtWidgets.QWidget):
 
         mainLay.addWidget(wBottom)
 
-        #fix later that the motd gets bigger and smaller over time
-        """
-        size = ["font-size: 40px;", "font-size: 35px;"]
-        anim = QtCore.QPropertyAnimation(self, 'stlyesheet')
-        state = [QtCore.QState(), QtCore.QState()]
-        state[0].assignProperty(self, "stylesheet", size[0])
-        state[1].assignProperty(self, "stylesheet", size[1])
-        state[0].addTransition(state[0].propertiesAssigned, state[1])
-        state[1].addTransition(state[1].propertiesAssigned, state[0])
-
-        self.machine = QtCore.QStateMachine()
-        self.machine.addDefaultAnimation(anim)
-        self.machine.addState(state[0])
-        self.machine.addState(state[1])
-        self.machine.setInitialState(state[0])
-        self.machine.start()
-        """
-
         self.setLayout(mainLay)
-    
-    #Called when a item in the last projects list is clicked
-    def selectProject(self):
-        #Switch to last projects tab when button is clicked on creation tab.
-        if not(Introduction.infoTabOpen):
-            Introduction.sCenter.setCurrentIndex(0)
-            Introduction.createBtn.setText("Create")
-            Introduction.infoTabOpen = True
-        
-        #Manage the buttons colours and update the text
-        for i in range(Introduction.vLastProjects.count()):
-            Introduction.vLastProjects.itemAt(i).widget().setStyleSheet("background-color: #0084a8;")
-        data = [self.name, self.path]
-        self.setStyleSheet("background-color: #006986;")
-        Introduction.setProjectInfo(self, "fromList", data)
-
-    #Set the projects textedit and such to the data variable. Place defines what to set.
-    def setProjectInfo(self, place, data):
-        if place == "fromList":
-            Introduction.infoName.setVisible(True)
-            Introduction.infoName.setText("Name: {0}".format(data[0]))
-            Introduction.infoPath.setText("Path: {0}".format(data[1]))
-            Introduction.selectedProject = data[1]
-            print("introductionWindow; Introduction; setProjectInfo: Selected Project:{0}".format(data[1]))
-        
-        elif place == "fromFile":
-            Introduction.infoName.setVisible(True)
-            Introduction.infoName.setText("Name: {0}".format(os.path.splitext(os.path.basename(data))[0]))
-            Introduction.infoPath.setText("Path: {0}".format(data))
-            Introduction.selectedProject = data
-            print("introductionWindow; Introduction; setProjectInfo: Selected Project from:{0} to open".format(data))
-
-        elif place == "fromCreate":
-            print("introductionWindow; Introduction; setProjectInfo: Selected Project Creation folder:{0}".format(data))
-            Introduction.pathEdit.setText(data)
 
     #Switch betwen the create and open project tabs
     def switchTab(self):
-        if Introduction.infoTabOpen:
+        if Introduction.prjSelectTabOpen:
             Introduction.sCenter.setCurrentIndex(1)
             Introduction.createBtn.setText("Last\nProjects")
-            Introduction.infoTabOpen = False
+            Introduction.prjSelectTabOpen = False
         else:
             Introduction.sCenter.setCurrentIndex(0)
             Introduction.createBtn.setText("Create")
-            Introduction.infoTabOpen = True
+            Introduction.prjSelectTabOpen = True
+
+    #Open a dialog asking if the path to the project should be searched for or if the entry should be deleted
+    def projNotFound(self, place):
+        rmvDialog = QtWidgets.QMessageBox()
+        rmvDialog.setWindowTitle("Remove Project?")
+        rmvDialog.setText("This project can't be found anymore at {0}\n should it be removed from the list?".format(place))
+        rmvDialog.setStandardButtons(QtWidgets.QMessageBox.Yes)
+        rmvDialog.addButton(QtWidgets.QMessageBox.No)
+        rmvDialog.setDefaultButton(QtWidgets.QMessageBox.Yes)
+        if(rmvDialog.exec() == QtWidgets.QMessageBox.Yes):
+            Introduction.removeProject(self, place)
+    
+    def removeProject(self, path):
+        startupData.Data.removeItem(self, path)
+        Introduction.addProjects(self)
+
+    #Same function as in the index file which puts this window on the monitor where the mouse cursor is at
+    def center(self):
+        frameGm = self.frameGeometry()
+        screen = QtWidgets.QApplication.desktop().screenNumber(QtWidgets.QApplication.desktop().cursor().pos())
+        centerPoint = QtWidgets.QApplication.desktop().screenGeometry(screen).center()
+        frameGm.moveCenter(centerPoint)
+        self.move(frameGm.topLeft())
+
+    #Add the last opened projects as items and setup the carousel
+    def createCItems(self):
+        projList = []
+        prjPathList = []
+        nonExisting = []
+        for i in range(startupData.Data.lengthOfDB(self)):
+            try:
+                fileTest = open(startupData.Data.readDB(self, i)[2], "r")
+                projItem = carouselItem.CarouselItem()
+                projItem.setup(name = startupData.Data.readDB(self, i)[1], path = startupData.Data.readDB(self, i)[2], existing = True)
+                projList.append(projItem)
+                prjPathList.append(startupData.Data.readDB(self, i)[2])
+            except:
+                projItem = carouselItem.CarouselItem()
+                projItem.setup(name = startupData.Data.readDB(self, i)[1], path = startupData.Data.readDB(self, i)[2], existing = False)
+                projList.append(projItem)
+                prjPathList.append(startupData.Data.readDB(self, i)[2])
+                nonExisting.append(i)
+                print(clr.Fore.YELLOW + "introductionWindow; Introduction; __init__: Error finding project path!" + clr.Style.RESET_ALL)
+        
+        return projList, prjPathList, nonExisting
+
 
 #For executing this file standalone
 if __name__ == '__main__':
