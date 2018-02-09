@@ -7,8 +7,8 @@ from components.Menu import menuFileTab
 from components.Menu import menuSettingsTab
 from components.Menu import menuWindowTab
 from components.Menu import menuActions
-from components.Misc import directoryItem
-from components.Misc import breadCrumb
+from components.fileManager import directoryItem
+from components.fileManager import breadCrumb
 from PyQt5 import QtGui, QtCore, QtWidgets, QtMultimedia
 
 #This is the main file which is used for creating the window.

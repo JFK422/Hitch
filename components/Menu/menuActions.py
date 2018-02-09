@@ -1,6 +1,6 @@
 from PyQt5 import QtGui, QtCore, QtWidgets
 from components import introductionWindow
-from components.Misc import directoryItem
+from components.fileManager import directoryItem
 from projectHandling import startupData
 from components import create
 import colorama as clr

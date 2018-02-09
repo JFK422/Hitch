@@ -2,6 +2,7 @@ import qtawesome as qta
 import colorama as clr
 import createWorkarea, os
 from components import create
+from components.fileManager import fmgActions
 from PyQt5 import QtGui, QtCore, QtWidgets
 
 #Tabwidget for the open files ontop of the editor
@@ -38,6 +39,7 @@ class DirectoryItem(QtWidgets.QWidget):
         if self.type == "directory":
             DirectoryItem.itmBtn.setIcon(dirIco)
             DirectoryItem.itmBtn.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+            DirectoryItem.itmBtn.clicked.connect(lambda:)
             DirectoryItem.itmBtn.customContextMenuRequested.connect(lambda:DirectoryItem.onRightClick(self.button, self.name, path))
         elif self.type == "file":
             DirectoryItem.itmBtn.setIcon(fileIco)
@@ -76,6 +78,7 @@ class DirectoryItem(QtWidgets.QWidget):
     def createFile(self):
         path = DirectoryItem.gPath
         file = DirectoryItem.itmEdit.text()
+        print(file)
         if DirectoryItem.isDirCreating:
             os.makedirs(path + file)
         else:
@@ -85,16 +88,6 @@ class DirectoryItem(QtWidgets.QWidget):
         
     def abortChanges(self):
         create.CreateUI.openProjectInEditor(self, "refresh")
-
-    def keyPressEvent(self, event):
-        if event.key() == QtCore.Qt.Key_Enter:
-            DirectoryItem.createFile(self)
-        elif event.key() == QtCore.Qt.Key_Escape:
-            DirectoryItem.abortChanges(self)
-        elif False:
-            print("D")
-        else:
-            print("{0}".format(QtCore.Qt.Key_Enter))
     
     def changeType(self):
         dirIco = qta.icon("fa.folder", color="#f9f9f9")
@@ -110,7 +103,14 @@ class DirectoryItem(QtWidgets.QWidget):
         oldPath = "/"
         for j in range(len(DirectoryItem.lastName[2].split("/"))):
             oldPath += DirectoryItem.lastName[2].split("/")[j]
-        os.rename(DirectoryItem.lastName[2], oldPath + "/" + DirectoryItem.itmEdit.text())
+            if j != 0:
+                oldPath += "/"
+            if j == len(DirectoryItem.lastName[2].split("/"))-2:
+                break
+        DirectoryItem.itmEdit.setText("asdfghjklö")
+        print(DirectoryItem.lastName[2], oldPath + DirectoryItem.itmEdit.text())
+        os.rename(DirectoryItem.lastName[2], oldPath + DirectoryItem.itmEdit.text())
+        create.CreateUI.openProjectInEditor(self, "refresh")
 
     def onRightClick(self, name, path):
         moveIco = qta.icon("fa.arrows-alt", color="#f9f9f9")
