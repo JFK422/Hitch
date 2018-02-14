@@ -4,7 +4,7 @@ class fmgActions:
     
     #Called when a folder is opened or the breadcrumb points to a new location
     def changeLocation(self, newPos):
-        print(newPos)
+        create.CreateUI.openProjectInEditor(self, cause="changeLoc", location=newPos)
 
     #Called when a file needs to be opened
     def openFile(self, fileToOpen):

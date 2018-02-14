@@ -38,7 +38,7 @@ class DirectoryItem(QtWidgets.QWidget):
         if self.type == "directory":
             DirectoryItem.itmBtn.setIcon(dirIco)
             DirectoryItem.itmBtn.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-            DirectoryItem.itmBtn.clicked.connect(lambda:actions.changeLocation(self.path+self.name))
+            DirectoryItem.itmBtn.clicked.connect(lambda:actions.fmgActions.changeLocation(self, self.path + "/"))
             DirectoryItem.itmBtn.customContextMenuRequested.connect(lambda:DirectoryItem.onRightClick(self.button, self.name, path))
         elif self.type == "file":
             DirectoryItem.itmBtn.setIcon(fileIco)

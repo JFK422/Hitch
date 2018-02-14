@@ -17,7 +17,7 @@ class MenuAction:
             name = prjFile.read().split("\n")[0].split("=")[1]
             prjFile.close()
             startupData.Data.insert(self, name, self.filePath[0])
-            introductionWindow.Introduction.createCItems(self)
+            introductionWindow.Introduction.crl.refreshCarousel(self)
 
     #Select the folder in which the project should be created
     def selectProjectFolder(self):
@@ -37,19 +37,49 @@ class MenuAction:
         #Open one of the latest projects
         if prjSelectTabOpen:
             #Open the project file and catch it if it cant be found in the designated path
+            #try:
+            project = open(prjPathList[currentPos], "r+")
+            name = os.path.splitext(os.path.basename(prjPathList[currentPos]))[0]
+            startupData.Data.insert(self, name, prjPathList[currentPos])
+            project.close()
+            create.CreateUI.openProject = prjPathList[currentPos]
+
+            #Check if the assets path in the main project file is still correct
+            #Get the assets path from the current file
             try:
-                project = open(prjPathList[currentPos], "r+")
-                name = os.path.splitext(os.path.basename(prjPathList[currentPos]))[0]
-                startupData.Data.insert(self, name, prjPathList[currentPos])
-                project.close()
-                create.CreateUI.openProject = prjPathList[currentPos]
-                create.CreateUI.openProjectInEditor(self, "refresh")
-                self.hide()
-                print(clr.Fore.GREEN + "menuActions; MenuAction; launchProject: Launched project at {0} sucessfully!".format(prjPathList[currentPos])+ clr.Style.RESET_ALL)
-                
+                f = open(prjPathList[currentPos], "r")
+                text = f.read()
+                f.close()
+                assetsDir = text.split("\n")[1].split("=")[1].split("/")
+                assetsDir.pop(len(assetsDir)-1)
+                prjDir = prjPathList[currentPos].split("/")
+                print(assetsDir)
+                print(prjDir)
+                samePath = True
+                for k in range(len(assetsDir)-1):
+                    if not(assetsDir[k] == prjDir[k]):
+                        samePath = False
+            
+                if samePath:
+                    assetsDir.pop(0)
+                    for n in range(len(assetsDir)):
+                        create.CreateUI.prjAssetsDir += "/"
+                        create.CreateUI.prjAssetsDir += assetsDir[n]
+                    create.CreateUI.prjAssetsDir += "/"
+                    create.CreateUI.currentDir = create.CreateUI.prjAssetsDir
+
+                    create.CreateUI.openProjectInEditor(self, "refresh")
+                    self.hide()
+                    print(clr.Fore.GREEN + "menuActions; MenuAction; launchProject: Launched project at {0} sucessfully!".format(prjPathList[currentPos])+ clr.Style.RESET_ALL)
+            
+                else:
+                    print(clr.Fore.RED + "menuActions; MenuAction; launchProject: Unable to launch project due to missmatch of project and assets path in project file! Please fix manually!" + clr.Style.RESET_ALL)
+                    launchProject.showErrorDialog(self, "Unable to launch project due to missmatch of project\n and assets path in project file! Please fix manually!", "Path missmatch")
+            
             except:
                 print(clr.Fore.RED + "menuActions; MenuAction; launchProject: Error launching project! No project defined!" + clr.Style.RESET_ALL)
                 introductionWindow.Introduction.projNotFound(self, prjPathList[currentPos])
+            
         #Create a new project and open it
         else:
             name = intro.nameEdit.text()

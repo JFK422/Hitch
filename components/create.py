@@ -21,6 +21,7 @@ class CreateUI:
     hTools = None
     openProject = ""
     mainProjectFile = ""
+    prjAssetsDir = ""
     currentDir = ""
     index = 0
     row = 0
@@ -358,38 +359,36 @@ class CreateUI:
     def switchMenu(self, index):
         self.vLPart.setCurrentIndex(index)
 
-    def openProjectInEditor(self, cause, editName = ""):
+    def openProjectInEditor(self, cause, editName = "", location=""):
         CreateUI.clearFileList(self)
-        f = open(CreateUI.openProject, "r")
-        text = f.read()
-        f.close()
-        assetsDirectory = text.split("\n")[1].split("=")[1]
-        CreateUI.currentDir = assetsDirectory
         CreateUI.index = 0
         CreateUI.row = 0
         items = []
 
+        if( cause == "changeLoc" and not(location == "")):
+            print(location)
+            CreateUI.currentDir = location
+
         #Sort the files and directorys
-        for i in os.listdir(assetsDirectory):
+        for i in os.listdir(CreateUI.currentDir):
             items.append(i)
         items = sorted(items)
 
         if cause == "create":
             items.append("")
 
-
         #Add ze items in a grid formation to ze layout
         for h in items:
             item = directoryItem.DirectoryItem()
             if h == editName:
                 if cause == "edit":
-                    item.setup(h, assetsDirectory + h, "edit")
+                    item.setup(h, CreateUI.currentDir + h, "edit")
                 else:
-                    item.setup(h, assetsDirectory + h, "create")
-            elif os.path.isfile(assetsDirectory + h):
-                item.setup(h, assetsDirectory + h, "file")
+                    item.setup(h, CreateUI.currentDir + h, "create")
+            elif os.path.isfile(CreateUI.currentDir + h):
+                item.setup(h, CreateUI.currentDir + h, "file")
             else:
-                item.setup(h, assetsDirectory + h, "directory")
+                item.setup(h, CreateUI.currentDir + h, "directory")
             if CreateUI.index < 4:
                 print("Index: {0}; Row: {1}".format(CreateUI.index, CreateUI.row))
                 CreateUI.vFileExplorer.addWidget(item, CreateUI.row, CreateUI.index)
