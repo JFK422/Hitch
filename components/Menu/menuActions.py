@@ -37,16 +37,15 @@ class MenuAction:
         #Open one of the latest projects
         if prjSelectTabOpen:
             #Open the project file and catch it if it cant be found in the designated path
-            #try:
-            project = open(prjPathList[currentPos], "r+")
-            name = os.path.splitext(os.path.basename(prjPathList[currentPos]))[0]
-            startupData.Data.insert(self, name, prjPathList[currentPos])
-            project.close()
-            create.CreateUI.openProject = prjPathList[currentPos]
-
-            #Check if the assets path in the main project file is still correct
-            #Get the assets path from the current file
             try:
+                project = open(prjPathList[currentPos], "r+")
+                name = os.path.splitext(os.path.basename(prjPathList[currentPos]))[0]
+                startupData.Data.insert(self, name, prjPathList[currentPos])
+                project.close()
+                create.CreateUI.openProject = prjPathList[currentPos]
+
+                #Check if the assets path in the main project file is still correct
+                #Get the assets path from the current file
                 f = open(prjPathList[currentPos], "r")
                 text = f.read()
                 f.close()
