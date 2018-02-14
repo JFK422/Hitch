@@ -13,8 +13,6 @@ class Carousel(QtWidgets.QWidget):
         self.pos = startPos
         globalPos = startPos
 
-        print(len(carouselWidgets))
-
         frameWidget = QtWidgets.QWidget()
         frameWidget.setObjectName("carouselFrame")
 

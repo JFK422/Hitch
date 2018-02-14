@@ -8,18 +8,16 @@ import os
 
 class MenuAction:
     #Menu file tab
-    def newFile(self):
-        print("new file")
-
-    def openFile(self):
-        print("open file")
-
     #Open a file selector in oder to open a project. Afterwards add it to the list, requires launch to be clicked afterwards
     def openProjectFromFile(self):
         print("menuActions; MenuAction; openProjectFromFile: open project from file")
-        self.filePath = QtWidgets.QFileDialog.getOpenFileName(self, "Open Project From File")
+        self.filePath = QtWidgets.QFileDialog.getOpenFileName(self, "Open Project From File", "/home", "Hitch project file (*.hthp)")
         if not(self.filePath[0] == ""):
-            introductionWindow.Introduction.setProjectInfo(self, "fromFile", self.filePath[0])
+            prjFile = open(self.filePath[0], "r")
+            name = prjFile.read().split("\n")[0].split("=")[1]
+            prjFile.close()
+            startupData.Data.insert(self, name, self.filePath[0])
+            introductionWindow.Introduction.createCItems(self)
 
     #Select the folder in which the project should be created
     def selectProjectFolder(self):
@@ -28,45 +26,30 @@ class MenuAction:
         print(self.selectFilePath)
         if not(self.selectFilePath == ""):
             self.selectFilePath += "/"
-            introductionWindow.Introduction.setProjectInfo(self, "fromCreate", self.selectFilePath)
+            introductionWindow.Introduction.pathEdit.setText(self.selectFilePath)
 
 
     #Launch Button: Causes the project to be launched!
     def launchProject(self, prjSelectTabOpen, currentPos, prjPathList, prjNotFoundIndexList):
-        print("menuActions; MenuAction; launchProject: Launching Project")
+        print("menuActions; MenuAction; launchProject: Attempting to launch project")
         intro = introductionWindow.Introduction
         #Check which tab was open and open the path.
         #Open one of the latest projects
         if prjSelectTabOpen:
-            for i in range(len(prjNotFoundIndexList)):
-                if currentPos == prjNotFoundIndexList[i]:
-                    print(clr.Fore.RED + "menuActions; MenuAction; launchProject: Error launching project! No project defined!" + clr.Style.RESET_ALL)
-                    MenuAction.showErrorDialog(self, "Error, no project found at location:\n{0}".format(prjPathList[currentPos]), "Undefined Project")
-                    #figure the break out here!
+            #Open the project file and catch it if it cant be found in the designated path
+            try:
+                project = open(prjPathList[currentPos], "r+")
+                name = os.path.splitext(os.path.basename(prjPathList[currentPos]))[0]
+                startupData.Data.insert(self, name, prjPathList[currentPos])
+                project.close()
+                create.CreateUI.openProject = prjPathList[currentPos]
+                create.CreateUI.openProjectInEditor(self, "refresh")
+                self.hide()
+                print(clr.Fore.GREEN + "menuActions; MenuAction; launchProject: Launched project at {0} sucessfully!".format(prjPathList[currentPos])+ clr.Style.RESET_ALL)
                 
-                else:
-                    #Open the project file and catch it if it cant be found in the designated path
-                    #try:
-                    print("sdf"+prjPathList[currentPos])
-                    project = open(prjPathList[currentPos], "r+")
-                    name = os.path.splitext(os.path.basename(prjPathList[currentPos]))[0]
-                    startupData.Data.insert(self, name, prjPathList[currentPos])
-                    project.close()
-                    create.CreateUI.openProject = prjPathList[currentPos]
-                    create.CreateUI.openProjectInEditor(self, "refresh")
-                    self.hide()
-                    break
-                
-                    """
-                    except:
-                        create.CreateUI.dial.setText("Selected file not found!")
-                        create.CreateUI.dial.setIcon(QtWidgets.QMessageBox.Information)
-                        create.CreateUI.dial.setWindowTitle("File Error")
-                        create.CreateUI.dial.show()
-
-                        print(clr.Fore.RED + "menuActions; MenuAction; launchProject: Project file not found!" + clr.Style.RESET_ALL)
-                    """
-
+            except:
+                print(clr.Fore.RED + "menuActions; MenuAction; launchProject: Error launching project! No project defined!" + clr.Style.RESET_ALL)
+                introductionWindow.Introduction.projNotFound(self, prjPathList[currentPos])
         #Create a new project and open it
         else:
             name = intro.nameEdit.text()
@@ -94,10 +77,11 @@ class MenuAction:
                 project.close()
                 create.CreateUI.openProjectInEditor(self, "refresh")
                 self.hide()
+                print(clr.Fore.GREEN + "menuActions; MenuAction; launchProject: Created project at {0} sucessfully!".format(prjPathList[currentPos])+ clr.Style.RESET_ALL)
 
             else:
-                print(clr.Fore.RED + "menuActions; MenuAction; launchProject: Error launching project! No name or path defined!" + clr.Style.RESET_ALL)
-                MenuAction.showErrorDialog(self, "Error, no name or path defined!", "No name or path defined!")
+                print(clr.Fore.YELLOW + "menuActions; MenuAction; launchProject: Error launching project! No name or path defined!" + clr.Style.RESET_ALL)
+                MenuAction.showErrorDialog(self, "Error! No name or path defined!", "No name or path defined!")
 
     def showErrorDialog(self, message, title):
         infoDialog = QtWidgets.QMessageBox()

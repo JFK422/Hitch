@@ -7,6 +7,6 @@ class compiler:
         print("compiler; compiler; init: INIT_CALLED")
 
     def compile(self):
-        print(print("compiler; compiler; compile: Compiling"))
+        print("compiler; compiler; compile: Compiling")
         
         create.CreateUI.switchCompStatus(self, "compiling")

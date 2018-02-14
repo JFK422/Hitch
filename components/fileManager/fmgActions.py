@@ -6,7 +6,12 @@ class fmgActions:
     def changeLocation(self, newPos):
         print(newPos)
 
-    #
-    def openfile(self, fileToOpen):
+    #Called when a file needs to be opened
+    def openFile(self, fileToOpen):
         print(fileToOpen)
     
+    #The delete file method is in the directroyItem file!
+
+    #Save every modyfied file
+    def saveAll(self):
+        print("saving everything")

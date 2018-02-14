@@ -40,7 +40,6 @@ class CarouselItem(QtWidgets.QWidget):
                 frameWidget.setObjectName("carouselItemFrameNonExisting")
                 pImg.setPixmap(QtGui.QPixmap(imgPaths[0]).scaled(256, 256, QtCore.Qt.KeepAspectRatio))
 
-
         mainLay = QtWidgets.QVBoxLayout()
         mainLay.setContentsMargins(QtCore.QMargins(0,0,0,0))
         mainLay.setSpacing(0)
@@ -60,7 +59,7 @@ class CarouselItem(QtWidgets.QWidget):
 
         titleLay.addWidget(pName)
         imgLay.addWidget(pImg)
-
+        
         mainLay.addWidget(titleWidget)
         mainLay.addWidget(imgWidget)
         frameWidget.setLayout(mainLay)
