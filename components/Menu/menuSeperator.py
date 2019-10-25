@@ -17,8 +17,8 @@ class MenuSeperator(QtWidgets.QWidget):
         self.setLayout(vMenu)
 
 """
-              __
-        .__( . )<  (Meow)
+            __
+        .__( .)<  (Meow)
          \____)
-~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 """

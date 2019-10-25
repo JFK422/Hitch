@@ -1,20 +1,20 @@
 /*Set the general appearance of undefined widgets*/
 QPushButton {
-    border-color: #ff634d;
+    border-color: #34c873;
     border-style: solid;
     width: 100%;
     height: 100%;
-    background-color: #ff634d;
+    background-color: #34c873;
     color: #f9f9f9;
     font-size: 18px;
 }
 
 QPushButton:hover{
-    border-color: #ff5840;
+    border-color: #2dad63;
     border-style: solid;
     width: 100%;
     height: 100%;
-    background-color: #ff5840;
+    background-color: #2dad63;
     color: #f9f9f9;
     font-size: 18px;
 }
@@ -25,11 +25,11 @@ QLabel{
 
 QPushButton::menu-indicator
 {
-    background-color: #ff634d;
+    background-color: #34c873;
 }
 
 QMessageBox QPushButton{
-    background-color: #ff634d;
+    background-color: #34c873;
     color: #f9f9f9;
     font-size: 18px;
     height: 50%;
@@ -37,7 +37,7 @@ QMessageBox QPushButton{
 }
 
 QMessageBox QPushButton:hover{
-    background-color: #ff5840;
+    background-color: #34c873;
     color: #f9f9f9;
     font-size: 18px;
     height: 50%;
@@ -50,16 +50,16 @@ QFileDialog QPushButton{
 
 /*The buttons in the toolbar for compiling saving and such*/
 #toolButtons{
-    border-color: #ff634d;
+    border-color: #34c873;
     border-style: solid;
-    background-color: #ff634d;
+    background-color: #34c873;
     color: #f9f9f9;
     font-size: 18px;
 }
 
 #toolButtons:hover{
-    border-color: #ff5840;
-    background-color: #ff5840;
+    border-color: #2dad63;
+    background-color: #2dad63;
 }
 
 /*The for buttons on the right side for window interaction*/
@@ -232,7 +232,7 @@ QFileDialog QPushButton{
     font-size: 18px;
 }
 
-/*How the selector of the file to rin looks like*/
+/*How the selector of the file to run looks like*/
 #menuRunChooser{
     background-color: #34c873;
     border-style:  solid;
@@ -253,7 +253,7 @@ QFileDialog QPushButton{
 
 /*Style of the search bar in the edit tab of the menu*/
 #menuSearch{
-    background-color: #18184a;
+    background-color: #34c873;
     color: #f9f9f9;
     border-radius: 8px;
     font-size: 18px;
@@ -261,7 +261,7 @@ QFileDialog QPushButton{
 
 /*How the console looks like in the run menu*/
 #console{
-    background-color: #18184a;
+    background-color: #006986;
 }
 
 #consoleText{
@@ -277,12 +277,12 @@ QFileDialog QPushButton{
 
 /*Style of the currently open/closed tab in the settings window*/
 #openTab{
-    background-color: #e54f39;
+    background-color: #2dad63;
     border-radius: 8px;
 }
 
 #normalTab{
-    background-color: #ff634d;
+    background-color: #34c873;
     border-radius: 8px;
 }
 
@@ -442,15 +442,15 @@ QFileDialog QPushButton{
 }
 
 #carouselItemFrameNonExisting{
-    background-color: #FF5454;
+    background-color: #2dad63;
 }
 
 #carouselSideButtons{
-    background-color: #ff634d;
+    background-color: #34c873;
 }
 
 #carouselSideButtons:hover{
-    background-color: #e54f39;
+    background-color: #34c873;
 }
 
 #projectLabel{
