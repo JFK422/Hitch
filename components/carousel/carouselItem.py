@@ -1,8 +1,8 @@
 from PyQt5 import QtGui, QtCore, QtWidgets
-from PIL import Image
+from random import randint
 import colorama as clr
 import qtawesome as qta
-import sys
+import sys, os
 
 class CarouselItem(QtWidgets.QWidget):
     
@@ -10,6 +10,12 @@ class CarouselItem(QtWidgets.QWidget):
         self.name = name
         self.projPath = path
         projImg = ""
+        imgPaths = ["./resources/projectImages/pImgO.png",
+        "./resources/projectImages/pImgB.png",
+        "./resources/projectImages/pImgG.png",
+        "./resources/projectImages/pImgI.png",
+        "./resources/projectImages/pImgR.png",
+        "./resources/projectImages/pImgV.png"]
 
         frameWidget = QtWidgets.QWidget()
 
@@ -19,18 +25,20 @@ class CarouselItem(QtWidgets.QWidget):
         pImg.setObjectName("projectLabel")
         #pImg.setScaledContents(True)
 
-        #projFile = open(path, "r")
-        #print(projFile.read())
-        #print(projFile.read().split("\n")[3].split("=")[1])
-        #QtGui.QPixmap(projFile.read().split("\n")[3].split("=")[1])
-
-        if existing:
-            frameWidget.setObjectName("carouselItemFrame")
-            pImg.setPixmap(QtGui.QPixmap("/home/jfk422/Projects/HitchTestProj/Resources/titleImg.png").scaled(256, 256, QtCore.Qt.KeepAspectRatio))
+        if os.path.isfile(path + "/Resources/titleImg.png"):
+            if existing:
+                frameWidget.setObjectName("carouselItemFrame")
+                pImg.setPixmap(QtGui.QPixmap(path + "/Resources/titleImg.png").scaled(256, 256, QtCore.Qt.KeepAspectRatio))
+            else:
+                frameWidget.setObjectName("carouselItemFrameNonExisting")
+                pImg.setPixmap(QtGui.QPixmap(imgPaths[0]).scaled(256, 256, QtCore.Qt.KeepAspectRatio))
         else:
-            frameWidget.setObjectName("carouselItemFrameNonExisting")
-            pImg.setPixmap(QtGui.QPixmap("./resources/projectImages/pImgO.png").scaled(256, 256, QtCore.Qt.KeepAspectRatio))
-
+            if existing:
+                frameWidget.setObjectName("carouselItemFrame")
+                pImg.setPixmap(QtGui.QPixmap(imgPaths[randint(1, 5)]).scaled(256, 256, QtCore.Qt.KeepAspectRatio))
+            else:
+                frameWidget.setObjectName("carouselItemFrameNonExisting")
+                pImg.setPixmap(QtGui.QPixmap(imgPaths[0]).scaled(256, 256, QtCore.Qt.KeepAspectRatio))
 
         mainLay = QtWidgets.QVBoxLayout()
         mainLay.setContentsMargins(QtCore.QMargins(0,0,0,0))
@@ -51,7 +59,7 @@ class CarouselItem(QtWidgets.QWidget):
 
         titleLay.addWidget(pName)
         imgLay.addWidget(pImg)
-
+        
         mainLay.addWidget(titleWidget)
         mainLay.addWidget(imgWidget)
         frameWidget.setLayout(mainLay)

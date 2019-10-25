@@ -1,5 +1,6 @@
 from PyQt5 import QtGui, QtCore, QtWidgets
 from components.carousel import carouselItem
+from components import introductionWindow
 import colorama as clr
 import qtawesome as qta
 import sys
@@ -12,8 +13,6 @@ class Carousel(QtWidgets.QWidget):
         self.cWidgets = carouselWidgets
         self.pos = startPos
         globalPos = startPos
-
-        print(len(carouselWidgets))
 
         frameWidget = QtWidgets.QWidget()
         frameWidget.setObjectName("carouselFrame")
@@ -78,6 +77,20 @@ class Carousel(QtWidgets.QWidget):
     
     def getCurrentPos(self):
         return Carousel.globalPos
+    
+    def refreshCarousel(self, startPos = 0, elemAsButtons = False):
+        self.cWidgets = introductionWindow.Introduction.createCItems(self)[0]
+        print(self.cWidgets)
+        for i in range(len(self.cWidgets)):
+            if elemAsButtons:
+                itmBtn = QtWidgets.QPushButton(self.cWidgets[i])
+                Carousel.itemsLay.addWidget(itmBtn)
+        else:
+            Carousel.itemsLay.addWidget(self.cWidgets[i])
+
+    def clearCarousel(self):
+        for i in reversed(range(Carousel.itemsLay.count())):
+            Carousel.itemsLay.itemAt(i).widget().setParent(None)
 
 #For executing this file standalone
 if __name__ == '__main__':

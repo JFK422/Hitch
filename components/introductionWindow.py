@@ -16,6 +16,7 @@ class Introduction(QtWidgets.QWidget):
     prjSelectTabOpen = True
     createBtn = None
     nameEdit = None
+    crl = None
     
     #Init the window
     def __init__(self):
@@ -85,9 +86,9 @@ class Introduction(QtWidgets.QWidget):
 
         #Create the carousel with its items
         projList = Introduction.createCItems(self)[0]
-        crl = carousel.Carousel()
-        crl.setup(projList)
-        vInfo.addWidget(crl)
+        Introduction.crl = carousel.Carousel()
+        Introduction.crl.setup(projList)
+        vInfo.addWidget(Introduction.crl)
 
         hBottom.addWidget(wCenter)
 
@@ -99,7 +100,7 @@ class Introduction(QtWidgets.QWidget):
 
         launchBtn = QtWidgets.QPushButton("Launch")
         launchBtn.setObjectName("launchProject")
-        launchBtn.clicked.connect(lambda:menuActions.MenuAction.launchProject(self, Introduction.prjSelectTabOpen, crl.getCurrentPos(), Introduction.createCItems(self)[1], Introduction.createCItems(self)[2]))
+        launchBtn.clicked.connect(lambda:menuActions.MenuAction.launchProject(self, Introduction.prjSelectTabOpen, Introduction.crl.getCurrentPos(), Introduction.createCItems(self)[1], Introduction.createCItems(self)[2]))
         hLaunch.addWidget(launchBtn)
         hBottom.addWidget(wLaunch)
 
@@ -191,16 +192,13 @@ class Introduction(QtWidgets.QWidget):
     def projNotFound(self, place):
         rmvDialog = QtWidgets.QMessageBox()
         rmvDialog.setWindowTitle("Remove Project?")
-        rmvDialog.setText("This project can't be found anymore at {0}\n should it be removed from the list?".format(place))
+        rmvDialog.setText("This project can't be found anymore at {0}!\n Should it be removed from the list?".format(place))
         rmvDialog.setStandardButtons(QtWidgets.QMessageBox.Yes)
         rmvDialog.addButton(QtWidgets.QMessageBox.No)
         rmvDialog.setDefaultButton(QtWidgets.QMessageBox.Yes)
         if(rmvDialog.exec() == QtWidgets.QMessageBox.Yes):
-            Introduction.removeProject(self, place)
-    
-    def removeProject(self, path):
-        startupData.Data.removeItem(self, path)
-        Introduction.addProjects(self)
+            startupData.Data.removeItem(self, place)
+            Introduction.crl.refreshCarousel(self)
 
     #Same function as in the index file which puts this window on the monitor where the mouse cursor is at
     def center(self):
@@ -228,7 +226,7 @@ class Introduction(QtWidgets.QWidget):
                 projList.append(projItem)
                 prjPathList.append(startupData.Data.readDB(self, i)[2])
                 nonExisting.append(i)
-                print(clr.Fore.YELLOW + "introductionWindow; Introduction; __init__: Error finding project path!" + clr.Style.RESET_ALL)
+                print(clr.Fore.YELLOW + "introductionWindow; Introduction; createCItems: Error finding project at {0}!".format(startupData.Data.readDB(self, i)[2]) + clr.Style.RESET_ALL)
         
         return projList, prjPathList, nonExisting
 

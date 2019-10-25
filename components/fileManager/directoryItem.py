@@ -2,6 +2,7 @@ import qtawesome as qta
 import colorama as clr
 import createWorkarea, os
 from components import create
+from components.fileManager import fmgActions as actions
 from PyQt5 import QtGui, QtCore, QtWidgets
 
 #Tabwidget for the open files ontop of the editor
@@ -9,7 +10,6 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 class DirectoryItem(QtWidgets.QWidget):
     itmBtn = None
     itmName = None
-    itmEdit = None
     lastName = [False, "", ""]
     gPath = ""
     isDirCreating = True
@@ -18,7 +18,7 @@ class DirectoryItem(QtWidgets.QWidget):
         lay.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
         DirectoryItem.itmBtn = QtWidgets.QPushButton("")
         DirectoryItem.itmName = QtWidgets.QLabel("")
-        DirectoryItem.itmEdit = QtWidgets.QLineEdit("")
+        self.dirNameEdit = QtWidgets.QLineEdit()
 
         self.path = path
         self.name = name
@@ -38,6 +38,7 @@ class DirectoryItem(QtWidgets.QWidget):
         if self.type == "directory":
             DirectoryItem.itmBtn.setIcon(dirIco)
             DirectoryItem.itmBtn.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+            DirectoryItem.itmBtn.clicked.connect(lambda:actions.fmgActions.changeLocation(self, self.path + "/"))
             DirectoryItem.itmBtn.customContextMenuRequested.connect(lambda:DirectoryItem.onRightClick(self.button, self.name, path))
         elif self.type == "file":
             DirectoryItem.itmBtn.setIcon(fileIco)
@@ -59,7 +60,7 @@ class DirectoryItem(QtWidgets.QWidget):
         
         #Set the text of the element
         if self.type == "edit":
-            DirectoryItem.itmEdit.setText(name)
+            self.dirNameEdit.setText(self.name)
         DirectoryItem.itmName.setText(name)
         DirectoryItem.itmName.setWordWrap(True)
         DirectoryItem.itmName.setObjectName("directoryText")
@@ -67,7 +68,7 @@ class DirectoryItem(QtWidgets.QWidget):
         self.setLayout(lay)
         lay.addWidget(DirectoryItem.itmBtn)
         if self.type == "create" or self.type == "edit":
-            lay.addWidget(DirectoryItem.itmEdit)
+            lay.addWidget(self.dirNameEdit)
         else:
             lay.addWidget(DirectoryItem.itmName)
 
@@ -75,7 +76,7 @@ class DirectoryItem(QtWidgets.QWidget):
 
     def createFile(self):
         path = DirectoryItem.gPath
-        file = DirectoryItem.itmEdit.text()
+        file = self.dirNameEdit.text()
         if DirectoryItem.isDirCreating:
             os.makedirs(path + file)
         else:
@@ -85,16 +86,6 @@ class DirectoryItem(QtWidgets.QWidget):
         
     def abortChanges(self):
         create.CreateUI.openProjectInEditor(self, "refresh")
-
-    def keyPressEvent(self, event):
-        if event.key() == QtCore.Qt.Key_Enter:
-            DirectoryItem.createFile(self)
-        elif event.key() == QtCore.Qt.Key_Escape:
-            DirectoryItem.abortChanges(self)
-        elif False:
-            print("D")
-        else:
-            print("{0}".format(QtCore.Qt.Key_Enter))
     
     def changeType(self):
         dirIco = qta.icon("fa.folder", color="#f9f9f9")
@@ -110,7 +101,16 @@ class DirectoryItem(QtWidgets.QWidget):
         oldPath = "/"
         for j in range(len(DirectoryItem.lastName[2].split("/"))):
             oldPath += DirectoryItem.lastName[2].split("/")[j]
-        os.rename(DirectoryItem.lastName[2], oldPath + "/" + DirectoryItem.itmEdit.text())
+            if j != 0:
+                oldPath += "/"
+            if j == len(DirectoryItem.lastName[2].split("/"))-2:
+                break
+        if(self.dirNameEdit.text() == ""):
+            print(clr.Fore.YELLOW + "directoryItem; DirectoryItem; renameFile: Cannot rename file! No new name defined!" + clr.Style.RESET_ALL)
+        else:
+            os.rename(DirectoryItem.lastName[2], oldPath + self.dirNameEdit.text())
+            print("directoryItem; DirectoryItem; renameFile: Renamed file to: {0}".format(self.dirNameEdit.text()))
+            create.CreateUI.openProjectInEditor(self, "refresh")
 
     def onRightClick(self, name, path):
         moveIco = qta.icon("fa.arrows-alt", color="#f9f9f9")

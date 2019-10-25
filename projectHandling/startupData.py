@@ -28,10 +28,12 @@ class Data:
             Data.cur.execute("SELECT filePath  FROM ProjTable")
             #insert it into the database if there is nothing
             if(Data.lengthOfDB(self) == 0):
-                    Data.cur.execute("INSERT INTO ProjTable(name, filePath, tmstp)  VALUES(?,?,?)", (name, filePath, time.time()))
-                    Data.db.commit()
+                Data.cur.execute("INSERT INTO ProjTable(name, filePath, tmstp)  VALUES(?,?,?)", (name, filePath, time.time()))
+                Data.db.commit()
+
+            #If there is something, loop throu the databse to see if it is already there
+            #in order to prevent duplicates when the project was already opened earlier
             else:
-                #if there is something, loop throu the databse to see if it is already there
                 exists = True
                 for i in range(Data.lengthOfDB(self)):
                     Data.cur.execute("SELECT filePath  FROM ProjTable")
@@ -47,6 +49,7 @@ class Data:
                     Data.cur.execute("SELECT filePath  FROM ProjTable")
                     Data.cur.execute("UPDATE ProjTable SET tmstp = ? WHERE filePath = ?", (time.time(), Data.cur.fetchall()[i][0]))
                     Data.db.commit()
+
         else:
             #Determine the oldest project and replace it!
             oldestIndex = 0
